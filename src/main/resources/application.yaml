@@ -1,0 +1,17 @@
+---
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://gz-cynosdbmysql-grp-17pikoep.sql.tencentcdb.com:22639/pancake_job
+    username: HELLO
+    password: JBGZ
+  config:
+    activate:
+      on-profile: dev
+server:
+  port: 8080
+
+---
+spring:
+  profiles:
+    active: dev
