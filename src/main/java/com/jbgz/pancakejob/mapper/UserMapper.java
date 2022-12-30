@@ -1,21 +1,18 @@
 package com.jbgz.pancakejob.mapper;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.jbgz.pancakejob.entity.User;
-import org.apache.ibatis.annotations.Select;
-
-import java.util.List;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
- * sql语句，后端和数据库接口类。
- * 可能不需要对应entity里的类，当然如果全用plus框架应该就要对应了。
- * */
-
-
+* @author CSY0214
+* @description 针对表【user】的数据库操作Mapper
+* @createDate 2022-12-30 22:46:41
+* @Entity com.jbgz.pancakejob.entity.User
+*/
 public interface UserMapper extends BaseMapper<User> {
-    @Select("SELECT * FROME user")
-    List<User> findAll();
 
-    @Select("SELECT *FROM user WHERE user_id=#{user_id}")
-    int find(User user);
 }
+
+
+
+

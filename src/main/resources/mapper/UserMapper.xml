@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jbgz.pancakejob.mapper.UserMapper">
+
+    <resultMap id="BaseResultMap" type="com.jbgz.pancakejob.entity.User">
+            <id property="userId" column="user_id" jdbcType="INTEGER"/>
+            <result property="userType" column="user_type" jdbcType="VARCHAR"/>
+            <result property="password" column="password" jdbcType="VARCHAR"/>
+            <result property="nickname" column="nickname" jdbcType="VARCHAR"/>
+            <result property="headportrait" column="headportrait" jdbcType="VARCHAR"/>
+            <result property="email" column="email" jdbcType="VARCHAR"/>
+            <result property="registrationTime" column="registration_time" jdbcType="TIMESTAMP"/>
+            <result property="contactMethod" column="contact_method" jdbcType="BIGINT"/>
+            <result property="introduction" column="introduction" jdbcType="VARCHAR"/>
+            <result property="score" column="score" jdbcType="DECIMAL"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        user_id,user_type,password,
+        nickname,headportrait,email,
+        registration_time,contact_method,introduction,
+        score
+    </sql>
+</mapper>

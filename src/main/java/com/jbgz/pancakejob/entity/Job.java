@@ -1,21 +1,82 @@
 package com.jbgz.pancakejob.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Date;
 import lombok.Data;
 
-import java.util.Date;
-
+/**
+ * 
+ * @TableName job
+ */
+@TableName(value ="job")
 @Data
-public class Job {
-    private Integer job_id;
-    private Integer recuriter_id;
-    private Date release_time;
-    private String job_state;
-    private  Integer job_type;
-    private String work_name;
-    private  Date work_time;
-    private String work_place;
-    private  String work_details;
-    private Float slalry;
-    private Date start_time;
-    private Date end_time;
+public class Job implements Serializable {
+    /**
+     * 
+     */
+    @TableId(type = IdType.AUTO)
+    private Integer jobId;
+
+    /**
+     * 
+     */
+    private Integer recuriterId;
+
+    /**
+     * 
+     */
+    private Date releaseTime;
+
+    /**
+     * 
+     */
+    private String jobState;
+
+    /**
+     * 
+     */
+    private Integer jobType;
+
+    /**
+     * 
+     */
+    private String workName;
+
+    /**
+     * 
+     */
+    private Date workTime;
+
+    /**
+     * 
+     */
+    private String workPlace;
+
+    /**
+     * 
+     */
+    private String workDetails;
+
+    /**
+     * 
+     */
+    private BigDecimal salary;
+
+    /**
+     * 
+     */
+    private Date startTime;
+
+    /**
+     * 
+     */
+    private Date endTime;
+
+    @TableField(exist = false)
+    private static final long serialVersionUID = 1L;
 }

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jbgz.pancakejob.mapper.OrderMapper">
+
+    <resultMap id="BaseResultMap" type="com.jbgz.pancakejob.entity.Order">
+            <id property="orderId" column="order_id" jdbcType="INTEGER"/>
+            <result property="jobhunterId" column="jobhunter_id" jdbcType="INTEGER"/>
+            <result property="jobId" column="job_id" jdbcType="INTEGER"/>
+            <result property="applyTime" column="apply_time" jdbcType="TIMESTAMP"/>
+            <result property="applyDiscription" column="apply_discription" jdbcType="VARCHAR"/>
+            <result property="orderState" column="order_state" jdbcType="VARCHAR"/>
+            <result property="passTime" column="pass_time" jdbcType="TIMESTAMP"/>
+            <result property="jobhunterScore" column="jobhunter_score" jdbcType="DECIMAL"/>
+            <result property="recuriterScore" column="recuriter_score" jdbcType="DECIMAL"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        order_id,jobhunter_id,job_id,
+        apply_time,apply_discription,order_state,
+        pass_time,jobhunter_score,recuriter_score
+    </sql>
+</mapper>

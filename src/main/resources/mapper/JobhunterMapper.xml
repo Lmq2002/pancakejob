@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jbgz.pancakejob.mapper.JobhunterMapper">
+
+    <resultMap id="BaseResultMap" type="com.jbgz.pancakejob.entity.Jobhunter">
+            <id property="jobhunterId" column="jobhunter_id" jdbcType="INTEGER"/>
+            <result property="birthday" column="birthday" jdbcType="DATE"/>
+            <result property="school" column="school" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        jobhunter_id,birthday,school
+    </sql>
+</mapper>

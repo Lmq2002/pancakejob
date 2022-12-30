@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jbgz.pancakejob.mapper.FavoritesDirMapper">
+
+    <resultMap id="BaseResultMap" type="com.jbgz.pancakejob.entity.FavoritesDir">
+            <id property="favoritesDirId" column="favorites_dir_id" jdbcType="INTEGER"/>
+            <result property="jobhunterId" column="jobhunter_id" jdbcType="INTEGER"/>
+            <result property="favoritesDirName" column="favorites_dir_name" jdbcType="VARCHAR"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        favorites_dir_id,jobhunter_id,favorites_dir_name,
+        create_time
+    </sql>
+</mapper>

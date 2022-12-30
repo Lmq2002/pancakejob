@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jbgz.pancakejob.mapper.NoticeMapper">
+
+    <resultMap id="BaseResultMap" type="com.jbgz.pancakejob.entity.Notice">
+            <id property="noticeId" column="notice_id" jdbcType="INTEGER"/>
+            <result property="title" column="title" jdbcType="VARCHAR"/>
+            <result property="content" column="content" jdbcType="VARCHAR"/>
+            <result property="status" column="status" jdbcType="VARCHAR"/>
+            <result property="announceTime" column="announce_time" jdbcType="TIMESTAMP"/>
+            <result property="adminId" column="admin_id" jdbcType="INTEGER"/>
+            <result property="imgUrl" column="img_url" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        notice_id,title,content,
+        status,announce_time,admin_id,
+        img_url
+    </sql>
+</mapper>

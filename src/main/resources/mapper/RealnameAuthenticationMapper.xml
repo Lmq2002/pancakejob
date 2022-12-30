@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jbgz.pancakejob.mapper.RealnameAuthenticationMapper">
+
+    <resultMap id="BaseResultMap" type="com.jbgz.pancakejob.entity.RealnameAuthentication">
+            <id property="applyId" column="apply_id" jdbcType="OTHER"/>
+            <result property="idcard" column="idcard" jdbcType="VARCHAR"/>
+            <result property="identification" column="identification" jdbcType="VARCHAR"/>
+            <result property="realName" column="real_name" jdbcType="VARCHAR"/>
+            <result property="jobhunterId" column="jobhunter_id" jdbcType="INTEGER"/>
+            <result property="applyTime" column="apply_time" jdbcType="TIMESTAMP"/>
+            <result property="checkStatus" column="check_status" jdbcType="VARCHAR"/>
+            <result property="checkTime" column="check_time" jdbcType="TIMESTAMP"/>
+            <result property="result" column="result" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        apply_id,idcard,identification,
+        real_name,jobhunter_id,apply_time,
+        check_status,check_time,result
+    </sql>
+</mapper>

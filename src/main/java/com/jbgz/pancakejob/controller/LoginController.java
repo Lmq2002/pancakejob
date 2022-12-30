@@ -1,14 +1,19 @@
 package com.jbgz.pancakejob.controller;
 
 
+import com.jbgz.pancakejob.common.Constants;
+import com.jbgz.pancakejob.dto.LoginDTO;
 import com.jbgz.pancakejob.entity.User;
 import com.jbgz.pancakejob.service.UserService;
+import com.jbgz.pancakejob.utils.ResultData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
+@RequestMapping("/")
 public class LoginController {
 
     @Autowired
@@ -21,10 +26,10 @@ public class LoginController {
      * 新建时间：2022/12/28
      * */
     @PostMapping("/register")
-    public boolean regist(@RequestBody User user)
+    public ResultData regist(@RequestBody User user)
     {
         userService.save(user);
-        return true;
+        return ResultData.error();
     }
 
     /**
@@ -34,14 +39,14 @@ public class LoginController {
      * 新建时间：2022/12/28
      * */
     @PostMapping("/login")
-    public boolean login(@RequestBody User user)
+    public ResultData login(@RequestBody Map<String,Object> inputData)
     {
-        if(userService.find(user)==1)
-        {
-            //...
-            //conlogService.save()
-        }
-        return true;
+//        if(userService.find(logindto)!=null)
+//        {
+//            //...
+//            //conlogService.save()
+//        }
+        return ResultData.error(Constants.CODE_401,"test");
     }
 
     /**
@@ -51,14 +56,14 @@ public class LoginController {
      * 新建时间：2022/12/28
      * */
     @PutMapping("/password")
-    public boolean modifyPassword(@RequestBody User user)
+    public ResultData modifyPassword(@RequestBody User user)
     {
-        return true;
+        return ResultData.error();
     }
-//    @RequestMapping("/hello")
-//    public String hello() {
-//        return "hello springboot";
-//    }
+    @RequestMapping("/hello")
+    public String hello() {
+        return "hello springboot";
+    }
 //
 //    @PostMapping("/find")
 //    public int find(@RequestBody User user){

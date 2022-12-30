@@ -1,15 +1,56 @@
 package com.jbgz.pancakejob.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import java.io.Serializable;
+import java.util.Date;
 import lombok.Data;
 
-import java.util.Date;
-
+/**
+ * 
+ * @TableName notice
+ */
+@TableName(value ="notice")
 @Data
-public class Notice {
-    private Integer notice_id;
+public class Notice implements Serializable {
+    /**
+     * 
+     */
+    @TableId
+    private Integer noticeId;
+
+    /**
+     * 
+     */
     private String title;
+
+    /**
+     * 
+     */
     private String content;
+
+    /**
+     * 
+     */
     private String status;
-    private Date announce_time;
-    private Integer admin_id;
+
+    /**
+     * 
+     */
+    private Date announceTime;
+
+    /**
+     * 
+     */
+    private Integer adminId;
+
+    /**
+     * 
+     */
+    private String imgUrl;
+
+    @TableField(exist = false)
+    private static final long serialVersionUID = 1L;
 }

@@ -1,18 +1,13 @@
 package com.jbgz.pancakejob.service;
 
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jbgz.pancakejob.entity.User;
-import com.jbgz.pancakejob.mapper.UserMapper;
-import org.springframework.stereotype.Service;
+import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
- * 封装mapper接口函数，以供controller调用。
- * */
-@Service
-public class UserService extends ServiceImpl<UserMapper, User> {
-    private UserMapper userMapper;
-    public int find(User user)
-    {
-        return userMapper.find(user);
-    }
+* @author CSY0214
+* @description 针对表【user】的数据库操作Service
+* @createDate 2022-12-30 22:46:41
+*/
+public interface UserService extends IService<User> {
+
 }
