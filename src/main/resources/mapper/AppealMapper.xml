@@ -10,10 +10,11 @@
             <result property="appealContent" column="appeal_content" jdbcType="VARCHAR"/>
             <result property="appealTime" column="appeal_time" jdbcType="TIMESTAMP"/>
             <result property="appealResult" column="appeal_result" jdbcType="VARCHAR"/>
+            <result property="status" column="status" jdbcType="VARCHAR"/>
     </resultMap>
 
     <sql id="Base_Column_List">
         order_id,appeal_type,appeal_content,
-        appeal_time,appeal_result
+        appeal_time,appeal_result,status
     </sql>
 </mapper>

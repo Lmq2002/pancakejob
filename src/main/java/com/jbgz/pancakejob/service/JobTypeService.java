@@ -2,6 +2,9 @@ package com.jbgz.pancakejob.service;
 
 import com.jbgz.pancakejob.entity.JobType;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.jbgz.pancakejob.utils.ResultData;
+
+import java.util.List;
 
 /**
 * @author CSY0214
@@ -9,5 +12,13 @@ import com.baomidou.mybatisplus.extension.service.IService;
 * @createDate 2022-12-30 22:19:17
 */
 public interface JobTypeService extends IService<JobType> {
+
+    List<JobType> getTypeList();
+
+    boolean addJobType(String typeName);
+
+    boolean deleteJobType(int typeId);
+
+    boolean changeJobType(int typeId,String typeName);
 
 }

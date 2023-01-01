@@ -1,8 +1,8 @@
 package com.jbgz.pancakejob.service.impl;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jbgz.pancakejob.entity.Appeal;
-import com.jbgz.pancakejob.service.AppealService;
 import com.jbgz.pancakejob.mapper.AppealMapper;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 */
 @Service
 public class AppealServiceImpl extends ServiceImpl<AppealMapper, Appeal>
-    implements AppealService{
+    implements IService<Appeal> {
 
 }
 

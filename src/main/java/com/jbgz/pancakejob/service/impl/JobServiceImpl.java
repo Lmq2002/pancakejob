@@ -1,5 +1,6 @@
 package com.jbgz.pancakejob.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jbgz.pancakejob.dto.JobDTO;
 import com.jbgz.pancakejob.entity.Job;
@@ -9,8 +10,11 @@ import com.jbgz.pancakejob.mapper.JobTypeMapper;
 import com.jbgz.pancakejob.mapper.RecuriterMapper;
 import com.jbgz.pancakejob.service.JobService;
 import com.jbgz.pancakejob.mapper.JobMapper;
+import com.jbgz.pancakejob.service.JobTypeService;
 import com.jbgz.pancakejob.utils.DateTimeTrans;
 import com.jbgz.pancakejob.utils.ResultData;
+import com.jbgz.pancakejob.vo.JobInfoVO;
+import com.jbgz.pancakejob.vo.JobUpVO;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -32,7 +36,7 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job>
     @Resource
     private JobTypeMapper jobTypeMapper;
 
-    //    @Override
+//    @Override
 //    public ResultData getJobList(int pageNum, int pageSize){
 //
 //        ResultData result=new ResultData();
@@ -60,8 +64,12 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job>
         jobDTO.setReleaseTime(DateTimeTrans.dateToString(job.getReleaseTime()));
         jobDTO.setJobState(job.getJobState());
 
-        JobType jobType= jobTypeMapper.selectById(job.getJobType());
-        jobDTO.setJobType(jobType.getTypeName());
+        if(job.getJobType()!=null){
+            JobType jobType= jobTypeMapper.selectById(job.getJobType());
+            jobDTO.setJobType(jobType.getTypeName());
+        }
+        else
+            jobDTO.setJobType(null);
 
         jobDTO.setWorkName(job.getWorkName());
         jobDTO.setWorkTime(DateTimeTrans.timeToString(job.getWorkTime()));
@@ -84,28 +92,33 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job>
         return jobDTOList;
     }
 
-    public ResultData getJobList(){
-        ResultData result=new ResultData();
-        //QueryWrapper<Job> jobQueryWrapper= new QueryWrapper<Job>();
-        List<JobDTO> jobDTOList=getJobListDTO(jobMapper.selectList(null));
-        if(jobDTOList.size()!=0)
-            result.data.put("job_list", jobDTOList);
-        result.message = "请求成功";
-        result.code = 200;
-        return result;
+    //获取兼职列表
+    public List<JobDTO> getJobList(String state){
+        QueryWrapper<Job> jobQueryWrapper= new QueryWrapper<Job>();
+        //筛选已发布且正在招聘的兼职
+        jobQueryWrapper.eq("job_state",state);
+        List<JobDTO> jobDTOList=getJobListDTO(jobMapper.selectList(jobQueryWrapper));
+        return jobDTOList;
     }
 
-    public ResultData getJobInfo(int jobId){
-        ResultData result=new ResultData();
+    //获取单个兼职信息
+    public List<JobDTO> getJobInfo(int jobId){
         Job job=jobMapper.selectById(jobId);
         List<JobDTO> jobDTO=new ArrayList<>();
         jobDTO.add(getJObDTO(job));
-        result.data.put("job_list",jobDTO);
-        result.message = "请求成功";
-        result.code = 200;
-        return result;
+        return jobDTO;
     }
 
+    //发布兼职
+    public int createJob(JobUpVO jobUpVO){
+        JobInfoVO jobInfo=jobUpVO.getJobInfo();
+        Job job=new Job();
+        job.setRecuriterId(jobUpVO.getRecuriterId());
+        //job.setJobType(jobInfo.setJobType());
+
+        int re=0;
+        return re;
+    }
 
 }
 

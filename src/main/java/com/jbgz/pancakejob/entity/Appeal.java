@@ -42,6 +42,11 @@ public class Appeal implements Serializable {
      */
     private String appealResult;
 
+    /**
+     *
+     */
+    private String status;
+
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 }
