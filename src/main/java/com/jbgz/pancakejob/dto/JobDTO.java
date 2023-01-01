@@ -3,10 +3,15 @@ package com.jbgz.pancakejob.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 @Data
 public class JobDTO {
     @JsonProperty("jobId")
     private int jobId;
+
+    @JsonProperty("recuriterId")
+    private int recuriterId;
 
     @JsonProperty("companyName")
     private String companyName;
@@ -24,7 +29,7 @@ public class JobDTO {
     private String workName;
 
     @JsonProperty("workTime")
-    private String workTime;
+    private int workTime;
 
     @JsonProperty("workPlace")
     private String workPlace;
@@ -33,7 +38,7 @@ public class JobDTO {
     private String workDetails;
 
     @JsonProperty("salary")
-    private double salary;
+    private BigDecimal salary;
 
     @JsonProperty("startTime")
     private String startTime;

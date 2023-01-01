@@ -18,7 +18,10 @@ import com.jbgz.pancakejob.vo.JobUpVO;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.text.SimpleDateFormat;
+import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -57,6 +60,7 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job>
     public JobDTO getJObDTO(Job job){
         JobDTO jobDTO=new JobDTO();
         jobDTO.setJobId(job.getJobId());
+        jobDTO.setRecuriterId(job.getRecuriterId());
 
         Recuriter recuriter = recuriterMapper.selectById(job.getRecuriterId());
         jobDTO.setCompanyName(recuriter.getCompanyName());
@@ -72,11 +76,10 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job>
             jobDTO.setJobType(null);
 
         jobDTO.setWorkName(job.getWorkName());
-        jobDTO.setWorkTime(DateTimeTrans.timeToString(job.getWorkTime()));
-
+        jobDTO.setWorkTime(job.getWorkTime());
         jobDTO.setWorkPlace(job.getWorkPlace());
         jobDTO.setWorkDetails(job.getWorkDetails());
-        jobDTO.setSalary(job.getSalary().doubleValue());
+        jobDTO.setSalary(job.getSalary());
 
         jobDTO.setStartTime(DateTimeTrans.dateToString(job.getStartTime()));
         jobDTO.setEndTime(DateTimeTrans.dateToString(job.getEndTime()));
@@ -110,14 +113,31 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job>
     }
 
     //发布兼职
-    public int createJob(JobUpVO jobUpVO){
+    public boolean createJob(JobUpVO jobUpVO){
         JobInfoVO jobInfo=jobUpVO.getJobInfo();
         Job job=new Job();
         job.setRecuriterId(jobUpVO.getRecuriterId());
-        //job.setJobType(jobInfo.setJobType());
+        job.setReleaseTime(new Date());
+        if(jobUpVO.isIfRelease())
+            job.setJobState("未审核");
+        else
+            job.setJobState("未发布");
+        job.setJobType(jobInfo.getJobType());
+        job.setWorkName(jobInfo.getJobName());
+        job.setWorkTime(jobInfo.getWorkTime());
+        job.setWorkPlace(jobInfo.getWorkPlace());
+        job.setWorkDetails(jobInfo.getWorkDetails());
+        job.setSalary(jobInfo.getSalary());
+        job.setStartTime(DateTimeTrans.stringToDate(jobInfo.getStartTime()));
+        job.setEndTime(DateTimeTrans.stringToDate(jobInfo.getEndTime()));
+        job.setWorkerNum(jobInfo.getEmployeeNum());
 
-        int re=0;
-        return re;
+        int re=jobMapper.insert(job);
+        System.out.println("delete:"+re);
+        if(re>0)
+            return true;
+        else
+            return false;
     }
 
 }

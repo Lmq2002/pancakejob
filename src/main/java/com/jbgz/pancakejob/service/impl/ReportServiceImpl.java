@@ -4,7 +4,11 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jbgz.pancakejob.entity.Report;
 import com.jbgz.pancakejob.service.ReportService;
 import com.jbgz.pancakejob.mapper.ReportMapper;
+import com.jbgz.pancakejob.vo.ReportVO;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.Date;
 
 /**
 * @author CSY0214
@@ -14,6 +18,25 @@ import org.springframework.stereotype.Service;
 @Service
 public class ReportServiceImpl extends ServiceImpl<ReportMapper, Report>
     implements ReportService{
+    @Resource
+    private ReportMapper reportMapper;
+    //举报兼职
+    public boolean createReport(ReportVO reportVO){
+        Report report=new Report();
+        report.setJobhunterId(reportVO.getJobhunterId());
+        report.setJobId(reportVO.getJobId());
+        report.setReportReason(report.getReportReason());
+        report.setReportState("");
+        report.setReportTime(new Date());
+
+        int re=reportMapper.insert(report);
+        System.out.println("insert:"+re);
+        if(re>0)
+            return true;
+        else
+            return false;
+    }
+
 
 }
 

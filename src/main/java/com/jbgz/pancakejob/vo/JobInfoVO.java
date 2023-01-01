@@ -2,13 +2,17 @@ package com.jbgz.pancakejob.vo;
 
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 @Data
 public class JobInfoVO {
     private String jobName;
 
-    private String jobType;
+    private int jobType;
 
     private String workDetails;
+
+    private int workTime;
 
     private String startTime;
 
@@ -16,7 +20,7 @@ public class JobInfoVO {
 
     private String workPlace;
 
-    private double salary;
+    private BigDecimal salary;
 
     private int employeeNum;
 

@@ -1,8 +1,10 @@
 package com.jbgz.pancakejob.controller;
 
 import com.jbgz.pancakejob.service.JobService;
+import com.jbgz.pancakejob.service.ReportService;
 import com.jbgz.pancakejob.utils.ResultData;
 import com.jbgz.pancakejob.vo.JobUpVO;
+import com.jbgz.pancakejob.vo.ReportVO;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -12,6 +14,8 @@ import javax.annotation.Resource;
 public class JobController {
     @Resource
     private JobService jobService;
+    @Resource
+    private ReportService reportService;
 
     //获取所有审核通过的兼职列表
     @GetMapping("/getJobList")
@@ -80,11 +84,47 @@ public class JobController {
         }
     }
 
-    //发布兼职
+    //发布兼职or存草稿
     @PostMapping("/upJob")
     public ResultData upJob(@RequestBody JobUpVO jobVO){
-        ResultData result=new ResultData();
+        try{
+            ResultData result=new ResultData();
+            boolean re=jobService.createJob(jobVO);
+            if(re){
+                result.message="发布成功";
+                result.code=200;
+            }
+            else{
+                result.message="发布失败";
+                result.code=300;
+            }
+            System.out.println("result:"+result);
+            return result;
+        }
+        catch (Exception e){
+            return ResultData.error();
+        }
+    }
 
-        return result;
+    //举报兼职
+    @PostMapping("/reportJob")
+    public ResultData reportJob(@RequestBody ReportVO reportVO){
+        try{
+            ResultData result=new ResultData();
+            boolean re=reportService.createReport(reportVO);
+            if(re){
+                result.message="举报成功";
+                result.code=200;
+            }
+            else{
+                result.message="举报失败";
+                result.code=300;
+            }
+            System.out.println("result:"+result);
+            return result;
+        }
+        catch (Exception e){
+            return ResultData.error();
+        }
     }
 }

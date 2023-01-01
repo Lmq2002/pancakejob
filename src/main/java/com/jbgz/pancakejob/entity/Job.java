@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Date;
 import lombok.Data;
 
@@ -50,7 +51,7 @@ public class Job implements Serializable {
     /**
      * 
      */
-    private Date workTime;
+    private Integer workTime;
 
     /**
      * 
@@ -61,6 +62,11 @@ public class Job implements Serializable {
      * 
      */
     private String workDetails;
+
+    /**
+     *
+     */
+    private Integer workerNum;
 
     /**
      * 

@@ -7,16 +7,17 @@
     <resultMap id="BaseResultMap" type="com.jbgz.pancakejob.entity.Job">
             <id property="jobId" column="job_id" jdbcType="INTEGER"/>
             <result property="recuriterId" column="recuriter_id" jdbcType="INTEGER"/>
-            <result property="releaseTime" column="release_time" jdbcType="DATE"/>
+            <result property="releaseTime" column="release_time" jdbcType="TIMESTAMP"/>
             <result property="jobState" column="job_state" jdbcType="VARCHAR"/>
             <result property="jobType" column="job_type" jdbcType="INTEGER"/>
             <result property="workName" column="work_name" jdbcType="VARCHAR"/>
-            <result property="workTime" column="work_time" jdbcType="TIME"/>
+            <result property="workTime" column="work_time" jdbcType="INTEGER"/>
             <result property="workPlace" column="work_place" jdbcType="VARCHAR"/>
             <result property="workDetails" column="work_details" jdbcType="VARCHAR"/>
+            <result property="workerNum" column="worker_num" jdbcType="INTEGER"/>
             <result property="salary" column="salary" jdbcType="DECIMAL"/>
-            <result property="startTime" column="start_time" jdbcType="DATE"/>
-            <result property="endTime" column="end_time" jdbcType="DATE"/>
+            <result property="startTime" column="start_time" jdbcType="TIMESTAMP"/>
+            <result property="endTime" column="end_time" jdbcType="TIMESTAMP"/>
     </resultMap>
 
     <sql id="Base_Column_List">
