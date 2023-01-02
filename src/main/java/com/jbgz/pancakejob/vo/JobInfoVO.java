@@ -1,7 +1,9 @@
 package com.jbgz.pancakejob.vo;
 
 import lombok.Data;
-
+/**
+ * 接收前端传参
+ * */
 import java.math.BigDecimal;
 
 @Data

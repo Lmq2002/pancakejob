@@ -1,9 +1,12 @@
 package com.jbgz.pancakejob.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.jbgz.pancakejob.dto.PersonalInfoDTO;
 import com.jbgz.pancakejob.entity.Jobhunter;
 import com.jbgz.pancakejob.service.JobhunterService;
 import com.jbgz.pancakejob.mapper.JobhunterMapper;
+import com.jbgz.pancakejob.vo.GetPersonalInfoVO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -15,6 +18,13 @@ import org.springframework.stereotype.Service;
 public class JobhunterServiceImpl extends ServiceImpl<JobhunterMapper, Jobhunter>
     implements JobhunterService{
 
+    @Autowired
+    private JobhunterMapper jobhunterMapper;
+
+    @Override
+    public PersonalInfoDTO getPersonalInfo(GetPersonalInfoVO vo) {
+        return jobhunterMapper.getInfo(vo);
+    }
 }
 
 

@@ -6,7 +6,7 @@ spring:
   application:
     name: pankcakejob
   freemarker:
-    template-loader-path: classpath:/web/app/
+#    template-loader-path: classpath:/web/app/
     suffix: .ftl
     charset: utf-8
     cache: false
@@ -18,9 +18,23 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     name: defaultDataSource
-    url: jdbc:mysql://gz-cynosdbmysql-grp-17pikoep.sql.tencentcdb.com:22639/pancake_job?serverTimezone=UTC
+    url: jdbc:mysql://gz-cynosdbmysql-grp-17pikoep.sql.tencentcdb.com:22639/pancake_job?useTimezone=true&serverTimezone=GMT%2B8
     username: HELLO
     password: JBGZ
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+#  mail:
+#    protocol: smtp # 邮件协议
+#    host: smtp.163.com # 网易邮箱stmp服务器地址
+#    port: 25
+#    username: pancakeJob@163.com # 发件人邮箱地址
+#    password: DKOFQWFHHQUCNVKE # 授权码
+#    default-encoding: utf-8 # 编码字符集
+#    properties:
+#      mail:
+#        debug: true # 完整打印邮件发送过程的日志
+
 server:
   port: 5000
 

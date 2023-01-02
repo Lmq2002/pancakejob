@@ -23,4 +23,20 @@
         registration_time,contact_method,introduction,
         score
     </sql>
+
+<!--    <insert id="createUser" parameterType="com.jbgz.pancakejob.vo.RegistVO"-->
+<!--            useGeneratedKeys="true" keyProperty="user_id">-->
+<!--        insert into user(-->
+<!--            user_type, password, email, registration_time)-->
+<!--        values (-->
+<!--            #{userType}, #{password}, #{email}, #{registrationTime, jdbcType=DATETIME}-->
+<!--               )-->
+
+<!--    </insert>-->
+
+<!--    <select id="findUserByEmail" parameterType="com.jbgz.pancakejob.vo.LoginByEmailVO"-->
+<!--            resultType="com.jbgz.pancakejob.entity.User">-->
+<!--        select * from user-->
+<!--        where email=#{email}-->
+<!--    </select>-->
 </mapper>

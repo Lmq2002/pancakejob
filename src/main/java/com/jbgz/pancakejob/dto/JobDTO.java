@@ -5,6 +5,10 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 
+/***
+ * 给前端传参
+ */
+
 @Data
 public class JobDTO {
     @JsonProperty("jobId")
