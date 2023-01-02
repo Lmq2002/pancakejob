@@ -1,5 +1,6 @@
 package com.jbgz.pancakejob.controller;
 
+import com.baomidou.mybatisplus.extension.api.R;
 import com.jbgz.pancakejob.common.Constants;
 import com.jbgz.pancakejob.dto.PersonalInfoDTO;
 import com.jbgz.pancakejob.service.JobhunterService;
@@ -53,18 +54,42 @@ public class UserController {
 
     /**
      *功能：设置个人信息
-     * 状态：正在开发中
+     * 状态：正在测试中
      * 负责人：lmq
      * 新建时间：2023/1/2
+     * 完成时间：2023/1/2
      */
     @PutMapping("/Jobhunter/personInfo/set")
     public ResultData setPersonalInfo(@RequestBody PersonalInfoVO vo){
         try{
-            return new ResultData(Constants.CODE_200,"成功",null);
+            boolean tmp = jobhunterService.setPersonalInfo(vo);
+            if(tmp)
+                return new ResultData(Constants.CODE_200,"成功",null);
+            else
+                return new ResultData(Constants.CODE_400,"失败",null);
         }
         catch (Exception e){
             System.out.println("异常情况："+e.getMessage());
             return ResultData.sys_error();
         }
     }
+
+    /**
+     * 功能：获取用户联系方式
+     * 状态：正在开发中
+     * 负责人：lmq
+     * 新建时间：2023/1/2
+     *
+     * */
+
+    /**
+     * 功能：添加用户联系方式
+     * 状态：正在开发中
+     * 负责人：lmq
+     * 新建时间：2023/1/2
+     * */
+
+    /**
+     * 功能：添加实名认证
+     * */
 }

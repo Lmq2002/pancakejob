@@ -1,23 +1,23 @@
 package com.jbgz.pancakejob.controller;
 
 
-import com.baomidou.mybatisplus.extension.api.R;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.jbgz.pancakejob.common.Constants;
+import com.jbgz.pancakejob.common.UserType;
 import com.jbgz.pancakejob.dto.CreateAccountDTO;
-import com.jbgz.pancakejob.dto.LoginDTO;
 import com.jbgz.pancakejob.entity.User;
-import com.jbgz.pancakejob.service.UserService;
-import com.jbgz.pancakejob.service.impl.UserServiceImpl;
+import com.jbgz.pancakejob.service.*;
+import com.jbgz.pancakejob.service.impl.*;
+import com.jbgz.pancakejob.utils.CreateJWT;
 import com.jbgz.pancakejob.utils.ResultData;
 import com.jbgz.pancakejob.vo.EmailAccountVO;
 import com.jbgz.pancakejob.vo.FindPasswordVO;
+import com.jbgz.pancakejob.vo.LoginVO;
 import com.jbgz.pancakejob.vo.RegistVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @RestController
 //@RequestMapping("/")
@@ -25,6 +25,12 @@ public class LoginController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private AdminConlogService adminConlogService;
+    @Autowired
+    private JobhunterConlogService jobhunterConlogService;
+    @Autowired
+    private RecuriterConlogService recuriterConlogService;
 
     /**
      * 功能：获取邮箱验证码
@@ -91,7 +97,10 @@ public class LoginController {
         try{
             boolean isSuccess = userService.regist(vo);
             if(isSuccess)
+            {
+
                 return new ResultData(Constants.CODE_200,"注册成功",null);
+            }
             else
                 return new ResultData(Constants.CODE_400,"注册失败",null);
         }
@@ -132,14 +141,62 @@ public class LoginController {
      * 新建时间：2022/12/28
      * */
     @PostMapping("/login")
-    public ResultData login(@RequestBody Map<String,Object> inputData)
+    public ResultData login(@RequestBody LoginVO vo)
     {
-//        if(userService.find(logindto)!=null)
-//        {
-//            //...
-//            //conlogService.save()
-//        }
-        return ResultData.error(Constants.CODE_401,"test");
+        try{
+            User user = null;
+            if(vo.getAccount().contains("@")){
+                QueryWrapper<User> qw = new QueryWrapper<>();
+                qw.eq("email",vo.getAccount());
+                qw.eq("password",vo.getPassword());
+                user = userService.getOne(qw);
+            }
+            else{
+                user = userService.login(vo);
+            }
+            if(user!=null){
+                System.out.println("准备生成token");
+                String token = CreateJWT.getToken(user);
+                System.out.println("token生成完毕！");
+
+//                System.out.println("准备验证token");
+//                boolean isTrue = CreateJWT.verifyToken(token);
+//                if(isTrue == false) //token未过期，且正确
+//                    return new ResultData(Constants.CODE_400,"登录失败",null);
+
+                //还需要加入conlog
+                boolean isSuccess = false;
+                if(user.getUserType().equals(UserType.ADMIN)){
+                    isSuccess = adminConlogService.create(user.getUserId(),token);
+                }
+                else if(user.getUserType().equals(UserType.RECURITER)){
+                    isSuccess = recuriterConlogService.create(user.getUserId(),token);
+                }
+                else if(user.getUserType().equals(UserType.JOBHUNTER)){
+                    isSuccess = jobhunterConlogService.create(user.getUserId(),token);
+                }
+                else{
+                    return new ResultData(Constants.CODE_400,"登录失败",null);
+                }
+                if(!isSuccess)
+                    return new ResultData(Constants.CODE_400,"登录失败",null);
+
+                ResultData result = new ResultData();
+                result.code = Constants.CODE_200;
+                result.message = "登录成功";
+                result.data.put("token",token);
+                result.data.put("userId",user.getUserId());
+                result.data.put("userType",user.getUserType());
+                return result;
+            }
+            else
+                return new ResultData(Constants.CODE_400,"登录失败",null);
+        }
+        catch (Exception e){
+            System.out.println("异常情况："+e.getMessage());
+            return ResultData.sys_error();
+        }
+        //return ResultData.sys_error();
     }
 
     /**

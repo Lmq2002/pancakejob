@@ -9,5 +9,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
 * @createDate 2022-12-30 22:39:19
 */
 public interface JobhunterConlogService extends IService<JobhunterConlog> {
-
+    public boolean create(Integer jobhunter_id,String token);
 }

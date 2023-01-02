@@ -9,5 +9,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
 * @createDate 2022-12-30 22:40:02
 */
 public interface RecuriterConlogService extends IService<RecuriterConlog> {
-
+    public boolean create(Integer recuriter_id,String token);
 }

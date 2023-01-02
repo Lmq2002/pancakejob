@@ -5,6 +5,7 @@ import com.jbgz.pancakejob.entity.Jobhunter;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.jbgz.pancakejob.mapper.JobhunterMapper;
 import com.jbgz.pancakejob.vo.GetPersonalInfoVO;
+import com.jbgz.pancakejob.vo.PersonalInfoVO;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -21,4 +22,6 @@ public interface JobhunterService extends IService<Jobhunter> {
      * 返回：PersonalInfo
      */
     public PersonalInfoDTO getPersonalInfo(GetPersonalInfoVO vo);
+
+    public boolean setPersonalInfo(PersonalInfoVO vo);
 }

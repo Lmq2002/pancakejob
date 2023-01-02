@@ -34,8 +34,7 @@
 
 <!--    </insert>-->
 
-<!--    <select id="findUserByEmail" parameterType="com.jbgz.pancakejob.vo.LoginByEmailVO"-->
-<!--            resultType="com.jbgz.pancakejob.entity.User">-->
+<!--    <select id="findUserByEmail" parameterType="com.jbgz.pancakejob.vo.LoginVO-            resultType="com.jbgz.pancakejob.entity.User">-->
 <!--        select * from user-->
 <!--        where email=#{email}-->
 <!--    </select>-->

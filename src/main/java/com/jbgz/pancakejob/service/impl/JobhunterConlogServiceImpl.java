@@ -4,7 +4,10 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jbgz.pancakejob.entity.JobhunterConlog;
 import com.jbgz.pancakejob.service.JobhunterConlogService;
 import com.jbgz.pancakejob.mapper.JobhunterConlogMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Date;
 
 /**
 * @author CSY0214
@@ -15,6 +18,18 @@ import org.springframework.stereotype.Service;
 public class JobhunterConlogServiceImpl extends ServiceImpl<JobhunterConlogMapper, JobhunterConlog>
     implements JobhunterConlogService{
 
+    @Autowired
+    private JobhunterConlogMapper mapper;
+    @Override
+    public boolean create(Integer jobhunter_id, String token) {
+        JobhunterConlog conlog = new JobhunterConlog();
+        conlog.setJobhunterId(jobhunter_id);
+        conlog.setToken(token);
+        conlog.setLoginTime(new Date());
+        int tmp = mapper.insert(conlog);
+        if (tmp<1)return false;
+        return true;
+    }
 }
 
 

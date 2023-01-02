@@ -6,13 +6,21 @@ import cn.hutool.crypto.SecureUtil;
 import cn.hutool.extra.mail.MailUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.jbgz.pancakejob.common.UserType;
 import com.jbgz.pancakejob.dto.CreateAccountDTO;
 import com.jbgz.pancakejob.dto.LoginDTO;
+import com.jbgz.pancakejob.entity.Administrator;
+import com.jbgz.pancakejob.entity.Jobhunter;
+import com.jbgz.pancakejob.entity.Recuriter;
 import com.jbgz.pancakejob.entity.User;
+import com.jbgz.pancakejob.mapper.AdministratorMapper;
+import com.jbgz.pancakejob.mapper.JobhunterMapper;
+import com.jbgz.pancakejob.mapper.RecuriterMapper;
 import com.jbgz.pancakejob.service.UserService;
 import com.jbgz.pancakejob.mapper.UserMapper;
 import com.jbgz.pancakejob.vo.EmailAccountVO;
 import com.jbgz.pancakejob.vo.FindPasswordVO;
+import com.jbgz.pancakejob.vo.LoginVO;
 import com.jbgz.pancakejob.vo.RegistVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,9 +40,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private JobhunterMapper jobhunterMapper;
+    @Autowired
+    private RecuriterMapper recuriterMapper;
+    @Autowired
+    private AdministratorMapper administratorMapper;
     @Override
-    public List<LoginDTO> login() {
-        return null;
+    public User login(LoginVO vo) {
+        return userMapper.findUserById(vo);
     }
 
 
@@ -91,8 +105,33 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         user.setRegistrationTime(new Date());
         user.setContactMethod(100L);
         tmp = userMapper.insert(user);
-        if(tmp!=0){
+        if(tmp!=0 && regist2(vo,user.getUserId())){
             return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean regist2(RegistVO vo, Integer id) {
+        boolean tmp = false;
+        if(id<10000)
+            return false;
+        if(vo.getUserType().equals(UserType.ADMIN)){
+            Administrator admin = new Administrator();
+            admin.setAdminId(id);
+            admin.setPassword(vo.getPassword());
+            System.out.println("准备插入:"+admin.getAdminId()+"  "+admin.getPassword());
+            if(1 == administratorMapper.registAdmin(admin))return true;
+        }
+        else if(vo.getUserType().equals(UserType.RECURITER)){
+            Recuriter recuriter = new Recuriter();
+            recuriter.setRecuriterId(id);
+            if(1 == recuriterMapper.registRecuriter(recuriter))return true;
+        }
+        else if(vo.getUserType().equals(UserType.JOBHUNTER)){
+            Jobhunter jobhunter = new Jobhunter();
+            jobhunter.setJobhunterId(id);
+            if(1 == jobhunterMapper.registJobhunter(jobhunter))return true;
         }
         return false;
     }

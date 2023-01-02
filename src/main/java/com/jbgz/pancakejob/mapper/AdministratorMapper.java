@@ -2,6 +2,7 @@ package com.jbgz.pancakejob.mapper;
 
 import com.jbgz.pancakejob.entity.Administrator;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Insert;
 
 /**
 * @author CSY0214
@@ -11,6 +12,8 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 */
 public interface AdministratorMapper extends BaseMapper<Administrator> {
 
+    @Insert("INSERT INTO administrator (admin_id,password) VALUES (#{adminId},#{password})")
+    Integer registAdmin(Administrator admin);
 }
 
 

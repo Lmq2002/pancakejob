@@ -18,13 +18,13 @@ public class JobhunterConlog implements Serializable {
     /**
      * 
      */
-    @TableId
+    @TableId(type = IdType.AUTO)
     private Integer conlogId;
 
     /**
      * 
      */
-    private String ip;
+    private String token;
 
     /**
      * 

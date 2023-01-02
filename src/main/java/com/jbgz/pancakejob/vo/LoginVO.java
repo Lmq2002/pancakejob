@@ -3,7 +3,7 @@ package com.jbgz.pancakejob.vo;
 import lombok.Data;
 
 @Data
-public class LoginByEmailVO {
-    private String email;
+public class LoginVO {
+    private String account;
     private String password;
 }

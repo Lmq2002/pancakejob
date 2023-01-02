@@ -6,6 +6,7 @@ import com.jbgz.pancakejob.entity.Jobhunter;
 import com.jbgz.pancakejob.service.JobhunterService;
 import com.jbgz.pancakejob.mapper.JobhunterMapper;
 import com.jbgz.pancakejob.vo.GetPersonalInfoVO;
+import com.jbgz.pancakejob.vo.PersonalInfoVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +25,11 @@ public class JobhunterServiceImpl extends ServiceImpl<JobhunterMapper, Jobhunter
     @Override
     public PersonalInfoDTO getPersonalInfo(GetPersonalInfoVO vo) {
         return jobhunterMapper.getInfo(vo);
+    }
+
+    @Override
+    public boolean setPersonalInfo(PersonalInfoVO vo) {
+        return jobhunterMapper.updateInfo(vo);
     }
 }
 

@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.jbgz.pancakejob.mapper.UserMapper;
 import com.jbgz.pancakejob.vo.EmailAccountVO;
 import com.jbgz.pancakejob.vo.FindPasswordVO;
+import com.jbgz.pancakejob.vo.LoginVO;
 import com.jbgz.pancakejob.vo.RegistVO;
 
 import java.util.List;
@@ -19,7 +20,7 @@ import java.util.List;
 public interface UserService extends IService<User> {
     
 
-    List<LoginDTO> login();
+    User login(LoginVO vo);
     /**
      * 调用雪花算法，生成邮箱验证码，发送邮箱
      * 返回：AccountDTO
@@ -37,6 +38,8 @@ public interface UserService extends IService<User> {
      * 返回 boolean
      * */
     boolean regist(RegistVO vo);
+
+    boolean regist2(RegistVO vo,Integer id);
 
     /**
      * 根据user_id修改密码

@@ -17,7 +17,7 @@ public class Recuriter implements Serializable {
     /**
      * 
      */
-    @TableId(type = IdType.AUTO)
+    @TableId
     private Integer recuriterId;
 
     /**

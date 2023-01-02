@@ -9,5 +9,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 * @createDate 2022-12-30 22:09:50
 */
 public interface AdminConlogService extends IService<AdminConlog> {
+    public boolean create(Integer admin_id,String token);
 
 }

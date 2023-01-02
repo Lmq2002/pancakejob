@@ -1,7 +1,9 @@
 package com.jbgz.pancakejob.mapper;
 
+import com.jbgz.pancakejob.entity.Administrator;
 import com.jbgz.pancakejob.entity.Recuriter;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Insert;
 
 /**
 * @author CSY0214
@@ -10,7 +12,8 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 * @Entity com.jbgz.pancakejob.entity.Recuriter
 */
 public interface RecuriterMapper extends BaseMapper<Recuriter> {
-
+    @Insert("INSERT INTO recuriter (recuriter_id) VALUES (#{recuriterId})")
+    Integer registRecuriter(Recuriter recuriter);
 }
 
 

@@ -6,7 +6,7 @@
 
     <resultMap id="BaseResultMap" type="com.jbgz.pancakejob.entity.RecuriterConlog">
             <id property="conlogId" column="conlog_id" jdbcType="INTEGER"/>
-            <result property="ip" column="ip" jdbcType="VARCHAR"/>
+            <result property="token" column="token" jdbcType="VARCHAR"/>
             <result property="loginTime" column="login_time" jdbcType="TIMESTAMP"/>
             <result property="recuriterId" column="recuriter_id" jdbcType="INTEGER"/>
     </resultMap>
