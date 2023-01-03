@@ -18,14 +18,11 @@ public class ResultData {
     //public boolean status;
     public String message;
 
-    //public List<Object> data= new ArrayList<>();
-
     public Map<String, Object> data = new HashMap<>();
 
 //    public ResultData()
 //    {
 //        code = 300;
-//        //status = false;
 //        message = "请求失败";
 //    }
 
@@ -34,9 +31,7 @@ public class ResultData {
 //        return jsonStr;
 //    }
 
-    public static ResultData error(){
-        return new ResultData();
-    }
+    public static ResultData error(){return new ResultData(Constants.CODE_400,"请求失败",null);}
     public static ResultData error(Integer code, String message) {
         return new ResultData(code,message,null);
     }

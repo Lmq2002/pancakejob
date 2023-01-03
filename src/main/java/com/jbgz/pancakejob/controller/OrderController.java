@@ -29,6 +29,12 @@ public class OrderController {
             return result;
         }
         catch (Exception e){
+//            ResultData result=new ResultData();
+//            result.code=400;
+//            result.message="请求失败";
+//            result.data.put("orderId：",null);
+//            return result;
+            System.out.println("错误信息"+e.getMessage());
             return ResultData.error();
         }
     }
@@ -47,6 +53,7 @@ public class OrderController {
             return result;
         }
         catch (Exception e){
+            System.out.println("错误信息"+e.getMessage());
             return ResultData.error();
         }
 
@@ -64,6 +71,7 @@ public class OrderController {
             return result;
         }
         catch (Exception e){
+            System.out.println("错误信息"+e.getMessage());
             return ResultData.error();
         }
     }
@@ -80,6 +88,7 @@ public class OrderController {
             return result;
         }
         catch (Exception e){
+            System.out.println("错误信息"+e.getMessage());
             return ResultData.error();
         }
     }
@@ -96,6 +105,7 @@ public class OrderController {
             return result;
         }
         catch (Exception e){
+            System.out.println("错误信息"+e.getMessage());
             return ResultData.error();
         }
     }
@@ -118,6 +128,7 @@ public class OrderController {
             return result;
         }
         catch (Exception e){
+            System.out.println("错误信息"+e.getMessage());
             return ResultData.error();
         }
 
@@ -141,6 +152,7 @@ public class OrderController {
             return result;
         }
         catch (Exception e){
+            System.out.println("错误信息"+e.getMessage());
             return ResultData.error();
         }
     }
@@ -159,6 +171,7 @@ public class OrderController {
             return result;
         }
         catch (Exception e){
+            System.out.println("错误信息"+e.getMessage());
             return ResultData.error();
         }
     }
@@ -177,6 +190,7 @@ public class OrderController {
             return result;
         }
         catch (Exception e){
+            System.out.println("错误信息"+e.getMessage());
             return ResultData.error();
         }
     }
@@ -195,6 +209,7 @@ public class OrderController {
             return result;
         }
         catch (Exception e){
+            System.out.println("错误信息"+e.getMessage());
             return ResultData.error();
         }
     }

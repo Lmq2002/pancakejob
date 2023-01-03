@@ -69,7 +69,7 @@ public class JobController {
                 return result;
             }
             catch(Exception e){
-                System.out.println("异常信息"+e.getMessage());
+                System.out.println("错误信息"+e.getMessage());
                 return ResultData.error();
             }
         }
@@ -83,6 +83,7 @@ public class JobController {
                 return result;
             }
             catch(Exception e){
+                System.out.println("错误信息"+e.getMessage());
                 return ResultData.error();
             }
         }
@@ -100,6 +101,7 @@ public class JobController {
             return result;
         }
         catch (Exception e){
+            System.out.println("错误信息"+e.getMessage());
             return ResultData.error();
         }
     }
@@ -122,6 +124,7 @@ public class JobController {
             return result;
         }
         catch (Exception e){
+            System.out.println("错误信息"+e.getMessage());
             return ResultData.error();
         }
     }
@@ -141,6 +144,7 @@ public class JobController {
             return result;
         }
         catch (Exception e){
+            System.out.println("错误信息"+e.getMessage());
             return ResultData.error();
         }
     }
@@ -163,6 +167,7 @@ public class JobController {
             return result;
         }
         catch (Exception e){
+            System.out.println("错误信息"+e.getMessage());
             return ResultData.error();
         }
     }

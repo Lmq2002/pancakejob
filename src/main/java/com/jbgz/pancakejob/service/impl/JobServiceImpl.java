@@ -142,7 +142,7 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job>
         job.setWorkerNum(jobInfo.getEmployeeNum());
 
         int re=jobMapper.insert(job);
-        System.out.println("delete:"+re);
+        System.out.println("insert:"+re);
         return re>0;
     }
 

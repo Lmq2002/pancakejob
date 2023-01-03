@@ -24,6 +24,7 @@ public class AdminController {
             return result;
         }
         catch(Exception e){
+            System.out.println("错误信息"+e.getMessage());
             return ResultData.error();
         }
     }
@@ -45,6 +46,7 @@ public class AdminController {
             return result;
         }
         catch (Exception e){
+            System.out.println("错误信息"+e.getMessage());
             return ResultData.error();
         }
     }
@@ -56,18 +58,16 @@ public class AdminController {
         try{
             ResultData result=new ResultData();
             boolean re=jobTypeService.deleteJobType(typeId);
-            if(re){
+            result.code=200;
+            if(re)
                 result.message="删除成功";
-                result.code=200;
-            }
-            else{
+            else
                 result.message="删除失败";
-                result.code=200;
-            }
             System.out.println("result:"+result);
             return result;
         }
         catch(Exception e){
+            System.out.println("错误信息"+e.getMessage());
             return ResultData.error();
         }
     }
@@ -90,6 +90,7 @@ public class AdminController {
             return result;
         }
         catch (Exception e){
+            System.out.println("错误信息"+e.getMessage());
             return ResultData.error();
         }
     }

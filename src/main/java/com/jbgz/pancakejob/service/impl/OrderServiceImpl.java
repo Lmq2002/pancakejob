@@ -125,31 +125,18 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
 
     //报名兼职
     public int createOrder(ApplyJobVO applyJobVO){
-//        QueryWrapper<Order> orderQueryWrapper=new QueryWrapper<Order>();
-//        orderQueryWrapper.eq("jobhunter_id",applyJobVO.getJobhunterId())
-//                .eq("job_id",applyJobVO.getJobId())
-//                .eq("order_state","已取消");
-//        Order order=orderMapper.selectOne(orderQueryWrapper);
-//        //如果有已取消的订单记录，则直接修改为已报名
-//        if(order!=null){
-//            order.setOrderState("已报名");
-//            orderMapper.updateById(order);
-//            return order.getOrderId();
-//        }//没有就插入新的订单记录
-//        else{
         //兼职的已报名人数+1
         Job job=jobMapper.selectById(applyJobVO.getJobId());
         job.setAppliedNum(job.getAppliedNum()+1);
         jobMapper.updateById(job);
         Order order=new Order();
-            order.setJobhunterId(applyJobVO.getJobhunterId());
-            order.setJobId(applyJobVO.getJobId());
-            order.setApplyTime(new Date());
-            order.setApplyDescription(applyJobVO.getApplyReason());
-            order.setOrderState("已报名");
-            int re=orderMapper.insert(order);
-            return re;
-//        }
+        order.setJobhunterId(applyJobVO.getJobhunterId());
+        order.setJobId(applyJobVO.getJobId());
+        order.setApplyTime(new Date());
+        order.setApplyDescription(applyJobVO.getApplyReason());
+        order.setOrderState("已报名");
+        int re=orderMapper.insert(order);
+        return re;
     }
 
     //取消报名

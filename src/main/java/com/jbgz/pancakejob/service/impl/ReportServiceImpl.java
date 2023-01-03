@@ -25,7 +25,7 @@ public class ReportServiceImpl extends ServiceImpl<ReportMapper, Report>
         Report report=new Report();
         report.setJobhunterId(reportVO.getJobhunterId());
         report.setJobId(reportVO.getJobId());
-        report.setReportReason(report.getReportReason());
+        report.setReportReason(reportVO.getReason());
         report.setReportState("未审核");
         report.setReportTime(new Date());
 
