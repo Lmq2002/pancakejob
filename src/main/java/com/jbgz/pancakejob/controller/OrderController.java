@@ -55,6 +55,9 @@ public class OrderController {
             ResultData result=new ResultData();
             boolean accept=orderState.equals("已录用");
             boolean re=orderService.acceptOfferOrNot(orderId,accept);
+
+            /*向招聘方发送通知?*/
+
             result.code=200;
             if(re)
                 result.message="修改成功";
@@ -75,6 +78,9 @@ public class OrderController {
             ResultData result=new ResultData();
             boolean send=orderState.equals("已通过");
             boolean re=orderService.sendOfferOrNot(orderId,send);
+
+            /*NotificationService向求职者发送通知*/
+
             result.code=200;
             if(re)
                 result.message="修改成功";

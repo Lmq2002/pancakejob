@@ -37,20 +37,14 @@ public class JobTypeServiceImpl extends ServiceImpl<JobTypeMapper, JobType>
         jobType.setTypeName(typeName);
         int re=jobTypeMapper.insert(jobType);
         System.out.println("insert:"+re);
-        if(re>0)
-            return true;
-        else
-            return false;
+        return re>0;
     }
 
     //删除兼职类型
     public boolean deleteJobType(int typeId){
         int re=jobTypeMapper.deleteById(typeId);
         System.out.println("delete:"+re);
-        if(re>0)
-            return true;
-        else
-            return false;
+        return re>0;
     }
 
     //修改兼职类型
@@ -60,10 +54,7 @@ public class JobTypeServiceImpl extends ServiceImpl<JobTypeMapper, JobType>
         jobType.setTypeName(typeName);
         int re=jobTypeMapper.updateById(jobType);
         System.out.println("update:"+re);
-        if(re>0)
-            return true;
-        else
-            return false;
+        return re>0;
     }
 }
 

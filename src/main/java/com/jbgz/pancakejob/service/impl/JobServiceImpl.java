@@ -141,18 +141,8 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job>
     public boolean closeRecurit(int jobId){
         Job job=jobMapper.selectById(jobId);
         job.setJobState("已结束");
-        jobMapper.updateById(job);
-        QueryWrapper<Order> orderQueryWrapper=new QueryWrapper<Order>();
-        orderQueryWrapper.eq("job_id",jobId).eq("order_state","已报名");
-        List<Order> orders=orderMapper.selectList(orderQueryWrapper);
-        orders.forEach(order -> {
-            order.setOrderState("未通过");
-
-            /*向求职者发送通知*/
-
-            orderMapper.updateById(order);
-        });
-        return true;
+        int re=jobMapper.updateById(job);
+        return re>0;
     }
 }
 

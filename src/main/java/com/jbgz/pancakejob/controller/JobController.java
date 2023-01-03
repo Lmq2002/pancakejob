@@ -1,6 +1,7 @@
 package com.jbgz.pancakejob.controller;
 
 import com.jbgz.pancakejob.service.JobService;
+import com.jbgz.pancakejob.service.OrderService;
 import com.jbgz.pancakejob.service.ReportService;
 import com.jbgz.pancakejob.utils.ResultData;
 import com.jbgz.pancakejob.vo.JobUpVO;
@@ -8,12 +9,15 @@ import com.jbgz.pancakejob.vo.ReportVO;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @RestController
 @RequestMapping("/job")
 public class JobController {
     @Resource
     private JobService jobService;
+    @Resource
+    private OrderService orderService;
     @Resource
     private ReportService reportService;
 
@@ -112,6 +116,10 @@ public class JobController {
         try{
             ResultData result=new ResultData();
             jobService.closeRecurit(jobId);
+            //修改剩余报名者的结果为未通过
+            List<Integer> refuses=orderService.refuseRestJobhunter(jobId);
+            //向求职者发送信息
+            //调用NotificationService的方法
             result.code=200;
             result.message="已结束招聘";
             return result;

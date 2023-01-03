@@ -4,6 +4,8 @@ import com.jbgz.pancakejob.entity.Order;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.jbgz.pancakejob.vo.ApplyJobVO;
 
+import java.util.List;
+
 /**
 * @author CSY0214
 * @description 针对表【order】的数据库操作Service
@@ -24,5 +26,6 @@ public interface OrderService extends IService<Order> {
 
     boolean finishOrder(int orderId);
 
+    List<Integer> refuseRestJobhunter(int jobId);
 
 }

@@ -11,6 +11,7 @@ import com.jbgz.pancakejob.vo.ApplyJobVO;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -92,18 +93,10 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
 
     //招聘方发放offer
     public boolean sendOfferOrNot(int orderId,boolean send){
-        if(send){
-
-            /*向求职者发送通知*/
-
+        if(send)
             return changeOrderState(orderId,"已通过");
-        }
-        else {
-
-            /*向求职者发送通知*/
-
+        else
             return changeOrderState(orderId,"未通过");
-        }
     }
 
     //求职者确认是否接受录用
@@ -114,18 +107,10 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
             Job job=jobMapper.selectById(order.getJobId());
             job.setAcceptedNum(job.getAcceptedNum()+1);
             int re=jobMapper.updateById(job);
-
-            /*向招聘方发送通知?*/
-
             return re>0;
         }
-        else{
-
-            /*向招聘方发送通知?*/
-
+        else
             return changeOrderState(orderId,"未录用");
-        }
-
     }
 
     //招聘方确认工作完成
@@ -139,6 +124,21 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
             job.setJobState("已完成");
         int re=jobMapper.updateById(job);
         return re>0;
+    }
+
+    //招聘方结束招聘时将剩余报名者的订单状态修改为“未通过”，返回需要发送未通过通知的求职者名单
+    public List<Integer> refuseRestJobhunter(int jobId){
+        //筛选出剩余的报名者
+        QueryWrapper<Order> orderWrapper=new QueryWrapper<Order>();
+        orderWrapper.eq("job_id",jobId).eq("order_state","已报名");
+        List<Order> orders=orderMapper.selectList(orderWrapper);
+        List<Integer> refuseList=new ArrayList<>();
+        orders.forEach(order -> {
+            order.setOrderState("未通过");
+            refuseList.add(order.getJobhunterId());//获得需要发送未通过通知的人员列表
+            orderMapper.updateById(order);
+        });
+        return refuseList;
     }
 
 }
