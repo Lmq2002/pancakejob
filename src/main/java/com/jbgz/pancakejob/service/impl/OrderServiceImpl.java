@@ -86,7 +86,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
         if(scoreType.equals("jobhunter"))
             order.setJobhunterScore(newScore);
         else if(scoreType.equals("recuriter"))
-            order.setRecuriterScore(newScore);
+            order.setRecruiterScore(newScore);
         int re=orderMapper.updateById(order);
         return re>0;
     }
