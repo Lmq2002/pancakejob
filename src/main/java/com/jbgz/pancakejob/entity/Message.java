@@ -18,7 +18,7 @@ public class Message implements Serializable {
     /**
      * 
      */
-    @TableId
+    @TableId(type = IdType.AUTO)
     private Integer messageId;
 
     /**

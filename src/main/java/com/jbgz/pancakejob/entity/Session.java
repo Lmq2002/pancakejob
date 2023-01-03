@@ -18,7 +18,7 @@ public class Session implements Serializable {
     /**
      * 
      */
-    @TableId
+    @TableId(type = IdType.AUTO)
     private Integer sessionId;
 
     /**

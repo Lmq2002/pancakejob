@@ -83,6 +83,21 @@ public class Job implements Serializable {
      */
     private Date endTime;
 
+    /**
+     *
+     */
+    private Integer appliedNum;
+
+    /**
+     *
+     */
+    private Integer acceptedNum;
+
+    /**
+     *
+     */
+    private Integer finishedNum;
+
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 }

@@ -18,7 +18,7 @@ public class Notification implements Serializable {
     /**
      * 
      */
-    @TableId
+    @TableId(type = IdType.AUTO)
     private Integer notificationId;
 
     /**

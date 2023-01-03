@@ -5,8 +5,10 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jbgz.pancakejob.dto.JobDTO;
 import com.jbgz.pancakejob.entity.Job;
 import com.jbgz.pancakejob.entity.JobType;
+import com.jbgz.pancakejob.entity.Order;
 import com.jbgz.pancakejob.entity.Recruiter;
 import com.jbgz.pancakejob.mapper.JobTypeMapper;
+import com.jbgz.pancakejob.mapper.OrderMapper;
 import com.jbgz.pancakejob.mapper.RecruiterMapper;
 import com.jbgz.pancakejob.service.JobService;
 import com.jbgz.pancakejob.mapper.JobMapper;
@@ -30,6 +32,8 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job>
     implements JobService{
     @Resource
     private JobMapper jobMapper;
+    @Resource
+    private OrderMapper orderMapper;
     @Resource
     private RecruiterMapper recruiterMapper;
     @Resource
@@ -130,12 +134,16 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job>
 
         int re=jobMapper.insert(job);
         System.out.println("delete:"+re);
-        if(re>0)
-            return true;
-        else
-            return false;
+        return re>0;
     }
 
+    //结束招聘
+    public boolean closeRecurit(int jobId){
+        Job job=jobMapper.selectById(jobId);
+        job.setJobState("已结束");
+        int re=jobMapper.updateById(job);
+        return re>0;
+    }
 }
 
 
