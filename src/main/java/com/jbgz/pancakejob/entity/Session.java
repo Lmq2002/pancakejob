@@ -34,7 +34,7 @@ public class Session implements Serializable {
     /**
      * 
      */
-    private Integer recuriterId;
+    private Integer recruiterId;
 
     /**
      * 
@@ -44,7 +44,7 @@ public class Session implements Serializable {
     /**
      * 
      */
-    private Date recuriterDeleteTime;
+    private Date recruiterDeleteTime;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;

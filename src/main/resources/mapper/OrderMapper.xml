@@ -13,12 +13,12 @@
             <result property="orderState" column="order_state" jdbcType="VARCHAR"/>
             <result property="passTime" column="pass_time" jdbcType="TIMESTAMP"/>
             <result property="jobhunterScore" column="jobhunter_score" jdbcType="DECIMAL"/>
-            <result property="recuriterScore" column="recuriter_score" jdbcType="DECIMAL"/>
+            <result property="recruiterScore" column="recruiter_score" jdbcType="DECIMAL"/>
     </resultMap>
 
     <sql id="Base_Column_List">
         order_id,jobhunter_id,job_id,
         apply_time,apply_discription,order_state,
-        pass_time,jobhunter_score,recuriter_score
+        pass_time,jobhunter_score,recruiter_score
     </sql>
 </mapper>

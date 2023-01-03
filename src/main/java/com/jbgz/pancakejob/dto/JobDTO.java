@@ -14,8 +14,8 @@ public class JobDTO {
     @JsonProperty("jobId")
     private int jobId;
 
-    @JsonProperty("recuriterId")
-    private int recuriterId;
+    @JsonProperty("recruiterId")
+    private int recruiterId;
 
     @JsonProperty("companyName")
     private String companyName;

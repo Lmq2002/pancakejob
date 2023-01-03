@@ -1,33 +1,25 @@
 package com.jbgz.pancakejob.service.impl;
 
-import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.RandomUtil;
-import cn.hutool.crypto.SecureUtil;
 import cn.hutool.extra.mail.MailUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jbgz.pancakejob.common.UserType;
 import com.jbgz.pancakejob.dto.CreateAccountDTO;
-import com.jbgz.pancakejob.dto.LoginDTO;
 import com.jbgz.pancakejob.entity.Administrator;
 import com.jbgz.pancakejob.entity.Jobhunter;
-import com.jbgz.pancakejob.entity.Recuriter;
+import com.jbgz.pancakejob.entity.Recruiter;
 import com.jbgz.pancakejob.entity.User;
 import com.jbgz.pancakejob.mapper.AdministratorMapper;
 import com.jbgz.pancakejob.mapper.JobhunterMapper;
-import com.jbgz.pancakejob.mapper.RecuriterMapper;
+import com.jbgz.pancakejob.mapper.RecruiterMapper;
 import com.jbgz.pancakejob.service.UserService;
 import com.jbgz.pancakejob.mapper.UserMapper;
-import com.jbgz.pancakejob.vo.EmailAccountVO;
-import com.jbgz.pancakejob.vo.FindPasswordVO;
-import com.jbgz.pancakejob.vo.LoginVO;
-import com.jbgz.pancakejob.vo.RegistVO;
+import com.jbgz.pancakejob.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.Date;
-import java.util.List;
 
 /**
 * @author CSY0214
@@ -43,7 +35,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     @Autowired
     private JobhunterMapper jobhunterMapper;
     @Autowired
-    private RecuriterMapper recuriterMapper;
+    private RecruiterMapper recruiterMapper;
     @Autowired
     private AdministratorMapper administratorMapper;
     @Override
@@ -123,10 +115,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
             System.out.println("准备插入:"+admin.getAdminId()+"  "+admin.getPassword());
             if(1 == administratorMapper.registAdmin(admin))return true;
         }
-        else if(vo.getUserType().equals(UserType.RECURITER)){
-            Recuriter recuriter = new Recuriter();
-            recuriter.setRecuriterId(id);
-            if(1 == recuriterMapper.registRecuriter(recuriter))return true;
+        else if(vo.getUserType().equals(UserType.RECRUITER)){
+            Recruiter recruiter = new Recruiter();
+            recruiter.setRecruiterId(id);
+            if(1 == recruiterMapper.registRecruiter(recruiter))return true;
         }
         else if(vo.getUserType().equals(UserType.JOBHUNTER)){
             Jobhunter jobhunter = new Jobhunter();
@@ -139,6 +131,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     @Override
     public boolean alterPassword(FindPasswordVO vo) {
         return userMapper.alterPassword(vo);
+    }
+
+    @Override
+    public boolean setContactMethod(ContactMethodVO vo) {
+        if(userMapper.setContactMethod(vo))
+            return true;
+        return false;
     }
 }
 

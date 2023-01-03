@@ -1,16 +1,9 @@
 package com.jbgz.pancakejob.service;
 
 import com.jbgz.pancakejob.dto.CreateAccountDTO;
-import com.jbgz.pancakejob.dto.LoginDTO;
 import com.jbgz.pancakejob.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.jbgz.pancakejob.mapper.UserMapper;
-import com.jbgz.pancakejob.vo.EmailAccountVO;
-import com.jbgz.pancakejob.vo.FindPasswordVO;
-import com.jbgz.pancakejob.vo.LoginVO;
-import com.jbgz.pancakejob.vo.RegistVO;
-
-import java.util.List;
+import com.jbgz.pancakejob.vo.*;
 
 /**
 * @author CSY0214
@@ -46,4 +39,11 @@ public interface UserService extends IService<User> {
      * 返回boolean
      * */
     boolean alterPassword(FindPasswordVO vo);
+
+    /**
+     * 根据userId修改或者添加contactMethod
+     * 返回boolean
+     * */
+    boolean setContactMethod(ContactMethodVO vo);
+
 }

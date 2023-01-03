@@ -8,13 +8,13 @@
             <id property="sessionId" column="session_id" jdbcType="INTEGER"/>
             <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
             <result property="jobhunterDeleteTime" column="jobhunter_delete_time" jdbcType="TIMESTAMP"/>
-            <result property="recuriterId" column="recuriter_id" jdbcType="INTEGER"/>
+            <result property="recruiterId" column="recruiter_id" jdbcType="INTEGER"/>
             <result property="jobhunterId" column="jobhunter_id" jdbcType="INTEGER"/>
-            <result property="recuriterDeleteTime" column="recuriter_delete_time" jdbcType="TIMESTAMP"/>
+            <result property="recruiterDeleteTime" column="recruiter_delete_time" jdbcType="TIMESTAMP"/>
     </resultMap>
 
     <sql id="Base_Column_List">
         session_id,create_time,jobhunter_delete_time,
-        recuriter_id,jobhunter_id,recuriter_delete_time
+        recruiter_id,jobhunter_id,recruiter_delete_time
     </sql>
 </mapper>

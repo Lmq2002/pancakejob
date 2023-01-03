@@ -60,7 +60,7 @@ public class Order implements Serializable {
     /**
      * 
      */
-    private BigDecimal recuriterScore;
+    private BigDecimal recruiterScore;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;

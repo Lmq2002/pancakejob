@@ -14,7 +14,7 @@ import lombok.Data;
  */
 @TableName(value ="recuriter_conlog")
 @Data
-public class RecuriterConlog implements Serializable {
+public class RecruiterConlog implements Serializable {
     /**
      * 
      */
@@ -34,7 +34,7 @@ public class RecuriterConlog implements Serializable {
     /**
      * 
      */
-    private Integer recuriterId;
+    private Integer recruiterId;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;

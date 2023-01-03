@@ -10,7 +10,7 @@
             <result property="companyId" column="company_id" jdbcType="VARCHAR"/>
             <result property="companyType" column="company_type" jdbcType="VARCHAR"/>
             <result property="certification" column="certification" jdbcType="VARCHAR"/>
-            <result property="recuriterId" column="recuriter_id" jdbcType="INTEGER"/>
+            <result property="recruiterId" column="recruiter_id" jdbcType="INTEGER"/>
             <result property="applyTime" column="apply_time" jdbcType="TIMESTAMP"/>
             <result property="checkStatus" column="check_status" jdbcType="VARCHAR"/>
             <result property="checkTime" column="check_time" jdbcType="TIMESTAMP"/>
@@ -19,7 +19,7 @@
 
     <sql id="Base_Column_List">
         apply_id,company_name,company_id,
-        company_type,certification,recuriter_id,
+        company_type,certification,recruiter_id,
         apply_time,check_status,check_time,
         result
     </sql>

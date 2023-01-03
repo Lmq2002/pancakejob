@@ -1,6 +1,5 @@
 package com.jbgz.pancakejob.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -13,12 +12,12 @@ import lombok.Data;
  */
 @TableName(value ="recuriter")
 @Data
-public class Recuriter implements Serializable {
+public class Recruiter implements Serializable {
     /**
      * 
      */
     @TableId
-    private Integer recuriterId;
+    private Integer recruiterId;
 
     /**
      * 

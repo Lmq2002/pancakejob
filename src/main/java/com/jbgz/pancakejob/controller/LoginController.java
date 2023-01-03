@@ -30,7 +30,7 @@ public class LoginController {
     @Autowired
     private JobhunterConlogService jobhunterConlogService;
     @Autowired
-    private RecuriterConlogService recuriterConlogService;
+    private RecruiterConlogService recruiterConlogService;
 
     /**
      * 功能：获取邮箱验证码
@@ -136,9 +136,10 @@ public class LoginController {
 
     /**
      * 功能：登录，记录conlog
-     * 状态：正在开发中
+     * 状态：正在测试中
      * 负责人：Lmq
      * 新建时间：2022/12/28
+     * 完成时间：2023/1/3
      * */
     @PostMapping("/login")
     public ResultData login(@RequestBody LoginVO vo)
@@ -169,8 +170,8 @@ public class LoginController {
                 if(user.getUserType().equals(UserType.ADMIN)){
                     isSuccess = adminConlogService.create(user.getUserId(),token);
                 }
-                else if(user.getUserType().equals(UserType.RECURITER)){
-                    isSuccess = recuriterConlogService.create(user.getUserId(),token);
+                else if(user.getUserType().equals(UserType.RECRUITER)){
+                    isSuccess = recruiterConlogService.create(user.getUserId(),token);
                 }
                 else if(user.getUserType().equals(UserType.JOBHUNTER)){
                     isSuccess = jobhunterConlogService.create(user.getUserId(),token);

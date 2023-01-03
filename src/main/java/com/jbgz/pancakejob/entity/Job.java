@@ -26,7 +26,7 @@ public class Job implements Serializable {
     /**
      * 
      */
-    private Integer recuriterId;
+    private Integer recruiterId;
 
     /**
      * 

@@ -1,9 +1,9 @@
 package com.jbgz.pancakejob.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.jbgz.pancakejob.entity.RecuriterConlog;
-import com.jbgz.pancakejob.service.RecuriterConlogService;
-import com.jbgz.pancakejob.mapper.RecuriterConlogMapper;
+import com.jbgz.pancakejob.entity.RecruiterConlog;
+import com.jbgz.pancakejob.service.RecruiterConlogService;
+import com.jbgz.pancakejob.mapper.RecruiterConlogMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,15 +15,15 @@ import java.util.Date;
 * @createDate 2022-12-30 22:40:02
 */
 @Service
-public class RecuriterConlogServiceImpl extends ServiceImpl<RecuriterConlogMapper, RecuriterConlog>
-    implements RecuriterConlogService{
+public class RecruiterConlogServiceImpl extends ServiceImpl<RecruiterConlogMapper, RecruiterConlog>
+    implements RecruiterConlogService {
 
     @Autowired
-    private RecuriterConlogMapper mapper;
+    private RecruiterConlogMapper mapper;
     @Override
-    public boolean create(Integer recuriter_id, String token) {
-        RecuriterConlog conlog = new RecuriterConlog();
-        conlog.setRecuriterId(recuriter_id);
+    public boolean create(Integer recruiter_id, String token) {
+        RecruiterConlog conlog = new RecruiterConlog();
+        conlog.setRecruiterId(recruiter_id);
         conlog.setToken(token);
         conlog.setLoginTime(new Date());
         int tmp = mapper.insert(conlog);

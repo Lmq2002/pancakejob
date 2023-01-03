@@ -2,17 +2,17 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.jbgz.pancakejob.mapper.RecuriterConlogMapper">
+<mapper namespace="com.jbgz.pancakejob.mapper.RecruiterConlogMapper">
 
-    <resultMap id="BaseResultMap" type="com.jbgz.pancakejob.entity.RecuriterConlog">
+    <resultMap id="BaseResultMap" type="com.jbgz.pancakejob.entity.RecruiterConlog">
             <id property="conlogId" column="conlog_id" jdbcType="INTEGER"/>
             <result property="token" column="token" jdbcType="VARCHAR"/>
             <result property="loginTime" column="login_time" jdbcType="TIMESTAMP"/>
-            <result property="recuriterId" column="recuriter_id" jdbcType="INTEGER"/>
+            <result property="recruiterId" column="recruiter_id" jdbcType="INTEGER"/>
     </resultMap>
 
     <sql id="Base_Column_List">
         conlog_id,ip,login_time,
-        recuriter_id
+        recruiter_id
     </sql>
 </mapper>

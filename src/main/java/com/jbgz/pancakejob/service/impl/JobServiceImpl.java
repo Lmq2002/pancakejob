@@ -5,21 +5,17 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jbgz.pancakejob.dto.JobDTO;
 import com.jbgz.pancakejob.entity.Job;
 import com.jbgz.pancakejob.entity.JobType;
-import com.jbgz.pancakejob.entity.Recuriter;
+import com.jbgz.pancakejob.entity.Recruiter;
 import com.jbgz.pancakejob.mapper.JobTypeMapper;
-import com.jbgz.pancakejob.mapper.RecuriterMapper;
+import com.jbgz.pancakejob.mapper.RecruiterMapper;
 import com.jbgz.pancakejob.service.JobService;
 import com.jbgz.pancakejob.mapper.JobMapper;
-import com.jbgz.pancakejob.service.JobTypeService;
 import com.jbgz.pancakejob.utils.DateTimeTrans;
-import com.jbgz.pancakejob.utils.ResultData;
 import com.jbgz.pancakejob.vo.JobInfoVO;
 import com.jbgz.pancakejob.vo.JobUpVO;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.text.SimpleDateFormat;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -35,7 +31,7 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job>
     @Resource
     private JobMapper jobMapper;
     @Resource
-    private RecuriterMapper recuriterMapper;
+    private RecruiterMapper recruiterMapper;
     @Resource
     private JobTypeMapper jobTypeMapper;
 
@@ -60,10 +56,10 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job>
     public JobDTO getJObDTO(Job job){
         JobDTO jobDTO=new JobDTO();
         jobDTO.setJobId(job.getJobId());
-        jobDTO.setRecuriterId(job.getRecuriterId());
+        jobDTO.setRecruiterId(job.getRecruiterId());
 
-        Recuriter recuriter = recuriterMapper.selectById(job.getRecuriterId());
-        jobDTO.setCompanyName(recuriter.getCompanyName());
+        Recruiter recruiter = recruiterMapper.selectById(job.getRecruiterId());
+        jobDTO.setCompanyName(recruiter.getCompanyName());
 
         jobDTO.setReleaseTime(DateTimeTrans.dateToString(job.getReleaseTime()));
         jobDTO.setJobState(job.getJobState());
@@ -116,7 +112,7 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job>
     public boolean createJob(JobUpVO jobUpVO){
         JobInfoVO jobInfo=jobUpVO.getJobInfo();
         Job job=new Job();
-        job.setRecuriterId(jobUpVO.getRecuriterId());
+        job.setRecruiterId(jobUpVO.getRecruiterId());
         job.setReleaseTime(new Date());
         if(jobUpVO.isIfRelease())
             job.setJobState("未审核");

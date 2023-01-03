@@ -2,6 +2,7 @@ package com.jbgz.pancakejob.mapper;
 
 import com.jbgz.pancakejob.entity.User;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.jbgz.pancakejob.vo.ContactMethodVO;
 import com.jbgz.pancakejob.vo.EmailAccountVO;
 import com.jbgz.pancakejob.vo.FindPasswordVO;
 import com.jbgz.pancakejob.vo.LoginVO;
@@ -30,6 +31,9 @@ public interface UserMapper extends BaseMapper<User> {
 
     @Update("UPDATE user SET password = #{password} WHERE user_id = #{userId}")
     boolean alterPassword(FindPasswordVO vo);
+
+    @Update("UPDATE user SET contact_method = #{contactMethod} WHERE user_id = #{userId}")
+    boolean setContactMethod(ContactMethodVO vo);
 
 
 

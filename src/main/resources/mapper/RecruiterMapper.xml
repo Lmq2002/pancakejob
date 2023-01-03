@@ -2,14 +2,14 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.jbgz.pancakejob.mapper.RecuriterMapper">
+<mapper namespace="com.jbgz.pancakejob.mapper.RecruiterMapper">
 
-    <resultMap id="BaseResultMap" type="com.jbgz.pancakejob.entity.Recuriter">
-            <id property="recuriterId" column="recuriter_id" jdbcType="INTEGER"/>
+    <resultMap id="BaseResultMap" type="com.jbgz.pancakejob.entity.Recruiter">
+            <id property="recruiterId" column="recruiter_id" jdbcType="INTEGER"/>
             <result property="companyName" column="company_name" jdbcType="VARCHAR"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        recuriter_id,company_name
+        recruiter_id,company_name
     </sql>
 </mapper>
