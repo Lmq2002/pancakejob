@@ -2,6 +2,7 @@ package com.jbgz.pancakejob.mapper;
 
 import com.jbgz.pancakejob.entity.Job;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Select;
 
 /**
 * @author CSY0214
@@ -10,6 +11,8 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 * @Entity com.jbgz.pancakejob.entity.Job
 */
 public interface JobMapper extends BaseMapper<Job> {
+
+//    @Select("")
 
 }
 

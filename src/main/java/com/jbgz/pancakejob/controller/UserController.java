@@ -31,6 +31,9 @@ public class UserController {
     @Autowired
     private CompanyAuthenticationService companyAuthenticationService;
 
+    @Autowired
+    private FavoritesDirService favoritesDirService;
+
     /**
      * 功能：获取个人信息
      * 状态：正在测试中
@@ -237,9 +240,24 @@ public class UserController {
 
     /**
      * 功能：通过jobhunterid获取收藏夹列表
-     * 状态：正在确认中（传参问题）
+     * 状态：正在测试中
      * 负责人：lmq
      * 新建时间：2023/1/3
-     *
+     * 完成时间：2023/1/4
      * */
+    @GetMapping("/jobhunter/favorites")
+    public ResultData getFavoritesDirList(@RequestParam("jobhunterId") Integer jobhunterId){
+        try{
+            ResultData result= new ResultData();
+            result.code = Constants.CODE_200;
+            result.message = "成功";
+            result.data.put("favorites_list",favoritesDirService.getDirList(jobhunterId));
+            return result;
+        }
+        catch (Exception e){
+            System.out.println("异常情况："+e.getMessage());
+            return ResultData.sys_error();
+        }
+    }
+
 }

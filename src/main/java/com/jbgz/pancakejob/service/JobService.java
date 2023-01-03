@@ -1,5 +1,6 @@
 package com.jbgz.pancakejob.service;
 
+import com.jbgz.pancakejob.dto.FavoritesDTO;
 import com.jbgz.pancakejob.dto.JobDTO;
 import com.jbgz.pancakejob.entity.Job;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -23,4 +24,10 @@ public interface JobService extends IService<Job> {
     List<JobDTO> getJobInfo(int jobId);
     boolean createJob(JobUpVO jobUpVO);
     boolean closeRecruit(int jobId);
+
+    /**
+     * 根据jobId获取收藏展示信息。
+     * 返回对应收藏信息
+     * */
+    FavoritesDTO getFavorites(Integer jobId);
 }

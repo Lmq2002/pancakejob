@@ -6,6 +6,8 @@ import com.jbgz.pancakejob.service.CollectJobService;
 import com.jbgz.pancakejob.mapper.CollectJobMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
 * @author CSY0214
 * @description 针对表【collect_job】的数据库操作Service实现
@@ -15,6 +17,10 @@ import org.springframework.stereotype.Service;
 public class CollectJobServiceImpl extends ServiceImpl<CollectJobMapper, CollectJob>
     implements CollectJobService{
 
+//    @Override
+//    public List<Integer> findJob(Integer dirId) {
+//        return null;
+//    }
 }
 
 

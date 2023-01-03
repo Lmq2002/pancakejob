@@ -2,6 +2,9 @@ package com.jbgz.pancakejob.mapper;
 
 import com.jbgz.pancakejob.entity.CollectJob;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Select;
+
+import java.util.List;
 
 /**
 * @author CSY0214
@@ -11,6 +14,8 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 */
 public interface CollectJobMapper extends BaseMapper<CollectJob> {
 
+    @Select("SELECT DISTINCT job_id FROM collect_job WHERE collect_position = #{dirId}")
+    public List<Integer> getJobId(Integer dirId);
 }
 
 

@@ -2,6 +2,7 @@ package com.jbgz.pancakejob.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.jbgz.pancakejob.dto.FavoritesDTO;
 import com.jbgz.pancakejob.dto.JobDTO;
 import com.jbgz.pancakejob.entity.Job;
 import com.jbgz.pancakejob.entity.JobType;
@@ -152,6 +153,11 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job>
         job.setJobState("已结束");
         int re=jobMapper.updateById(job);
         return re>0;
+    }
+
+    @Override
+    public FavoritesDTO getFavorites(Integer jobId) {
+        return null;
     }
 }
 
