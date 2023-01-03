@@ -29,7 +29,7 @@ public interface UserMapper extends BaseMapper<User> {
     @Select("SELECT email, password FROM user WHERE email = #{email}")
     List<User> confirmEmail(EmailAccountVO vo);
 
-    @Update("UPDATE user SET password = #{password} WHERE user_id = #{userId}")
+    @Update("UPDATE user SET password = #{password} WHERE email = #{email}")
     boolean alterPassword(FindPasswordVO vo);
 
     @Update("UPDATE user SET contact_method = #{contactMethod} WHERE user_id = #{userId}")

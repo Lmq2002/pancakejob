@@ -235,4 +235,11 @@ public class UserController {
         }
     }
 
+    /**
+     * 功能：通过jobhunterid获取收藏夹列表
+     * 状态：正在确认中（传参问题）
+     * 负责人：lmq
+     * 新建时间：2023/1/3
+     *
+     * */
 }

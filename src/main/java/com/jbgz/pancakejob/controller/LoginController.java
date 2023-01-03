@@ -111,11 +111,12 @@ public class LoginController {
     }
 
     /**
-     * 功能：根据和userId修改密码
+     * 功能：根据email修改密码
      * 状态：正在测试中
      * 负责人：lmq
      * 新建时间：2023/1/2
      * 完成时间：2023/1/2
+     * 修改时间：20231/3
      * */
     @PostMapping("/findPassword")
     public ResultData alterPassword(@RequestBody FindPasswordVO vo)
