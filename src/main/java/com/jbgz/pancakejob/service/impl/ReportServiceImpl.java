@@ -26,15 +26,12 @@ public class ReportServiceImpl extends ServiceImpl<ReportMapper, Report>
         report.setJobhunterId(reportVO.getJobhunterId());
         report.setJobId(reportVO.getJobId());
         report.setReportReason(report.getReportReason());
-        report.setReportState("");
+        report.setReportState("未审核");
         report.setReportTime(new Date());
 
         int re=reportMapper.insert(report);
         System.out.println("insert:"+re);
-        if(re>0)
-            return true;
-        else
-            return false;
+        return re>0;
     }
 
 

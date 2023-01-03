@@ -18,12 +18,17 @@
             <result property="salary" column="salary" jdbcType="DECIMAL"/>
             <result property="startTime" column="start_time" jdbcType="TIMESTAMP"/>
             <result property="endTime" column="end_time" jdbcType="TIMESTAMP"/>
+            <result property="appliedNum" column="applied_num" jdbcType="INTEGER"/>
+            <result property="acceptedNum" column="accepted_num" jdbcType="INTEGER"/>
+            <result property="finishedNum" column="finished_num" jdbcType="INTEGER"/>
     </resultMap>
 
     <sql id="Base_Column_List">
         job_id,recuriter_id,release_time,
         job_state,job_type,work_name,
         work_time,work_place,work_details,
-        salary,start_time,end_time
+        worker_num,salary,start_time,
+        end_time,applied_num,accepted_num,
+        finished_num
     </sql>
 </mapper>

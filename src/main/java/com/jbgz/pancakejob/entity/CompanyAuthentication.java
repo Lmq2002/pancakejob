@@ -18,7 +18,7 @@ public class CompanyAuthentication implements Serializable {
     /**
      * 
      */
-    @TableId
+    @TableId(type = IdType.AUTO)
     private Integer applyId;
 
     /**

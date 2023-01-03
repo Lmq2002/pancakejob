@@ -41,7 +41,7 @@ public class AdminController {
             }
             else{
                 result.message="添加失败";
-                result.code=300;
+                result.code=200;
             }
             System.out.println("result:"+result);
             return result;
@@ -64,7 +64,7 @@ public class AdminController {
             }
             else{
                 result.message="删除失败";
-                result.code=300;
+                result.code=200;
             }
             System.out.println("result:"+result);
             return result;
@@ -87,7 +87,7 @@ public class AdminController {
             }
             else{
                 result.message="修改失败";
-                result.code=300;
+                result.code=200;
             }
             System.out.println("result:"+result);
             return result;

@@ -55,12 +55,12 @@ public class Order implements Serializable {
     /**
      * 
      */
-    private BigDecimal jobhunterScore;
+    private Integer jobhunterScore;
 
     /**
      * 
      */
-    private BigDecimal recuriterScore;
+    private Integer recuriterScore;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;

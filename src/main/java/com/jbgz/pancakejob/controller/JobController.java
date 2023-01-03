@@ -96,7 +96,7 @@ public class JobController {
             }
             else{
                 result.message="发布失败";
-                result.code=300;
+                result.code=200;
             }
             System.out.println("result:"+result);
             return result;
@@ -105,6 +105,22 @@ public class JobController {
             return ResultData.error();
         }
     }
+
+    //结束招聘
+    @PutMapping("/closeRecurit")
+    public ResultData closeRecurit(int jobId){
+        try{
+            ResultData result=new ResultData();
+            jobService.closeRecurit(jobId);
+            result.code=200;
+            result.message="已结束招聘";
+            return result;
+        }
+        catch (Exception e){
+            return ResultData.error();
+        }
+    }
+
 
     //举报兼职
     @PostMapping("/reportJob")
@@ -118,7 +134,7 @@ public class JobController {
             }
             else{
                 result.message="举报失败";
-                result.code=300;
+                result.code=200;
             }
             System.out.println("result:"+result);
             return result;

@@ -12,8 +12,8 @@
             <result property="applyDiscription" column="apply_discription" jdbcType="VARCHAR"/>
             <result property="orderState" column="order_state" jdbcType="VARCHAR"/>
             <result property="passTime" column="pass_time" jdbcType="TIMESTAMP"/>
-            <result property="jobhunterScore" column="jobhunter_score" jdbcType="DECIMAL"/>
-            <result property="recuriterScore" column="recuriter_score" jdbcType="DECIMAL"/>
+            <result property="jobhunterScore" column="jobhunter_score" jdbcType="INTEGER"/>
+            <result property="recuriterScore" column="recuriter_score" jdbcType="INTEGER"/>
     </resultMap>
 
     <sql id="Base_Column_List">

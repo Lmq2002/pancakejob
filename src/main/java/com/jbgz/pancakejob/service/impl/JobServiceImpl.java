@@ -5,21 +5,19 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jbgz.pancakejob.dto.JobDTO;
 import com.jbgz.pancakejob.entity.Job;
 import com.jbgz.pancakejob.entity.JobType;
+import com.jbgz.pancakejob.entity.Order;
 import com.jbgz.pancakejob.entity.Recuriter;
 import com.jbgz.pancakejob.mapper.JobTypeMapper;
+import com.jbgz.pancakejob.mapper.OrderMapper;
 import com.jbgz.pancakejob.mapper.RecuriterMapper;
 import com.jbgz.pancakejob.service.JobService;
 import com.jbgz.pancakejob.mapper.JobMapper;
-import com.jbgz.pancakejob.service.JobTypeService;
 import com.jbgz.pancakejob.utils.DateTimeTrans;
-import com.jbgz.pancakejob.utils.ResultData;
 import com.jbgz.pancakejob.vo.JobInfoVO;
 import com.jbgz.pancakejob.vo.JobUpVO;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.text.SimpleDateFormat;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -34,6 +32,8 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job>
     implements JobService{
     @Resource
     private JobMapper jobMapper;
+    @Resource
+    private OrderMapper orderMapper;
     @Resource
     private RecuriterMapper recuriterMapper;
     @Resource
@@ -134,12 +134,26 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job>
 
         int re=jobMapper.insert(job);
         System.out.println("delete:"+re);
-        if(re>0)
-            return true;
-        else
-            return false;
+        return re>0;
     }
 
+    //结束招聘
+    public boolean closeRecurit(int jobId){
+        Job job=jobMapper.selectById(jobId);
+        job.setJobState("已结束");
+        jobMapper.updateById(job);
+        QueryWrapper<Order> orderQueryWrapper=new QueryWrapper<Order>();
+        orderQueryWrapper.eq("job_id",jobId).eq("order_state","已报名");
+        List<Order> orders=orderMapper.selectList(orderQueryWrapper);
+        orders.forEach(order -> {
+            order.setOrderState("未通过");
+
+            /*向求职者发送通知*/
+
+            orderMapper.updateById(order);
+        });
+        return true;
+    }
 }
 
 
