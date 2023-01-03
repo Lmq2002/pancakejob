@@ -48,6 +48,19 @@ public class OrderController {
 
     }
 
+    //获取某兼职报名者列表
+    @GetMapping("/getAppliedList")
+    public ResultData getAppliedList(int jobId){
+        try{
+            ResultData result=new ResultData();
+
+            return result;
+        }
+        catch (Exception e){
+            return ResultData.error();
+        }
+    }
+
     //求职者确认录用结果
     @PutMapping("/confirmPassResult")
     public ResultData confirmPassResult(int orderId,String orderState){
@@ -130,11 +143,11 @@ public class OrderController {
     }
 
     //评价招聘方
-    @PostMapping("/commentOnRecuriter")
-    public ResultData commentOnRecuriter(int orderId,int recuriterScore){
+    @PostMapping("/commentOnRecruiter")
+    public ResultData commentOnRecruiter(int orderId,int recruiterScore){
         try{
             ResultData result=new ResultData();
-            boolean re=orderService.changeOrderScore(orderId,recuriterScore,"recuriter");
+            boolean re=orderService.changeOrderScore(orderId,recruiterScore,"recruiter");
             result.code=200;
             if(re)
                 result.message="评分成功";

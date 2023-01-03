@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
 * @author CSY0214
-* @description 针对表【recuriter_conlog】的数据库操作Mapper
+* @description 针对表【recruiter_conlog】的数据库操作Mapper
 * @createDate 2022-12-30 22:40:02
 * @Entity com.jbgz.pancakejob.entity.RecruiterConlog
 */

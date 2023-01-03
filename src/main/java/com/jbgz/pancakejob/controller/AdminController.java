@@ -1,6 +1,5 @@
 package com.jbgz.pancakejob.controller;
 
-import com.baomidou.mybatisplus.extension.api.R;
 import com.jbgz.pancakejob.service.JobTypeService;
 import com.jbgz.pancakejob.utils.ResultData;
 import org.springframework.web.bind.annotation.*;

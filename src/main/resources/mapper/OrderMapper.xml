@@ -9,7 +9,7 @@
             <result property="jobhunterId" column="jobhunter_id" jdbcType="INTEGER"/>
             <result property="jobId" column="job_id" jdbcType="INTEGER"/>
             <result property="applyTime" column="apply_time" jdbcType="TIMESTAMP"/>
-            <result property="applyDiscription" column="apply_discription" jdbcType="VARCHAR"/>
+            <result property="applyDescription" column="apply_description" jdbcType="VARCHAR"/>
             <result property="orderState" column="order_state" jdbcType="VARCHAR"/>
             <result property="passTime" column="pass_time" jdbcType="TIMESTAMP"/>
             <result property="jobhunterScore" column="jobhunter_score" jdbcType="INTEGER"/>
@@ -18,7 +18,7 @@
 
     <sql id="Base_Column_List">
         order_id,jobhunter_id,job_id,
-        apply_time,apply_discription,order_state,
+        apply_time,apply_description,order_state,
         pass_time,jobhunter_score,recruiter_score
     </sql>
 </mapper>

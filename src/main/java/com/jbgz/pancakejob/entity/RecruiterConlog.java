@@ -10,9 +10,9 @@ import lombok.Data;
 
 /**
  * 
- * @TableName recuriter_conlog
+ * @TableName recruiter_conlog
  */
-@TableName(value ="recuriter_conlog")
+@TableName(value ="recruiter_conlog")
 @Data
 public class RecruiterConlog implements Serializable {
     /**

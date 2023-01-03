@@ -8,9 +8,9 @@ import lombok.Data;
 
 /**
  * 
- * @TableName recuriter
+ * @TableName recruiter
  */
-@TableName(value ="recuriter")
+@TableName(value ="recruiter")
 @Data
 public class Recruiter implements Serializable {
     /**

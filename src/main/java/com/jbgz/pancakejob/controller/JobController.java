@@ -88,6 +88,22 @@ public class JobController {
         }
     }
 
+    //获取所有招聘方管理的兼职列表
+    @GetMapping("/getAllJobList")
+    public ResultData getAllJobList(int recruiterId){
+        try{
+            ResultData result=new ResultData();
+            result.data.put("job_list",jobService.getAllJobList(recruiterId));
+            result.message = "请求成功";
+            result.code = 200;
+            System.out.println(result);//打印观察
+            return result;
+        }
+        catch (Exception e){
+            return ResultData.error();
+        }
+    }
+
     //发布兼职or存草稿
     @PostMapping("/upJob")
     public ResultData upJob(@RequestBody JobUpVO jobVO){
@@ -111,11 +127,11 @@ public class JobController {
     }
 
     //结束招聘
-    @PutMapping("/closeRecurit")
-    public ResultData closeRecurit(int jobId){
+    @PutMapping("/closeRecruit")
+    public ResultData closeRecruit(int jobId){
         try{
             ResultData result=new ResultData();
-            jobService.closeRecurit(jobId);
+            jobService.closeRecruit(jobId);
             //修改剩余报名者的结果为未通过
             List<Integer> refuses=orderService.refuseRestJobhunter(jobId);
             //向求职者发送信息
@@ -128,7 +144,6 @@ public class JobController {
             return ResultData.error();
         }
     }
-
 
     //举报兼职
     @PostMapping("/reportJob")

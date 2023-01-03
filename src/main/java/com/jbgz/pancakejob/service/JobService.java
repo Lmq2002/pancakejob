@@ -19,7 +19,8 @@ public interface JobService extends IService<Job> {
     JobDTO getJObDTO(Job job);
     List<JobDTO> getJobListDTO(List<Job> jobList);
     List<JobDTO> getJobList(String state);
+    List<JobDTO> getAllJobList(int recruiterId);
     List<JobDTO> getJobInfo(int jobId);
     boolean createJob(JobUpVO jobUpVO);
-    boolean closeRecurit(int jobId);
+    boolean closeRecruit(int jobId);
 }

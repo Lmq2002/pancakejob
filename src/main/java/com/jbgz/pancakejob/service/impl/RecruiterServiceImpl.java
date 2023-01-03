@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 /**
 * @author CSY0214
-* @description 针对表【recuriter】的数据库操作Service实现
+* @description 针对表【recruiter】的数据库操作Service实现
 * @createDate 2022-12-30 22:39:49
 */
 @Service
@@ -21,8 +21,8 @@ public class RecruiterServiceImpl extends ServiceImpl<RecruiterMapper, Recruiter
     @Autowired
     RecruiterMapper mapper;
     @Override
-    public RecruiterPersonInfoDTO getInfo(Integer recuriterId) {
-        return mapper.getInfo(recuriterId);
+    public RecruiterPersonInfoDTO getInfo(Integer recruiterId) {
+        return mapper.getInfo(recruiterId);
     }
 
     @Override

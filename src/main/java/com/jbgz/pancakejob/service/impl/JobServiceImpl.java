@@ -95,7 +95,7 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job>
         return jobDTOList;
     }
 
-    //获取兼职列表
+    //获取已发布且审核通过的兼职列表
     public List<JobDTO> getJobList(String state){
         QueryWrapper<Job> jobQueryWrapper= new QueryWrapper<Job>();
         //筛选已发布且正在招聘的兼职
@@ -103,6 +103,15 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job>
         List<JobDTO> jobDTOList=getJobListDTO(jobMapper.selectList(jobQueryWrapper));
         return jobDTOList;
     }
+
+    //获取招聘方管理的所有兼职
+    public List<JobDTO> getAllJobList(int recruiterId){
+        QueryWrapper<Job> jobQueryWrapper=new QueryWrapper<Job>();
+        jobQueryWrapper.eq("recruiter_id",recruiterId);
+        List<JobDTO> jobDTOList=getJobListDTO(jobMapper.selectList(jobQueryWrapper));
+        return jobDTOList;
+    }
+
 
     //获取单个兼职信息
     public List<JobDTO> getJobInfo(int jobId){
@@ -138,7 +147,7 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job>
     }
 
     //结束招聘
-    public boolean closeRecurit(int jobId){
+    public boolean closeRecruit(int jobId){
         Job job=jobMapper.selectById(jobId);
         job.setJobState("已结束");
         int re=jobMapper.updateById(job);

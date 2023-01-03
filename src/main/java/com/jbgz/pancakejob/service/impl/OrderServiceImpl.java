@@ -2,6 +2,7 @@ package com.jbgz.pancakejob.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.jbgz.pancakejob.dto.OrderDTO;
 import com.jbgz.pancakejob.entity.Job;
 import com.jbgz.pancakejob.entity.Order;
 import com.jbgz.pancakejob.mapper.JobMapper;
@@ -51,7 +52,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
             order.setJobhunterId(applyJobVO.getJobhunterId());
             order.setJobId(applyJobVO.getJobId());
             order.setApplyTime(new Date());
-            order.setApplyDiscription(applyJobVO.getApplyReason());
+            order.setApplyDescription(applyJobVO.getApplyReason());
             order.setOrderState("已报名");
             int re=orderMapper.insert(order);
             return re;
@@ -70,6 +71,15 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
         return false;
     }
 
+    //获取求职者的订单列表
+//    public List<OrderDTO> getOrderList(int jobhunterId){
+//
+//    }
+
+    //获取某个兼职的订单列表（已报名or已录用）
+    //public List<>
+
+
     //修改订单状态
     public boolean changeOrderState(int orderId,String newState){
         Order order=new Order();
@@ -85,7 +95,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
         order.setOrderId(orderId);
         if(scoreType.equals("jobhunter"))
             order.setJobhunterScore(newScore);
-        else if(scoreType.equals("recuriter"))
+        else if(scoreType.equals("recruiter"))
             order.setRecruiterScore(newScore);
         int re=orderMapper.updateById(order);
         return re>0;

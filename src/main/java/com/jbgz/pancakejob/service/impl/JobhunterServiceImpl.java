@@ -10,6 +10,8 @@ import com.jbgz.pancakejob.vo.PersonalInfoVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
+
 /**
 * @author CSY0214
 * @description 针对表【jobhunter】的数据库操作Service实现

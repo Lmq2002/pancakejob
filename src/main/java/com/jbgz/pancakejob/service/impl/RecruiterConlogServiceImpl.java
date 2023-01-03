@@ -11,7 +11,7 @@ import java.util.Date;
 
 /**
 * @author CSY0214
-* @description 针对表【recuriter_conlog】的数据库操作Service实现
+* @description 针对表【recruiter_conlog】的数据库操作Service实现
 * @createDate 2022-12-30 22:40:02
 */
 @Service

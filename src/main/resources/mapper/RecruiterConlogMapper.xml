@@ -12,7 +12,7 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        conlog_id,ip,login_time,
+        conlog_id,token,login_time,
         recruiter_id
     </sql>
 </mapper>
