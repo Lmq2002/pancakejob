@@ -135,8 +135,8 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
         order.setApplyTime(new Date());
         order.setApplyDescription(applyJobVO.getApplyReason());
         order.setOrderState("已报名");
-        int re=orderMapper.insert(order);
-        return re;
+        orderMapper.insert(order);
+        return order.getOrderId();
     }
 
     //取消报名
@@ -147,8 +147,8 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
         job.setAppliedNum(job.getAppliedNum()-1);
         jobMapper.updateById(job);
         order.setOrderState("已取消");
-        orderMapper.updateById(order);
-        return false;
+        int re=orderMapper.updateById(order);
+        return re>0;
     }
 
     //获取求职者的订单列表
@@ -168,7 +168,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
                 .eq("order_state","已录用").or()
                 .eq("order_state","已放弃").or()
                 .eq("order_state","已完成").or()
-                .eq("order_state","支付异常").or()
+                .eq("order_state","支付异常")
                 .eq("job_id",jobId);
         List<OrderAppliedDTO> orderAppliedDTOList=getOrderAppliedDTOList(orderMapper.selectList(orderWrapper));
         return orderAppliedDTOList;

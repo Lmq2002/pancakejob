@@ -25,15 +25,10 @@ public class OrderController {
             int orderId=orderService.createOrder(applyJobVO);
             result.code=200;
             result.message="报名成功";
-            result.data.put("orderId：",orderId);
+            result.data.put("orderId",orderId);
             return result;
         }
         catch (Exception e){
-//            ResultData result=new ResultData();
-//            result.code=400;
-//            result.message="请求失败";
-//            result.data.put("orderId：",null);
-//            return result;
             System.out.println("错误信息"+e.getMessage());
             return ResultData.error();
         }
