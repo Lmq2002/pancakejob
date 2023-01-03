@@ -13,7 +13,7 @@ import lombok.Data;
  * 
  * @TableName order
  */
-@TableName(value ="order")
+@TableName(value ="`order`")
 @Data
 public class Order implements Serializable {
     /**
@@ -30,6 +30,7 @@ public class Order implements Serializable {
     /**
      * 
      */
+    @TableId(value = "job_id")
     private Integer jobId;
 
     /**
