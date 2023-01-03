@@ -1,11 +1,15 @@
 package com.jbgz.pancakejob.controller;
 
+import com.jbgz.pancakejob.dto.OrderAcceptedDTO;
+import com.jbgz.pancakejob.dto.OrderAppliedDTO;
+import com.jbgz.pancakejob.dto.OrderDTO;
 import com.jbgz.pancakejob.service.OrderService;
 import com.jbgz.pancakejob.utils.ResultData;
 import com.jbgz.pancakejob.vo.ApplyJobVO;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @RestController
 @RequestMapping("/order")
@@ -48,12 +52,47 @@ public class OrderController {
 
     }
 
+    //获取求职者的订单列表
+    @GetMapping("/getJobhunterOrderList")
+    public ResultData getJobhunterOrderList(int jobhunterId){
+        try{
+            ResultData result=new ResultData();
+            List<OrderDTO> order_list=orderService.getOrderList(jobhunterId);
+            result.data.put("order_list",order_list);
+            result.code=200;
+            result.message="请求成功";
+            return result;
+        }
+        catch (Exception e){
+            return ResultData.error();
+        }
+    }
+
     //获取某兼职报名者列表
     @GetMapping("/getAppliedList")
     public ResultData getAppliedList(int jobId){
         try{
             ResultData result=new ResultData();
+            List<OrderAppliedDTO> order_list=orderService.getOrderAppliedList(jobId);
+            result.data.put("order_list",order_list);
+            result.code=200;
+            result.message="请求成功";
+            return result;
+        }
+        catch (Exception e){
+            return ResultData.error();
+        }
+    }
 
+    //获取某兼职录用者列表
+    @GetMapping("/getAcceptedList")
+    public ResultData getAcceptedList(int jobId){
+        try{
+            ResultData result=new ResultData();
+            List<OrderAcceptedDTO> order_list=orderService.getOrderAcceptedList(jobId);
+            result.data.put("order_list",order_list);
+            result.code=200;
+            result.message="请求成功";
             return result;
         }
         catch (Exception e){
@@ -159,8 +198,5 @@ public class OrderController {
             return ResultData.error();
         }
     }
-
-
-
 
 }

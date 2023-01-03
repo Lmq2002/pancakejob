@@ -15,10 +15,10 @@ public interface JobTypeService extends IService<JobType> {
 
     List<JobType> getTypeList();
 
-    boolean addJobType(String typeName);
+    int addJobType(String typeName);
 
     boolean deleteJobType(int typeId);
 
-    boolean changeJobType(int typeId,String typeName);
+    int changeJobType(int typeId,String typeName);
 
 }

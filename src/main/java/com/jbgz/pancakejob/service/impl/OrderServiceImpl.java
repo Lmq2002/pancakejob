@@ -2,12 +2,17 @@ package com.jbgz.pancakejob.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.jbgz.pancakejob.dto.OrderDTO;
+import com.jbgz.pancakejob.dto.*;
 import com.jbgz.pancakejob.entity.Job;
+import com.jbgz.pancakejob.entity.Jobhunter;
 import com.jbgz.pancakejob.entity.Order;
+import com.jbgz.pancakejob.entity.User;
 import com.jbgz.pancakejob.mapper.JobMapper;
+import com.jbgz.pancakejob.mapper.JobhunterMapper;
+import com.jbgz.pancakejob.mapper.UserMapper;
 import com.jbgz.pancakejob.service.OrderService;
 import com.jbgz.pancakejob.mapper.OrderMapper;
+import com.jbgz.pancakejob.utils.DateTimeTrans;
 import com.jbgz.pancakejob.vo.ApplyJobVO;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +34,94 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
     private OrderMapper orderMapper;
     @Resource
     private JobMapper jobMapper;
+    @Resource
+    private JobhunterMapper jobhunterMapper;
+    @Resource
+    private UserMapper userMapper;
+
+    //转换单个订单的DTO
+    public OrderDTO getOrderDTO(Order order){
+        OrderDTO orderDTO=new OrderDTO();
+        orderDTO.setOrderId(order.getOrderId());
+        orderDTO.setOrderState(order.getOrderState());
+        OrderJobDTO orderJobDTO=new OrderJobDTO();
+        Job job=jobMapper.selectById(order.getJobId());
+        orderJobDTO.setWorkName(job.getWorkName());
+        orderJobDTO.setWorkPlace(job.getWorkPlace());
+        orderJobDTO.setStartTime(DateTimeTrans.datetimeToString(job.getStartTime()));
+        orderJobDTO.setEndTime(DateTimeTrans.datetimeToString(job.getEndTime()));
+        orderJobDTO.setWorkTime(job.getWorkTime());
+        orderDTO.setJob(orderJobDTO);
+        return orderDTO;
+    }
+
+    //转换求职者订单列表的DTO
+    public List<OrderDTO> getOrderDTOList(List<Order> orderList){
+        List<OrderDTO> orderDTOList=new ArrayList<>();
+        for(Order order:orderList){
+            OrderDTO orderDTO=getOrderDTO(order);
+            orderDTOList.add(orderDTO);
+        }
+        return orderDTOList;
+    }
+
+    //获取某兼职报名者的DTO
+    public OrderAppliedDTO getOrderAppliedDTO(Order order){
+        OrderAppliedDTO orderAppliedDTO=new OrderAppliedDTO();
+        orderAppliedDTO.setOrderId(order.getOrderId());
+        orderAppliedDTO.setOrderState(order.getOrderState());
+        orderAppliedDTO.setApplyDescription(order.getApplyDescription());
+        Jobhunter jobhunter=jobhunterMapper.selectById(order.getJobhunterId());
+        User user=userMapper.selectById(jobhunter.getJobhunterId());
+        JobhunterDTO jobhunterDTO=new JobhunterDTO();
+        jobhunterDTO.setJobhunterId(jobhunter.getJobhunterId());
+        jobhunterDTO.setHeadportrait(user.getHeadportrait());
+        jobhunterDTO.setEmail(user.getEmail());
+        jobhunterDTO.setSchool(jobhunter.getSchool());
+        orderAppliedDTO.setJobhunter(jobhunterDTO);
+        return orderAppliedDTO;
+    }
+
+    //转换某兼职的报名者列表的DTO
+    public List<OrderAppliedDTO> getOrderAppliedDTOList(List<Order> orderList){
+        List<OrderAppliedDTO> orderAppliedDTOList=new ArrayList<>();
+        for(Order order:orderList){
+            OrderAppliedDTO orderAppliedDTO=getOrderAppliedDTO(order);
+            orderAppliedDTOList.add(orderAppliedDTO);
+        }
+        return orderAppliedDTOList;
+    }
+
+    //获取某兼职录用人员的DTO
+    public OrderAcceptedDTO getOrderAcceptedDTO(Order order){
+        OrderAcceptedDTO orderAcceptedDTO=new OrderAcceptedDTO();
+        Jobhunter jobhunter=jobhunterMapper.selectById(order.getJobhunterId());
+        User user=userMapper.selectById(jobhunter.getJobhunterId());
+        JobhunterDTO jobhunterDTO=new JobhunterDTO();
+        jobhunterDTO.setJobhunterId(jobhunter.getJobhunterId());
+        jobhunterDTO.setHeadportrait(user.getHeadportrait());
+        jobhunterDTO.setEmail(user.getEmail());
+        jobhunterDTO.setSchool(jobhunter.getSchool());
+        orderAcceptedDTO.setJobhunter(jobhunterDTO);
+
+        OrderScoreDTO orderScoreDTO=new OrderScoreDTO();
+        orderScoreDTO.setOrderId(order.getOrderId());
+        orderScoreDTO.setRecruiterScore(order.getRecruiterScore());
+        orderScoreDTO.setJobhunterScore(order.getJobhunterScore());
+        orderAcceptedDTO.setOrder(orderScoreDTO);
+
+        return orderAcceptedDTO;
+    }
+
+    //转换某兼职录用人员列表的DTO
+    public List<OrderAcceptedDTO> getOrderAcceptedDTOList(List<Order> orderList){
+        List<OrderAcceptedDTO> orderAcceptedDTOList=new ArrayList<>();
+        for(Order order:orderList){
+            OrderAcceptedDTO orderAcceptedDTO=getOrderAcceptedDTO(order);
+            orderAcceptedDTOList.add(orderAcceptedDTO);
+        }
+        return orderAcceptedDTOList;
+    }
 
     //报名兼职
     public int createOrder(ApplyJobVO applyJobVO){
@@ -72,13 +165,38 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
     }
 
     //获取求职者的订单列表
-//    public List<OrderDTO> getOrderList(int jobhunterId){
-//
-//    }
+    public List<OrderDTO> getOrderList(int jobhunterId){
+        QueryWrapper<Order> orderWrapper=new QueryWrapper<Order>();
+        orderWrapper.eq("jobhunter_id",jobhunterId);
+        List<OrderDTO> orderDTOList=getOrderDTOList(orderMapper.selectList(orderWrapper));
+        return orderDTOList;
+    }
 
-    //获取某个兼职的订单列表（已报名or已录用）
-    //public List<>
+    //获取某个兼职的已报名订单列表（除了已取消的所有状态）
+    public List<OrderAppliedDTO> getOrderAppliedList(int jobId){
+        QueryWrapper<Order> orderWrapper=new QueryWrapper<Order>();
+        orderWrapper.eq("order_state","已报名").or()
+                .eq("order_state","已通过").or()
+                .eq("order_state","未通过").or()
+                .eq("order_state","已录用").or()
+                .eq("order_state","已放弃").or()
+                .eq("order_state","已完成").or()
+                .eq("order_state","支付异常").or()
+                .eq("job_id",jobId);
+        List<OrderAppliedDTO> orderAppliedDTOList=getOrderAppliedDTOList(orderMapper.selectList(orderWrapper));
+        return orderAppliedDTOList;
+    }
 
+    //获取某个兼职的录用名单(已录用、已完成、支付异常)
+    public List<OrderAcceptedDTO> getOrderAcceptedList(int jobId){
+        QueryWrapper<Order> orderWrapper=new QueryWrapper<Order>();
+        orderWrapper.eq("order_state","已录用").or()
+                .eq("order_state","已完成").or()
+                .eq("order_state","支付异常")
+                .eq("job_id",jobId);
+        List<OrderAcceptedDTO> orderAcceptedDTOList=getOrderAcceptedDTOList(orderMapper.selectList(orderWrapper));
+        return orderAcceptedDTOList;
+    }
 
     //修改订单状态
     public boolean changeOrderState(int orderId,String newState){
@@ -103,8 +221,12 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
 
     //招聘方发放offer
     public boolean sendOfferOrNot(int orderId,boolean send){
-        if(send)
+        if(send){
+            Order order=orderMapper.selectById(orderId);
+            order.setPassTime(new Date());
+            orderMapper.updateById(order);
             return changeOrderState(orderId,"已通过");
+        }
         else
             return changeOrderState(orderId,"未通过");
     }

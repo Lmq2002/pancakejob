@@ -33,15 +33,14 @@ public class AdminController {
     public ResultData addType(String typeName){
         try{
             ResultData result=new ResultData();
-            boolean re=jobTypeService.addJobType(typeName);
-            if(re){
-                result.message="添加成功";
-                result.code=200;
-            }
-            else{
+            int re=jobTypeService.addJobType(typeName);
+            result.code=200;
+            if(re==-1)
+                result.message="兼职类型已存在";
+            else if(re==0)
                 result.message="添加失败";
-                result.code=200;
-            }
+            else
+                result.message="添加成功";
             System.out.println("result:"+result);
             return result;
         }
@@ -79,15 +78,14 @@ public class AdminController {
     public ResultData changeType(int typeId,String typeName){
         try{
             ResultData result=new ResultData();
-            boolean re=jobTypeService.changeJobType(typeId,typeName);
-            if(re){
-                result.message="修改成功";
-                result.code=200;
-            }
-            else{
+            int re=jobTypeService.changeJobType(typeId,typeName);
+            result.code=200;
+            if(re==-1)
+                result.message="兼职类型已存在";
+            else if(re==0)
                 result.message="修改失败";
-                result.code=200;
-            }
+            else
+                result.message="修改成功";
             System.out.println("result:"+result);
             return result;
         }

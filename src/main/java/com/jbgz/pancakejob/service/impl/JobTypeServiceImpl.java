@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jbgz.pancakejob.entity.JobType;
 import com.jbgz.pancakejob.service.JobTypeService;
 import com.jbgz.pancakejob.mapper.JobTypeMapper;
-import com.jbgz.pancakejob.utils.ResultData;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -32,38 +31,41 @@ public class JobTypeServiceImpl extends ServiceImpl<JobTypeMapper, JobType>
     }
 
     //增加兼职类型
-    public boolean addJobType(String typeName){
+    public int addJobType(String typeName){
         JobType jobType=new JobType();
         jobType.setTypeName(typeName);
-        int re=jobTypeMapper.insert(jobType);
-        System.out.println("insert:"+re);
-        if(re>0)
-            return true;
-        else
-            return false;
+        QueryWrapper<JobType> jobTypeWrapper=new QueryWrapper<JobType>();
+        jobTypeWrapper.eq("type_name",typeName);
+        if(jobTypeMapper.selectCount(jobTypeWrapper)>0)
+            return -1;
+        else{
+            int re=jobTypeMapper.insert(jobType);
+            System.out.println("insert:"+re);
+            return re;
+        }
     }
 
     //删除兼职类型
     public boolean deleteJobType(int typeId){
         int re=jobTypeMapper.deleteById(typeId);
         System.out.println("delete:"+re);
-        if(re>0)
-            return true;
-        else
-            return false;
+        return re>0;
     }
 
     //修改兼职类型
-    public boolean changeJobType(int typeId,String typeName){
+    public int changeJobType(int typeId,String typeName){
         JobType jobType=new JobType();
         jobType.setTypeId(typeId);
         jobType.setTypeName(typeName);
-        int re=jobTypeMapper.updateById(jobType);
-        System.out.println("update:"+re);
-        if(re>0)
-            return true;
-        else
-            return false;
+        QueryWrapper<JobType> jobTypeWrapper=new QueryWrapper<JobType>();
+        jobTypeWrapper.eq("type_name",typeName);
+        if(jobTypeMapper.selectCount(jobTypeWrapper)>0)
+            return -1;
+        else {
+            int re = jobTypeMapper.updateById(jobType);
+            System.out.println("update:" + re);
+            return re;
+        }
     }
 }
 
