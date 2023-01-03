@@ -95,7 +95,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         user.setUserType(vo.getUserType());
         user.setPassword(vo.getPassword());
         user.setRegistrationTime(new Date());
-        user.setContactMethod(100L);
+//        user.setContactMethod(100L);
         tmp = userMapper.insert(user);
         if(tmp!=0 && regist2(vo,user.getUserId())){
             return true;
