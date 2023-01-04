@@ -27,6 +27,7 @@ public interface OrderService extends IService<Order> {
     List<OrderAcceptedDTO> getOrderAcceptedDTOList(List<Order> orderList);
     List<OrderAcceptedDTO> getOrderAcceptedList(int jobId);
 
+    String getApplyState(int jobhunterId,int jobId);
     int createOrder(ApplyJobVO applyJobVO);
     boolean cancelOrder(int orderId);
     boolean changeOrderState(int orderId,String newState);

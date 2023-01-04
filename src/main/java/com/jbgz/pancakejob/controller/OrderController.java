@@ -17,6 +17,24 @@ public class OrderController {
     @Resource
     private OrderService orderService;
 
+    //获取报名状态
+    @GetMapping("/getApplyState")
+    public ResultData getApplyState(int jobhunterId,int jobId){
+        try{
+            ResultData result=new ResultData();
+            result.code=200;
+//            if(orderService.getApplyState(jobhunterId,jobId))
+//                result.message="已报名";
+//            else
+//                result.message="未报名";
+            result.message=orderService.getApplyState(jobhunterId,jobId);
+            return result;
+        }
+        catch (Exception e){
+            return ResultData.error();
+        }
+    }
+
     //报名兼职
     @PostMapping("/applyForJob")
     public ResultData applyForJob(@RequestBody ApplyJobVO applyJobVO){

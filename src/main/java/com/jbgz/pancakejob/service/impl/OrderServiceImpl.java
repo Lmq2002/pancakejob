@@ -123,6 +123,16 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
         return orderAcceptedDTOList;
     }
 
+    //获取兼职报名状态
+    public String getApplyState(int jobhunterId,int jobId){
+        QueryWrapper<Order> orderWrapper=new QueryWrapper<Order>();
+        orderWrapper.eq("jobhunter_id",jobhunterId).eq("job_id",jobId).orderByDesc("apply_time");
+        List<Order> orders=orderMapper.selectList(orderWrapper);
+        //orderWrapper.eq("jobhunter_id",jobhunterId).eq("job_id",jobId).eq("order_state","已报名");
+        //int re=orderMapper.selectCount(orderWrapper);
+        return orders.get(0).getOrderState();
+    }
+
     //报名兼职
     public int createOrder(ApplyJobVO applyJobVO){
         //兼职的已报名人数+1
@@ -239,7 +249,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
         Job job=jobMapper.selectById(order.getJobId());
         job.setFinishedNum(job.getFinishedNum()+1);
         //如果所有工作订单均已完成，将兼职状态修改为已完成
-        if(job.getFinishedNum().equals(job.getAcceptedNum()))
+        if(job.getFinishedNum().equals(job.getAcceptedNum())&&job.getJobState().equals("已结束"))
             job.setJobState("已完成");
         int re=jobMapper.updateById(job);
         return re>0;
