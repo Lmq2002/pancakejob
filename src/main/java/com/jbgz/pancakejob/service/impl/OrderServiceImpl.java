@@ -137,27 +137,30 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
     public int createOrder(ApplyJobVO applyJobVO){
         //兼职的已报名人数+1
         Job job=jobMapper.selectById(applyJobVO.getJobId());
-        job.setAppliedNum(job.getAppliedNum()+1);
-        jobMapper.updateById(job);
         Order order=new Order();
         order.setJobhunterId(applyJobVO.getJobhunterId());
         order.setJobId(applyJobVO.getJobId());
         order.setApplyTime(new Date());
         order.setApplyDescription(applyJobVO.getApplyReason());
         order.setOrderState("已报名");
-        orderMapper.insert(order);
-        return order.getOrderId();
+        if(orderMapper.insert(order)>0){
+            job.setAppliedNum(job.getAppliedNum()+1);
+            jobMapper.updateById(job);
+            return order.getOrderId();
+        }
+        else
+            return -1;
     }
 
     //取消报名
     public boolean cancelOrder(int orderId){
         Order order=orderMapper.selectById(orderId);
+        order.setOrderState("已取消");
+        orderMapper.updateById(order);
         //兼职的已报名人数-1
         Job job=jobMapper.selectById(order.getJobId());
         job.setAppliedNum(job.getAppliedNum()-1);
-        jobMapper.updateById(job);
-        order.setOrderState("已取消");
-        int re=orderMapper.updateById(order);
+        int re=jobMapper.updateById(job);
         return re>0;
     }
 
@@ -172,14 +175,14 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
     //获取某个兼职的已报名订单列表（除了已取消的所有状态）
     public List<OrderAppliedDTO> getOrderAppliedList(int jobId){
         QueryWrapper<Order> orderWrapper=new QueryWrapper<Order>();
-        orderWrapper.eq("order_state","已报名").or()
+        orderWrapper.eq("job_id",jobId).and(i->i
+                .eq("order_state","已报名").or()
                 .eq("order_state","已通过").or()
                 .eq("order_state","未通过").or()
                 .eq("order_state","已录用").or()
                 .eq("order_state","已放弃").or()
                 .eq("order_state","已完成").or()
-                .eq("order_state","支付异常")
-                .eq("job_id",jobId);
+                .eq("order_state","支付异常"));
         List<OrderAppliedDTO> orderAppliedDTOList=getOrderAppliedDTOList(orderMapper.selectList(orderWrapper));
         return orderAppliedDTOList;
     }
@@ -187,10 +190,9 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
     //获取某个兼职的录用名单(已录用、已完成、支付异常)
     public List<OrderAcceptedDTO> getOrderAcceptedList(int jobId){
         QueryWrapper<Order> orderWrapper=new QueryWrapper<Order>();
-        orderWrapper.eq("order_state","已录用").or()
+        orderWrapper.eq("job_id",jobId).and(i->i.eq("order_state","已录用").or()
                 .eq("order_state","已完成").or()
-                .eq("order_state","支付异常")
-                .eq("job_id",jobId);
+                .eq("order_state","支付异常"));
         List<OrderAcceptedDTO> orderAcceptedDTOList=getOrderAcceptedDTOList(orderMapper.selectList(orderWrapper));
         return orderAcceptedDTOList;
     }
@@ -248,7 +250,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
         Order order=orderMapper.selectById(orderId);
         Job job=jobMapper.selectById(order.getJobId());
         job.setFinishedNum(job.getFinishedNum()+1);
-        //如果所有工作订单均已完成，将兼职状态修改为已完成
+        //如果所有工作订单均已完成且已结束招聘，将兼职状态修改为已完成
         if(job.getFinishedNum().equals(job.getAcceptedNum())&&job.getJobState().equals("已结束"))
             job.setJobState("已完成");
         int re=jobMapper.updateById(job);
