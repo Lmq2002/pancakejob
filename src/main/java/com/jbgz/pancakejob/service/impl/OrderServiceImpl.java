@@ -106,8 +106,14 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
 
         OrderScoreDTO orderScoreDTO=new OrderScoreDTO();
         orderScoreDTO.setOrderId(order.getOrderId());
-        orderScoreDTO.setRecruiterScore(order.getRecruiterScore());
-        orderScoreDTO.setJobhunterScore(order.getJobhunterScore());
+        if(order.getRecruiterScore()==null)
+            orderScoreDTO.setRecruiterScore(0);
+        else
+            orderScoreDTO.setRecruiterScore(order.getRecruiterScore());
+        if(order.getJobhunterScore()==null)
+            orderScoreDTO.setJobhunterScore(0);
+        else
+            orderScoreDTO.setJobhunterScore(order.getJobhunterScore());
         orderAcceptedDTO.setOrder(orderScoreDTO);
 
         return orderAcceptedDTO;
@@ -190,7 +196,8 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
     //获取某个兼职的录用名单(已录用、已完成、支付异常)
     public List<OrderAcceptedDTO> getOrderAcceptedList(int jobId){
         QueryWrapper<Order> orderWrapper=new QueryWrapper<Order>();
-        orderWrapper.eq("job_id",jobId).and(i->i.eq("order_state","已录用").or()
+        orderWrapper.eq("job_id",jobId).and(i->i
+                .eq("order_state","已录用").or()
                 .eq("order_state","已完成").or()
                 .eq("order_state","支付异常"));
         List<OrderAcceptedDTO> orderAcceptedDTOList=getOrderAcceptedDTOList(orderMapper.selectList(orderWrapper));
