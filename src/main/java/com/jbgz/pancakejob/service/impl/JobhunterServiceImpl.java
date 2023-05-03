@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
 * @author CSY0214
@@ -25,8 +27,20 @@ public class JobhunterServiceImpl extends ServiceImpl<JobhunterMapper, Jobhunter
     private JobhunterMapper jobhunterMapper;
 
     @Override
-    public PersonalInfoDTO getPersonalInfo(GetPersonalInfoVO vo) {
-        return jobhunterMapper.getInfo(vo);
+    public List<PersonalInfoDTO> getPersonalInfo(GetPersonalInfoVO vo) {
+        try {
+            if (vo.getJobhunterId() != null) {
+                PersonalInfoDTO dto = jobhunterMapper.getInfo(vo);
+                List<PersonalInfoDTO> list = new ArrayList<>();
+                list.add(dto);
+                return list;
+            } else
+                return jobhunterMapper.getListAll();
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+            return null;
+        }
     }
 
     @Override

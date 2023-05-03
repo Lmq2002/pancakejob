@@ -59,32 +59,37 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job>
 ////        return jobMapper.selectList(null);
 //    }
     public JobDTO getJObDTO(Job job){
-        JobDTO jobDTO=new JobDTO();
-        jobDTO.setJobId(job.getJobId());
-        jobDTO.setRecruiterId(job.getRecruiterId());
+        try {
+            JobDTO jobDTO = new JobDTO();
+            jobDTO.setJobId(job.getJobId());
+            jobDTO.setRecruiterId(job.getRecruiterId());
 
-        Recruiter recruiter = recruiterMapper.selectById(job.getRecruiterId());
-        jobDTO.setCompanyName(recruiter.getCompanyName());
+            Recruiter recruiter = recruiterMapper.selectById(job.getRecruiterId());
+            jobDTO.setCompanyName(recruiter.getCompanyName());
 
-        jobDTO.setReleaseTime(DateTimeTrans.dateToString(job.getReleaseTime()));
-        jobDTO.setJobState(job.getJobState());
+            jobDTO.setReleaseTime(DateTimeTrans.dateToString(job.getReleaseTime()));
+            jobDTO.setJobState(job.getJobState());
 
-        if(job.getJobType()!=null){
-            JobType jobType= jobTypeMapper.selectById(job.getJobType());
-            jobDTO.setJobType(jobType.getTypeName());
+            if (job.getJobType() != null) {
+                JobType jobType = jobTypeMapper.selectById(job.getJobType());
+                jobDTO.setJobType(jobType.getTypeName());
+            } else
+                jobDTO.setJobType(null);
+
+            jobDTO.setWorkName(job.getWorkName());
+            jobDTO.setWorkTime(job.getWorkTime());
+            jobDTO.setWorkPlace(job.getWorkPlace());
+            jobDTO.setWorkDetails(job.getWorkDetails());
+            jobDTO.setSalary(job.getSalary());
+
+            jobDTO.setStartTime(DateTimeTrans.dateToString(job.getStartTime()));
+            jobDTO.setEndTime(DateTimeTrans.dateToString(job.getEndTime()));
+            return jobDTO;
         }
-        else
-            jobDTO.setJobType(null);
-
-        jobDTO.setWorkName(job.getWorkName());
-        jobDTO.setWorkTime(job.getWorkTime());
-        jobDTO.setWorkPlace(job.getWorkPlace());
-        jobDTO.setWorkDetails(job.getWorkDetails());
-        jobDTO.setSalary(job.getSalary());
-
-        jobDTO.setStartTime(DateTimeTrans.dateToString(job.getStartTime()));
-        jobDTO.setEndTime(DateTimeTrans.dateToString(job.getEndTime()));
-        return jobDTO;
+        catch (Exception e){
+            System.out.println(e.getMessage());
+            return null;
+        }
     }
 
     public List<JobDTO> getJobListDTO(List<Job> jobList){
@@ -113,6 +118,11 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job>
         return jobDTOList;
     }
 
+    //获取招聘方的兼职草稿箱列表
+    public List<JobDTO> getJobDraftList(int recruiterId){
+        List<Job> draft = jobMapper.getDraftListById(recruiterId);
+        return getJobListDTO(draft);
+    }
 
     //获取单个兼职信息
     public List<JobDTO> getJobInfo(int jobId){
@@ -122,6 +132,9 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job>
         return jobDTO;
     }
 
+    public boolean upJobDraft(Integer jobId){
+        return jobMapper.alterJobState(jobId, "未发布","未审核");
+    }
     //发布兼职
     public boolean createJob(JobUpVO jobUpVO){
         JobInfoVO jobInfo=jobUpVO.getJobInfo();

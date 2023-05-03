@@ -10,6 +10,8 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
+import java.util.List;
+
 /**
 * @author CSY0214
 * @description 针对表【jobhunter】的数据库操作Mapper
@@ -21,7 +23,11 @@ public interface JobhunterMapper extends BaseMapper<Jobhunter> {
     @Select("SELECT DISTINCT nickname, headportrait, contact_method, email, introduction, birthday, school " +
             "FROM user AS a LEFT JOIN jobhunter AS b ON a.user_id = b.jobhunter_id " +
             "WHERE a.user_id = #{jobhunterId}")
-    public PersonalInfoDTO getInfo(GetPersonalInfoVO vo);
+    PersonalInfoDTO getInfo(GetPersonalInfoVO vo);
+
+    @Select("SELECT DISTINCT nickname, headportrait, contact_method, email, introduction, birthday, school " +
+            "FROM user AS a LEFT JOIN jobhunter AS b ON a.user_id = b.jobhunter_id ")
+    List<PersonalInfoDTO> getListAll();
 
     @Insert("INSERT INTO jobhunter (jobhunter_id) VALUES (#{jobhunterId})")
     Integer registJobhunter(Jobhunter jobhunter);

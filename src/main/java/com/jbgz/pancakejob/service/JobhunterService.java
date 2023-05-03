@@ -8,6 +8,8 @@ import com.jbgz.pancakejob.vo.GetPersonalInfoVO;
 import com.jbgz.pancakejob.vo.PersonalInfoVO;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
+
 /**
 * @author CSY0214
 * @description 针对表【jobhunter】的数据库操作Service
@@ -21,7 +23,7 @@ public interface JobhunterService extends IService<Jobhunter> {
      * 根据user_id获取个人信息，需要查两张表
      * 返回：PersonalInfo
      */
-    public PersonalInfoDTO getPersonalInfo(GetPersonalInfoVO vo);
+    public List<PersonalInfoDTO> getPersonalInfo(GetPersonalInfoVO vo);
 
     public boolean setPersonalInfo(PersonalInfoVO vo);
 }

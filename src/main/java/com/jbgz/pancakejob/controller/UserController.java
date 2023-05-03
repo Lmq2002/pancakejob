@@ -1,7 +1,9 @@
 package com.jbgz.pancakejob.controller;
 
+import com.baomidou.mybatisplus.extension.api.R;
 import com.jbgz.pancakejob.common.Constants;
 import com.jbgz.pancakejob.common.RealNameStatus;
+import com.jbgz.pancakejob.dto.JobDTO;
 import com.jbgz.pancakejob.dto.PersonalInfoDTO;
 import com.jbgz.pancakejob.dto.RecruiterPersonInfoDTO;
 import com.jbgz.pancakejob.entity.CompanyAuthentication;
@@ -15,12 +17,15 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.xml.transform.Result;
 import java.util.Date;
+import java.util.List;
 
 @RestController
 public class UserController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private JobService jobService;
     @Autowired
     private JobhunterService jobhunterService;
     @Autowired
@@ -40,13 +45,15 @@ public class UserController {
      * 负责人：lmq
      * 新建时间：2023/1/2
      *完成时间：2023/1/2
+     * 修改时间: 2023/5/3
+     * 修改内容:传参为空时返回全部user表项
      */
     @GetMapping("/Jobhunter/personInfo/get")
-    public ResultData getPersonalInfo(@RequestParam("jobhunterId") Integer id){
+    public ResultData getPersonalInfo(@RequestParam(value = "jobhunterId", required = false) Integer id){
         try{
             GetPersonalInfoVO vo = new GetPersonalInfoVO();
             vo.setJobhunterId(id);
-            PersonalInfoDTO data = jobhunterService.getPersonalInfo(vo);
+            List<PersonalInfoDTO> data = jobhunterService.getPersonalInfo(vo);
             ResultData result = new ResultData();
             if(data!=null)
             {
@@ -234,6 +241,58 @@ public class UserController {
         }
         catch (Exception e){
             System.out.println("异常情况："+e.getMessage());
+            return ResultData.sys_error();
+        }
+    }
+
+    /**
+     * 功能：获取兼职草稿列表
+     * 状态：正在测试中
+     * 负责人：lmq
+     * 新建时间：2023/5/3
+     * 完成时间：2023/5/3
+     * */
+    @GetMapping("/recruiter/getJobDraftList")
+    public ResultData getJobDraftList(@RequestParam("recruiterId") Integer recruiterId){
+        try{
+            ResultData result = new ResultData();
+            result.data.put("job_list",jobService.getJobDraftList(recruiterId));
+            result.code=Constants.CODE_200;
+            result.message="成功";
+            return result;
+        }
+        catch (Exception e){
+            System.out.println("异常情况："+e.getMessage());
+            return ResultData.sys_error();
+        }
+    }
+
+
+    /**
+     * 功能：发布招聘方的兼职草稿，改变job状态
+     * 状态：正在测试中
+     * 负责人：lmq
+     * 新建时间：2023/5/3
+     * 完成时间：2023/5/3
+     * */
+    @PostMapping("/recruiter/upJobDraft")
+    public ResultData upJobDraft(@RequestParam("jobId") Integer jobId, @RequestParam("jobState") String jobState){
+        try{
+            boolean tmp = jobService.upJobDraft(jobId);
+            if(tmp){
+                ResultData result = new ResultData();
+                result.message="上传成功";
+                result.code = Constants.CODE_200;
+                result.data=null;
+                return result;
+            }
+            else{
+                return ResultData.error(Constants.CODE_400,"上传失败");
+            }
+
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
             return ResultData.sys_error();
         }
     }
