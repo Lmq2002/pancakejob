@@ -1,10 +1,12 @@
 package com.jbgz.pancakejob.controller;
 
+import com.jbgz.pancakejob.common.Constants;
 import com.jbgz.pancakejob.dto.OrderAcceptedDTO;
 import com.jbgz.pancakejob.dto.OrderAppliedDTO;
 import com.jbgz.pancakejob.dto.OrderDTO;
 import com.jbgz.pancakejob.service.OrderService;
 import com.jbgz.pancakejob.utils.ResultData;
+import com.jbgz.pancakejob.vo.AppealOrderVO;
 import com.jbgz.pancakejob.vo.ApplyJobVO;
 import org.springframework.web.bind.annotation.*;
 
@@ -214,7 +216,7 @@ public class OrderController {
         try{
             ResultData result=new ResultData();
             boolean re=orderService.changeOrderScore(orderId,recruiterScore,"recruiter");
-            result.code=200;
+            result.code= Constants.CODE_200;
             if(re)
                 result.message="评分成功";
             else
@@ -227,4 +229,25 @@ public class OrderController {
         }
     }
 
+    //订单申诉
+    @PostMapping("/appealOrder")
+    public ResultData appealOrder(@RequestBody AppealOrderVO appealOrderVO){
+        try{
+            ResultData result=new ResultData();
+            boolean re=false;
+            //if(appealOrderVO.getAppealType().equals("支付申诉"))
+                //“求职者评价申诉”、“招聘方评价申诉”、“支付申诉”
+
+                /*申诉是通过*/
+            result.code=Constants.CODE_200;
+            if(re)
+                result.message="申诉成功";
+            else
+                result.message="申诉失败";
+            return result;
+        }
+        catch (Exception e){
+            return ResultData.error();
+        }
+    }
 }

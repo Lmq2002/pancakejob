@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 public class AppealServiceImpl extends ServiceImpl<AppealMapper, Appeal>
     implements IService<Appeal> {
 
+
+
 }
 
 

@@ -75,6 +75,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
         User user=userMapper.selectById(jobhunter.getJobhunterId());
         JobhunterDTO jobhunterDTO=new JobhunterDTO();
         jobhunterDTO.setJobhunterId(jobhunter.getJobhunterId());
+        jobhunterDTO.setNickname(user.getNickname());
         jobhunterDTO.setHeadportrait(user.getHeadportrait());
         jobhunterDTO.setEmail(user.getEmail());
         jobhunterDTO.setSchool(jobhunter.getSchool());
