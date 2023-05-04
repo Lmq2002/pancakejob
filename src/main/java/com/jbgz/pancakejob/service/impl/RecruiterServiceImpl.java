@@ -9,6 +9,9 @@ import com.jbgz.pancakejob.vo.RecruiterPersonInfoVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
 * @author CSY0214
 * @description 针对表【recruiter】的数据库操作Service实现
@@ -21,8 +24,15 @@ public class RecruiterServiceImpl extends ServiceImpl<RecruiterMapper, Recruiter
     @Autowired
     RecruiterMapper mapper;
     @Override
-    public RecruiterPersonInfoDTO getInfo(Integer recruiterId) {
-        return mapper.getInfo(recruiterId);
+    public List<RecruiterPersonInfoDTO> getInfo(Integer recruiterId) {
+        if(recruiterId!=null) {
+            List<RecruiterPersonInfoDTO> list = new ArrayList<>();
+            list.add(mapper.getInfo(recruiterId));
+            return list;
+        }
+        else{
+            return mapper.getListAll();
+        }
     }
 
     @Override

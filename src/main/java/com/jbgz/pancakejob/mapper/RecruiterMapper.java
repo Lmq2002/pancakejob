@@ -8,6 +8,8 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
+import java.util.List;
+
 /**
 * @author CSY0214
 * @description 针对表【recruiter】的数据库操作Mapper
@@ -21,7 +23,11 @@ public interface RecruiterMapper extends BaseMapper<Recruiter> {
     @Select("SELECT DISTINCT recruiter_id, company_name, nickname, headportrait, contact_method, email, introduction"+
     " FROM user AS a INNER JOIN recruiter AS b ON a.user_id = b.recruiter_id"+
     " WHERE b.recruiter_id = #{recruiterId}")
-    public RecruiterPersonInfoDTO getInfo(Integer recruiterId);
+    RecruiterPersonInfoDTO getInfo(Integer recruiterId);
+
+    @Select("SELECT DISTINCT recruiter_id, company_name, nickname, headportrait, contact_method, email, introduction"+
+            " FROM user AS a INNER JOIN recruiter AS b ON a.user_id = b.recruiter_id")
+    List<RecruiterPersonInfoDTO> getListAll();
 
     @Update("UPDATE user "+
     " SET nickname = #{nickname},"+

@@ -206,9 +206,9 @@ public class UserController {
      * 完成时间：2023/1/3
      * */
     @GetMapping("/recruiter/personInfo/get")
-    public ResultData getRecruiterPersonInfo(@RequestParam("recruiterId") Integer recruiterId){
+    public ResultData getRecruiterPersonInfo(@RequestParam(value = "recruiterId",required = false) Integer recruiterId){
         try{
-            RecruiterPersonInfoDTO dto = recruiterService.getInfo(recruiterId);
+            List<RecruiterPersonInfoDTO> dto = recruiterService.getInfo(recruiterId);
             if(dto==null)
                 return new ResultData(Constants.CODE_400,"失败",null);
             ResultData result = new ResultData();
