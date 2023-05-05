@@ -6,7 +6,6 @@ import com.jbgz.pancakejob.dto.FavoritesDTO;
 import com.jbgz.pancakejob.dto.JobDTO;
 import com.jbgz.pancakejob.entity.Job;
 import com.jbgz.pancakejob.entity.JobType;
-import com.jbgz.pancakejob.entity.Order;
 import com.jbgz.pancakejob.entity.Recruiter;
 import com.jbgz.pancakejob.mapper.JobTypeMapper;
 import com.jbgz.pancakejob.mapper.OrderMapper;
@@ -14,6 +13,7 @@ import com.jbgz.pancakejob.mapper.RecruiterMapper;
 import com.jbgz.pancakejob.service.JobService;
 import com.jbgz.pancakejob.mapper.JobMapper;
 import com.jbgz.pancakejob.utils.DateTimeTrans;
+import com.jbgz.pancakejob.vo.JobDataVO;
 import com.jbgz.pancakejob.vo.JobInfoVO;
 import com.jbgz.pancakejob.vo.JobUpVO;
 import org.springframework.stereotype.Service;
@@ -132,6 +132,7 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job>
         return jobDTO;
     }
 
+    //发布兼职草稿
     public boolean upJobDraft(Integer jobId){
         return jobMapper.alterJobState(jobId, "未发布","未审核");
     }
@@ -160,6 +161,10 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job>
         return re>0;
     }
 
+    //修改兼职草稿
+    public boolean changeJobDraft(JobDataVO jobData){
+        return jobMapper.alterDraftContent(jobData);
+    }
     //结束招聘
     public boolean closeRecruit(int jobId){
         Job job=jobMapper.selectById(jobId);

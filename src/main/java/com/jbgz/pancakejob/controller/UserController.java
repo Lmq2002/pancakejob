@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.xml.transform.Result;
+import java.sql.ResultSet;
 import java.util.Date;
 import java.util.List;
 
@@ -297,6 +298,32 @@ public class UserController {
         }
     }
 
+    /**
+     * 功能：修改兼职草稿
+     * 状态：正在测试中
+     * 负责人：lmq
+     * 新建时间：2023/5/6
+     * 完成时间：2023/5/6
+     * */
+    @PostMapping("/recruiter/changeJobDraft")
+    public ResultData changeJobDraft(@RequestBody JobDataVO vo){
+        try{
+            System.out.println("!!! "+vo.getJobdata());
+            boolean tmp = jobService.changeJobDraft(vo);
+            if(tmp){
+                ResultData result = new ResultData();
+                result.data = null;
+                result.message="草稿修改成功";
+                result.code = Constants.CODE_200;
+                return result;
+            }
+            return ResultData.error(Constants.CODE_400,"失败");
+        }
+        catch (Exception e){
+            System.out.println("异常情况："+e.getMessage());
+            return  ResultData.sys_error();
+        }
+    }
     /**
      * 功能：通过jobhunterid获取收藏夹列表
      * 状态：正在测试中

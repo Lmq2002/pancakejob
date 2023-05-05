@@ -4,7 +4,7 @@ import com.jbgz.pancakejob.dto.FavoritesDTO;
 import com.jbgz.pancakejob.dto.JobDTO;
 import com.jbgz.pancakejob.entity.Job;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.jbgz.pancakejob.utils.ResultData;
+import com.jbgz.pancakejob.vo.JobDataVO;
 import com.jbgz.pancakejob.vo.JobUpVO;
 
 import java.util.List;
@@ -25,6 +25,7 @@ public interface JobService extends IService<Job> {
     List<JobDTO> getJobInfo(int jobId);
     boolean upJobDraft(Integer jobId);
     boolean createJob(JobUpVO jobUpVO);
+    boolean changeJobDraft(JobDataVO jobData);
     boolean closeRecruit(int jobId);
 
     /**

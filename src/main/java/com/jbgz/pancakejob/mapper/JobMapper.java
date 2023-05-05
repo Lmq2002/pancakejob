@@ -2,6 +2,7 @@ package com.jbgz.pancakejob.mapper;
 
 import com.jbgz.pancakejob.entity.Job;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.jbgz.pancakejob.vo.JobDataVO;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
@@ -22,6 +23,10 @@ public interface JobMapper extends BaseMapper<Job> {
     @Update("UPDATE job SET job_state= #{newState} where job_state= #{oldState} AND job_id= #{jobId}")
     boolean alterJobState(Integer jobId, String oldState, String newState);
 
+    @Update("UPDATE job SET work_name=#{jobdata.jobName},job_type=#{jobdata.jobType},work_details=#{jobdata.workDetails},"+
+            "start_time=#{jobdata.startTime}, end_time=#{jobdata.endTime},work_place=#{jobdata.workPlace},salary=#{jobdata.salary}," +
+            "applied_num=#{jobdata.employeeNum} WHERE job_id=#{jobdata.jobId}")
+    boolean alterDraftContent(JobDataVO jobData);
 }
 
 
