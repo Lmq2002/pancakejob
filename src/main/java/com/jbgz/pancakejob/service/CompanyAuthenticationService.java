@@ -2,6 +2,7 @@ package com.jbgz.pancakejob.service;
 
 import com.jbgz.pancakejob.entity.CompanyAuthentication;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.jbgz.pancakejob.vo.AuditVO;
 
 /**
 * @author CSY0214
@@ -9,5 +10,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 * @createDate 2022-12-30 22:38:45
 */
 public interface CompanyAuthenticationService extends IService<CompanyAuthentication> {
+
+    boolean auditAuthentication(AuditVO vo);
 
 }

@@ -2,6 +2,8 @@ package com.jbgz.pancakejob.mapper;
 
 import com.jbgz.pancakejob.entity.RealnameAuthentication;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.jbgz.pancakejob.vo.AuditVO;
+import org.apache.ibatis.annotations.Update;
 
 /**
 * @author CSY0214
@@ -11,6 +13,9 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 */
 public interface RealnameAuthenticationMapper extends BaseMapper<RealnameAuthentication> {
 
+    @Update("UPDATE realname_authentication SET result=#{result},check_status=#{checkStatus} " +
+            "WHERE apply_id=#{applyId} AND check_status='未审核'")
+    boolean auditAuthentication(AuditVO vo);
 }
 
 

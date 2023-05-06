@@ -1,7 +1,12 @@
 package com.jbgz.pancakejob.controller;
 
+import com.baomidou.mybatisplus.extension.api.R;
+import com.jbgz.pancakejob.common.Constants;
+import com.jbgz.pancakejob.service.CompanyAuthenticationService;
 import com.jbgz.pancakejob.service.JobTypeService;
+import com.jbgz.pancakejob.service.RealnameAuthenticationService;
 import com.jbgz.pancakejob.utils.ResultData;
+import com.jbgz.pancakejob.vo.AuditVO;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -11,6 +16,12 @@ import javax.annotation.Resource;
 public class AdminController {
     @Resource
     private JobTypeService jobTypeService;
+
+    @Resource
+    private RealnameAuthenticationService realnameAuthenticationService;
+
+    @Resource
+    private CompanyAuthenticationService companyAuthenticationService;
 
     //获取所有兼职类型
     @GetMapping("/getJobTypeList")
@@ -92,6 +103,32 @@ public class AdminController {
         catch (Exception e){
             System.out.println("错误信息"+e.getMessage());
             return ResultData.error();
+        }
+    }
+
+    @PostMapping("/auditUserAuthentication")
+    public ResultData auditUserAuthentication(@RequestBody AuditVO vo){
+        try{
+            boolean tmp = realnameAuthenticationService.auditAuthentication(vo);
+            if(tmp) return new ResultData(Constants.CODE_200,"成功",null);
+            return new ResultData(Constants.CODE_400,"失败",null);
+        }
+        catch (Exception e){
+            System.out.println("异常情况："+e.getMessage());
+            return ResultData.sys_error();
+        }
+    }
+
+    @PostMapping("/auditCompanyAuthentication")
+    public ResultData auditCompanyAuthentication(@RequestBody AuditVO vo){
+        try{
+            boolean tmp = companyAuthenticationService.auditAuthentication(vo);
+            if(tmp) return new ResultData(Constants.CODE_200,"成功",null);
+            return new ResultData(Constants.CODE_400,"失败",null);
+        }
+        catch (Exception e){
+            System.out.println("异常情况："+e.getMessage());
+            return ResultData.sys_error();
         }
     }
 }
