@@ -1,5 +1,6 @@
 package com.jbgz.pancakejob.service;
 
+import com.jbgz.pancakejob.common.JobStatus;
 import com.jbgz.pancakejob.dto.FavoritesDTO;
 import com.jbgz.pancakejob.dto.JobDTO;
 import com.jbgz.pancakejob.entity.Job;
@@ -23,14 +24,11 @@ public interface JobService extends IService<Job> {
     List<JobDTO> getJobDraftList(int recruiterId);
     List<JobDTO> getAllJobList(int recruiterId);
     List<JobDTO> getJobInfo(int jobId);
+    List<FavoritesDTO> getFavoritesDTO(Integer dirId, Integer jobhunterId);
     boolean upJobDraft(Integer jobId);
     boolean createJob(JobUpVO jobUpVO);
     boolean changeJobDraft(JobDataVO jobData);
     boolean closeRecruit(int jobId);
+    boolean deleteJob(Integer jobId, String jobType);
 
-    /**
-     * 根据jobId获取收藏展示信息。
-     * 返回对应收藏信息
-     * */
-    FavoritesDTO getFavorites(Integer jobId);
 }

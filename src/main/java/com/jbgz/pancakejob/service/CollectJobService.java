@@ -2,6 +2,7 @@ package com.jbgz.pancakejob.service;
 
 import com.jbgz.pancakejob.entity.CollectJob;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.jbgz.pancakejob.vo.CollectVO;
 
 import java.util.List;
 
@@ -17,4 +18,8 @@ public interface CollectJobService extends IService<CollectJob> {
      * 返回jobId列表
      * */
 //    public List<Integer> findJob(Integer dirId);
+
+    public boolean addCollect(CollectVO vo);
+    public boolean updatePosition(CollectVO vo);
+    public boolean deleteCollect(Integer jobhunterId, Integer jobId);
 }

@@ -35,14 +35,6 @@ public class FavoritesDirServiceImpl extends ServiceImpl<FavoritesDirMapper, Fav
 
     @Autowired
     private JobService jobService;
-    @Override
-    public FavoritesDirDTO getDirInfo(Integer favoritesDirId) {
-        FavoritesDirDTO dto = new FavoritesDirDTO();
-        dto.setFavoritesDirId(favoritesDirId);
-        dto.setFavoritesDirName(favoritesDirMapper.getDirName(favoritesDirId));
-        return dto;
-
-    }
 
 //    @Override
 //    public List<Integer> getDirIdList(Integer jobhunterId) {
@@ -51,23 +43,30 @@ public class FavoritesDirServiceImpl extends ServiceImpl<FavoritesDirMapper, Fav
 
     @Override
     public List<FavoritesDirDTO> getDirList(Integer jobhunterId) {
-        List<Integer> dirIdList = favoritesDirMapper.getDirIdList(jobhunterId);
-        List<FavoritesDirDTO> favoritesDirDTOList = new LinkedList<>();
-        for(Integer dirId : dirIdList){ //n个收藏夹
-            FavoritesDirDTO favoritesDirDTO = getDirInfo(dirId);
+        //收藏夹列表
+        List<FavoritesDirDTO> dirList = favoritesDirMapper.getDirList(jobhunterId);
 
-            List<Integer> jobIdList = collectJobMapper.getJobId(dirId);
-            List<FavoritesDTO> favoritesDTOList = new LinkedList<>();
-            for(Integer jobId : jobIdList){
-                FavoritesDTO favoritesDTO =jobService.getFavorites(jobId);
-                favoritesDTOList.add(favoritesDTO);
-            }
-            Map<String, List<FavoritesDTO>> map = new HashMap<>();
-            map.put("favorites",favoritesDTOList);
-            favoritesDirDTO.setFavorites(map);
-            favoritesDirDTOList.add(favoritesDirDTO);
+        for(FavoritesDirDTO dir : dirList){ //n个收藏夹
+            Map<String, List<FavoritesDTO>> favoritesList = new HashMap<>();
+            favoritesList.put("favorites_list",jobService.getFavoritesDTO(dir.getFavoritesDirId(),jobhunterId));
+            dir.setFavorites(favoritesList);
         }
-        return  favoritesDirDTOList;
+        return  dirList;
+    }
+
+    @Override
+    public boolean addDir(Integer jobhunterId, String dirName){
+        return favoritesDirMapper.insertDir(jobhunterId,dirName,new Date());
+    }
+
+    @Override
+    public boolean deleteDir(Integer jobhunterId, Integer dirId){
+        return favoritesDirMapper.deleteDir(jobhunterId,dirId);
+    }
+
+    @Override
+    public boolean updateDirName(Integer jobhunterId, String dirName, Integer dirId){
+        return favoritesDirMapper.updateDirName(jobhunterId,dirName,dirId);
     }
 }
 

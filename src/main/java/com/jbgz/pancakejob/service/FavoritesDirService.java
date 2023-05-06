@@ -12,10 +12,7 @@ import java.util.List;
 * @createDate 2022-12-30 22:38:52
 */
 public interface FavoritesDirService extends IService<FavoritesDir> {
-    /**
-     * 根据收藏夹id获取
-     * */
-    public FavoritesDirDTO getDirInfo(Integer favoritesDirId);
+
 
 //    public List<Integer> getDirIdList(Integer jobhunterId);
 
@@ -23,4 +20,8 @@ public interface FavoritesDirService extends IService<FavoritesDir> {
      * 根据求职者id获取收藏夹详细列表
      * */
     public List<FavoritesDirDTO> getDirList(Integer jobhunterId);
+
+    public boolean addDir(Integer jobhunterId, String dirName);
+    public boolean deleteDir(Integer jobhunterId, Integer dirId);
+    public boolean updateDirName(Integer jobhunterId, String dirName, Integer dirId);
 }

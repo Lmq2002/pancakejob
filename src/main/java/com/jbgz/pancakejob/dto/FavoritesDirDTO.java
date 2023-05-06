@@ -11,4 +11,5 @@ public class FavoritesDirDTO {
     private Integer favoritesDirId;
     private String favoritesDirName;
     private Map<String,List<FavoritesDTO>> favorites;
+
 }

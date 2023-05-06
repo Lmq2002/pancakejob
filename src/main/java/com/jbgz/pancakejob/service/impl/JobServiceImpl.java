@@ -2,6 +2,7 @@ package com.jbgz.pancakejob.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.jbgz.pancakejob.common.JobStatus;
 import com.jbgz.pancakejob.dto.FavoritesDTO;
 import com.jbgz.pancakejob.dto.JobDTO;
 import com.jbgz.pancakejob.entity.Job;
@@ -173,9 +174,12 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job>
         return re>0;
     }
 
-    @Override
-    public FavoritesDTO getFavorites(Integer jobId) {
-        return null;
+    public boolean deleteJob(Integer jobId, String jobType){
+        return jobMapper.deleteJob(jobId, jobType);
+    }
+
+    public List<FavoritesDTO> getFavoritesDTO(Integer dirId, Integer jobhunterId){
+        return jobMapper.getFavorites(dirId,jobhunterId);
     }
 }
 
