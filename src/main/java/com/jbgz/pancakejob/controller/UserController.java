@@ -408,7 +408,7 @@ public class UserController {
     }
 
     @GetMapping("/recruiter/getAuthentication")
-    public ResultData getRecruiterAuthentication(@RequestParam(value = "recruiterId",required = false)Integer recruiterId){
+    public ResultData getRecruiterAuthentication(@RequestParam("recruiterId")Integer recruiterId){
         try{
             List<CompanyAuthenDTO> list =companyAuthenticationService.getAuthen(recruiterId);
             if(list!=null) {
