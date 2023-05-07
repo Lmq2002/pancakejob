@@ -30,6 +30,7 @@ public interface JobService extends IService<Job> {
     boolean createJob(JobUpVO jobUpVO);
     boolean changeJobDraft(JobDataVO jobData);
     boolean closeRecruit(int jobId);
+    boolean changeJobState(int jobId, String jobState);
     boolean deleteJob(Integer jobId, String jobType);
 
 }

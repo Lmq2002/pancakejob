@@ -11,6 +11,9 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 */
 public interface OrderMapper extends BaseMapper<Order> {
 
+    double selectRecruiterOrder(int id);
+
+    double averageJobhunterScore(int id);
 }
 
 

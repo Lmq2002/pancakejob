@@ -179,9 +179,18 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job>
         return jobMapper.deleteJob(jobId, jobType);
     }
 
-    public List<FavoritesDTO> getFavoritesDTO(Integer dirId, Integer jobhunterId){
-        return jobMapper.getFavorites(dirId,jobhunterId);
+    public List<FavoritesDTO> getFavoritesDTO(Integer dirId, Integer jobhunterId) {
+        return jobMapper.getFavorites(dirId, jobhunterId);
     }
+
+    //修改兼职状态
+    public boolean changeJobState(int jobId, String jobState){
+        Job job=jobMapper.selectById(jobId);
+        job.setJobState(jobState);
+        int re=jobMapper.updateById(job);
+        return re>0;
+    }
+
 }
 
 

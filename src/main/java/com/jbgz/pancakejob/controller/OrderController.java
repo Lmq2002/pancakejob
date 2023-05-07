@@ -4,6 +4,7 @@ import com.jbgz.pancakejob.common.Constants;
 import com.jbgz.pancakejob.dto.OrderAcceptedDTO;
 import com.jbgz.pancakejob.dto.OrderAppliedDTO;
 import com.jbgz.pancakejob.dto.OrderDTO;
+import com.jbgz.pancakejob.service.AppealService;
 import com.jbgz.pancakejob.service.OrderService;
 import com.jbgz.pancakejob.utils.ResultData;
 import com.jbgz.pancakejob.vo.AppealOrderVO;
@@ -18,6 +19,9 @@ import java.util.List;
 public class OrderController {
     @Resource
     private OrderService orderService;
+
+    @Resource
+    private AppealService appealService;
 
     //获取报名状态
     @GetMapping("/getApplyState")
@@ -234,11 +238,15 @@ public class OrderController {
     public ResultData appealOrder(@RequestBody AppealOrderVO appealOrderVO){
         try{
             ResultData result=new ResultData();
-            boolean re=false;
-            //if(appealOrderVO.getAppealType().equals("支付申诉"))
-                //“求职者评价申诉”、“招聘方评价申诉”、“支付申诉”
 
-                /*申诉是通过*/
+            //是否要判断订单是否已有某类型的申诉？
+
+            if(appealOrderVO.getAppealType().equals("支付申诉"))
+                //设置订单状态设置为“支付异常”
+                orderService.changeOrderState(appealOrderVO.getOrderId(),"支付异常");
+
+            boolean re=appealService.createAppeal(appealOrderVO);
+                //“求职者评价申诉”、“招聘方评价申诉”、“支付申诉”
             result.code=Constants.CODE_200;
             if(re)
                 result.message="申诉成功";
@@ -247,6 +255,7 @@ public class OrderController {
             return result;
         }
         catch (Exception e){
+            System.out.println("错误信息"+e.getMessage());
             return ResultData.error();
         }
     }

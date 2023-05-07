@@ -5,20 +5,41 @@
 <mapper namespace="com.jbgz.pancakejob.mapper.OrderMapper">
 
     <resultMap id="BaseResultMap" type="com.jbgz.pancakejob.entity.Order">
-            <id property="orderId" column="order_id" jdbcType="INTEGER"/>
-            <result property="jobhunterId" column="jobhunter_id" jdbcType="INTEGER"/>
-            <result property="jobId" column="job_id" jdbcType="INTEGER"/>
-            <result property="applyTime" column="apply_time" jdbcType="TIMESTAMP"/>
-            <result property="applyDescription" column="apply_description" jdbcType="VARCHAR"/>
-            <result property="orderState" column="order_state" jdbcType="VARCHAR"/>
-            <result property="passTime" column="pass_time" jdbcType="TIMESTAMP"/>
-            <result property="jobhunterScore" column="jobhunter_score" jdbcType="INTEGER"/>
-            <result property="recruiterScore" column="recruiter_score" jdbcType="INTEGER"/>
+        <id property="orderId" column="order_id" jdbcType="INTEGER"/>
+        <result property="jobhunterId" column="jobhunter_id" jdbcType="INTEGER"/>
+        <result property="jobId" column="job_id" jdbcType="INTEGER"/>
+        <result property="applyTime" column="apply_time" jdbcType="TIMESTAMP"/>
+        <result property="applyDescription" column="apply_description" jdbcType="VARCHAR"/>
+        <result property="orderState" column="order_state" jdbcType="VARCHAR"/>
+        <result property="passTime" column="pass_time" jdbcType="TIMESTAMP"/>
+        <result property="jobhunterScore" column="jobhunter_score" jdbcType="INTEGER"/>
+        <result property="recruiterScore" column="recruiter_score" jdbcType="INTEGER"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        order_id,jobhunter_id,job_id,
+        order_id
+        ,jobhunter_id,job_id,
         apply_time,apply_description,order_state,
         pass_time,jobhunter_score,recruiter_score
     </sql>
+
+    <!--    <select id="selectRecruiterOrder" parameterType="java.lang.Integer"-->
+    <!--            resultType="com.jbgz.pancakejob.dto.RecruiterOrderDTO">-->
+    <select id="selectRecruiterOrder" parameterType="java.lang.Integer"
+            resultType="double">
+        SELECT COALESCE(AVG(recruiter_score), 0) as avg_score
+        FROM (SELECT ord.order_id, ord.job_id, ord.recruiter_score, jb.recruiter_id
+              FROM `order` ord
+                       LEFT JOIN job jb on ord.job_id = jb.job_id
+              WHERE jb.recruiter_id = #{id}
+                AND ord.recruiter_score IS NOT NULL
+                AND ord.recruiter_score != 0) as avgScore
+    </select>
+    <select id="averageJobhunterScore" parameterType="java.lang.Integer" resultType="double">
+        SELECT COALESCE(AVG(jobhunter_score), 0) as avg_score
+        FROM `order` ord
+        WHERE ord.jobhunter_id = #{id}
+          AND ord.jobhunter_score IS NOT NULL
+          AND ord.jobhunter_score !=0
+    </select>
 </mapper>

@@ -55,40 +55,6 @@ public class JobController {
 
     }
 
-    //获取所有待审核的兼职列表
-    @GetMapping("/getJobUnreviewed")
-    public ResultData getJobUnreviewed(int jobId){
-        String state="未审核";
-        if(jobId==-1) {//获取整个兼职列表
-            try{
-                ResultData result=new ResultData();
-                result.data.put("job_list",jobService.getJobList(state));
-                result.message = "请求成功";
-                result.code = 200;
-                System.out.println(result);//打印观察
-                return result;
-            }
-            catch(Exception e){
-                System.out.println("错误信息"+e.getMessage());
-                return ResultData.error();
-            }
-        }
-        else  {//获取单个兼职信息
-            try{
-                ResultData result=new ResultData();
-                result.data.put("job_list",jobService.getJobInfo(jobId));
-                result.message = "请求成功";
-                result.code = 200;
-                System.out.println(result);//打印观察
-                return result;
-            }
-            catch(Exception e){
-                System.out.println("错误信息"+e.getMessage());
-                return ResultData.error();
-            }
-        }
-    }
-
     //获取所有招聘方管理的兼职列表
     @GetMapping("/getAllJobList")
     public ResultData getAllJobList(int recruiterId){
@@ -138,6 +104,7 @@ public class JobController {
             //修改剩余报名者的结果为未通过
             List<Integer> refuses=orderService.refuseRestJobhunter(jobId);
             //向求职者发送信息
+            
             //调用NotificationService的方法
             result.code=200;
             result.message="已结束招聘";

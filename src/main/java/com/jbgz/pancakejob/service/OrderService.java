@@ -3,6 +3,7 @@ package com.jbgz.pancakejob.service;
 import com.jbgz.pancakejob.dto.OrderAcceptedDTO;
 import com.jbgz.pancakejob.dto.OrderAppliedDTO;
 import com.jbgz.pancakejob.dto.OrderDTO;
+import com.jbgz.pancakejob.dto.RecruiterOrderDTO;
 import com.jbgz.pancakejob.entity.Order;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.jbgz.pancakejob.vo.ApplyJobVO;
@@ -31,7 +32,7 @@ public interface OrderService extends IService<Order> {
     int createOrder(ApplyJobVO applyJobVO);
     boolean cancelOrder(int orderId);
     boolean changeOrderState(int orderId,String newState);
-    boolean changeOrderScore(int orderId,int newScore,String scoreType);
+    boolean changeOrderScore(int orderId, int newScore, String scoreType);
     boolean sendOfferOrNot(int orderId,boolean send);
     boolean acceptOfferOrNot(int orderId,boolean accept);
     boolean finishOrder(int orderId);
