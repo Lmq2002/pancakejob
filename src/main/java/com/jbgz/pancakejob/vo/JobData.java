@@ -3,6 +3,7 @@ package com.jbgz.pancakejob.vo;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 @Data
 public class JobData {
@@ -10,6 +11,7 @@ public class JobData {
     private String jobName;
     private String jobType;
     private String workDetails;
+    private Integer workTime;
     private String startTime;
     private String endTime;
     private String workPlace;

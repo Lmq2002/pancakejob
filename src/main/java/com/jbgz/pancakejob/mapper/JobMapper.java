@@ -28,7 +28,7 @@ public interface JobMapper extends BaseMapper<Job> {
 
     @Update("UPDATE job SET work_name=#{jobdata.jobName},job_type=#{jobdata.jobType},work_details=#{jobdata.workDetails},"+
             "start_time=#{jobdata.startTime}, end_time=#{jobdata.endTime},work_place=#{jobdata.workPlace},salary=#{jobdata.salary}," +
-            "applied_num=#{jobdata.employeeNum} WHERE job_id=#{jobdata.jobId}")
+            "applied_num=#{jobdata.employeeNum},work_time=#{jobdata.workTime} WHERE job_id=#{jobdata.jobId}")
     boolean alterDraftContent(JobDataVO jobData);
 
     @Select("SELECT job.job_id,work_name,work_place,start_time,end_time,work_time,salary,job_type " +

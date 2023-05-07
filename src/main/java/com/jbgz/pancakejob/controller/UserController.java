@@ -530,7 +530,6 @@ public class UserController {
     @PostMapping("/recruiter/changeJobDraft")
     public ResultData changeJobDraft(@RequestBody JobDataVO vo) {
         try {
-            System.out.println("!!! " + vo.getJobdata());
             boolean tmp = jobService.changeJobDraft(vo);
             if (tmp) {
                 ResultData result = new ResultData();
