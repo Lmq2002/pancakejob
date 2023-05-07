@@ -2,12 +2,16 @@ package com.jbgz.pancakejob.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jbgz.pancakejob.common.RealNameStatus;
+import com.jbgz.pancakejob.dto.PersonAuthenDTO;
 import com.jbgz.pancakejob.entity.RealnameAuthentication;
 import com.jbgz.pancakejob.service.RealnameAuthenticationService;
 import com.jbgz.pancakejob.mapper.RealnameAuthenticationMapper;
 import com.jbgz.pancakejob.vo.AuditVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
 * @author CSY0214
@@ -23,6 +27,10 @@ public class RealnameAuthenticationServiceImpl extends ServiceImpl<RealnameAuthe
 
     public boolean auditAuthentication(AuditVO vo){
         return mapper.auditAuthentication(vo);
+    }
+    public List<PersonAuthenDTO> getAuthenList(Integer jobhunterId){
+        if(jobhunterId!=null) return mapper.getOne(jobhunterId);
+        else return mapper.getList();
     }
 
 }

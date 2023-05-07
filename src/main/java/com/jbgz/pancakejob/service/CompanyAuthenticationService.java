@@ -1,8 +1,11 @@
 package com.jbgz.pancakejob.service;
 
+import com.jbgz.pancakejob.dto.CompanyAuthenDTO;
 import com.jbgz.pancakejob.entity.CompanyAuthentication;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.jbgz.pancakejob.vo.AuditVO;
+
+import java.util.List;
 
 /**
 * @author CSY0214
@@ -13,4 +16,5 @@ public interface CompanyAuthenticationService extends IService<CompanyAuthentica
 
     boolean auditAuthentication(AuditVO vo);
 
+    List<CompanyAuthenDTO> getAuthenList(Integer recruiterId);
 }

@@ -510,6 +510,13 @@ public class UserController {
         }
     }
 
+    /**
+     * 功能：删除兼职草稿
+     * 状态：正在测试中
+     * 负责人：lmq
+     * 新建时间：2023/5/6
+     * 完成时间：2023/5/6
+     */
     @DeleteMapping("/recruiter/deleteJobDraft")
     public ResultData deleteJobDraft(@RequestParam("jobId") Integer id) {
         try {
