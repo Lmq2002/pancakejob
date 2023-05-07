@@ -33,6 +33,10 @@ public class RealnameAuthenticationServiceImpl extends ServiceImpl<RealnameAuthe
         else return mapper.getList();
     }
 
+    public List<PersonAuthenDTO> getAuthen(Integer jobhunterId){
+        return mapper.getOne(jobhunterId);
+    }
+
 }
 
 

@@ -17,4 +17,5 @@ public interface RealnameAuthenticationService extends IService<RealnameAuthenti
 
     List<PersonAuthenDTO> getAuthenList(Integer jobhunterId);
 
+    List<PersonAuthenDTO> getAuthen(Integer jobhunterId);
 }

@@ -17,4 +17,6 @@ public interface CompanyAuthenticationService extends IService<CompanyAuthentica
     boolean auditAuthentication(AuditVO vo);
 
     List<CompanyAuthenDTO> getAuthenList(Integer recruiterId);
+
+    List<CompanyAuthenDTO> getAuthen(Integer recruiterId);
 }

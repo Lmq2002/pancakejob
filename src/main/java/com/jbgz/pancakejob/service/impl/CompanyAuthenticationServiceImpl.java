@@ -33,6 +33,10 @@ public class CompanyAuthenticationServiceImpl extends ServiceImpl<CompanyAuthent
         else return mapper.getList();
     }
 
+    public List<CompanyAuthenDTO> getAuthen(Integer recruiterId){
+        return mapper.getOne(recruiterId);
+    }
+
 }
 
 

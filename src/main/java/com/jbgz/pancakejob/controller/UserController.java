@@ -4,9 +4,7 @@ import com.baomidou.mybatisplus.extension.api.R;
 import com.jbgz.pancakejob.common.Constants;
 import com.jbgz.pancakejob.common.JobStatus;
 import com.jbgz.pancakejob.common.RealNameStatus;
-import com.jbgz.pancakejob.dto.JobDTO;
-import com.jbgz.pancakejob.dto.PersonalInfoDTO;
-import com.jbgz.pancakejob.dto.RecruiterPersonInfoDTO;
+import com.jbgz.pancakejob.dto.*;
 import com.jbgz.pancakejob.entity.CompanyAuthentication;
 import com.jbgz.pancakejob.entity.JobType;
 import com.jbgz.pancakejob.entity.RealnameAuthentication;
@@ -170,6 +168,25 @@ public class UserController {
             return ResultData.sys_error();
         }
 
+    }
+
+    @GetMapping("/Jobhunter/getAuthentication")
+    public ResultData getJobhunterAuthentication(@RequestParam("jobhunterId")Integer jobhunterId){
+        try{
+            List<PersonAuthenDTO> list =realnameAuthenticationService.getAuthen(jobhunterId);
+            if(list!=null) {
+                ResultData result = new ResultData();
+                result.message="成功";
+                result.data.put("personauthen_list",list);
+                result.code = Constants.CODE_200;
+                return result;
+            }
+            else return new ResultData(Constants.CODE_400,"失败",null);
+        }
+        catch (Exception e){
+            System.out.println("异常情况:" + e.getMessage());
+            return ResultData.sys_error();
+        }
     }
 
     /**
@@ -370,7 +387,7 @@ public class UserController {
      * 新建时间：2023/1/3
      * 完成时间：2023/1/3
      */
-    @PutMapping("recruiter/authentication")
+    @PutMapping("/recruiter/authentication")
     public ResultData addRecruiterAuthentication(@RequestBody GetRecruiterAuthenticationVO vo) {
         try {
             CompanyAuthentication authentication = new CompanyAuthentication();
@@ -385,6 +402,25 @@ public class UserController {
                 return new ResultData(Constants.CODE_200, "成功", null);
             else return new ResultData(Constants.CODE_400, "失败", null);
         } catch (Exception e) {
+            System.out.println("异常情况:" + e.getMessage());
+            return ResultData.sys_error();
+        }
+    }
+
+    @GetMapping("/recruiter/getAuthentication")
+    public ResultData getRecruiterAuthentication(@RequestParam("recruiterId")Integer recruiterId){
+        try{
+            List<CompanyAuthenDTO> list =companyAuthenticationService.getAuthen(recruiterId);
+            if(list!=null) {
+                ResultData result = new ResultData();
+                result.message="成功";
+                result.data.put("companyauthen_list",list);
+                result.code = Constants.CODE_200;
+                return result;
+            }
+            else return new ResultData(Constants.CODE_400,"失败",null);
+        }
+        catch (Exception e){
             System.out.println("异常情况:" + e.getMessage());
             return ResultData.sys_error();
         }
