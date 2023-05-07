@@ -1,8 +1,12 @@
 package com.jbgz.pancakejob.service;
 
+import com.jbgz.pancakejob.dto.ReportDTO;
 import com.jbgz.pancakejob.entity.Report;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.jbgz.pancakejob.vo.ReportDealVO;
 import com.jbgz.pancakejob.vo.ReportVO;
+
+import java.util.List;
 
 /**
 * @author CSY0214
@@ -11,5 +15,7 @@ import com.jbgz.pancakejob.vo.ReportVO;
 */
 public interface ReportService extends IService<Report> {
     boolean createReport(ReportVO reportVO);
+    List<ReportDTO> getReportList();
+    boolean dealReport(ReportDealVO reportDealVO);
 
 }

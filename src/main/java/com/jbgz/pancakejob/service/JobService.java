@@ -1,6 +1,5 @@
 package com.jbgz.pancakejob.service;
 
-import com.jbgz.pancakejob.common.JobStatus;
 import com.jbgz.pancakejob.dto.FavoritesDTO;
 import com.jbgz.pancakejob.dto.JobDTO;
 import com.jbgz.pancakejob.entity.Job;
@@ -29,6 +28,7 @@ public interface JobService extends IService<Job> {
     boolean createJob(JobUpVO jobUpVO);
     boolean changeJobDraft(JobDataVO jobData);
     boolean closeRecruit(int jobId);
+    boolean changeJobState(int jobId, String jobState);
     boolean deleteJob(Integer jobId, String jobType);
 
 }
