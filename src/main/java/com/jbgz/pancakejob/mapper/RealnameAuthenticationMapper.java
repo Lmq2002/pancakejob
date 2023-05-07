@@ -28,8 +28,9 @@ public interface RealnameAuthenticationMapper extends BaseMapper<RealnameAuthent
     List<PersonAuthenDTO> getOne(Integer jobhunterId);
 
     @Select("SELECT apply_id, idcard, identification, real_name, jobhunter_id," +
-            "MAX(apply_time) as apply_time,check_status, check_time, result  " +
-            "FROM realname_authentication WHERE jobhunter_id=#{jobhunterId}")
+            "apply_time,check_status, check_time, result  " +
+            "FROM realname_authentication WHERE jobhunter_id=#{jobhunterId} " +
+            "ORDER BY apply_time DESC LIMIT 1")
     List<PersonAuthenDTO> getNewestOne(Integer jobhunterId);
 }
 
