@@ -36,7 +36,7 @@ public class RealnameAuthenticationServiceImpl extends ServiceImpl<RealnameAuthe
     }
 
     public List<PersonAuthenDTO> getAuthen(Integer jobhunterId){
-        return mapper.getOne(jobhunterId);
+        return mapper.getNewestOne(jobhunterId);
     }
 
 }

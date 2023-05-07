@@ -1,6 +1,7 @@
 package com.jbgz.pancakejob.service;
 
 import com.jbgz.pancakejob.common.JobStatus;
+import com.jbgz.pancakejob.dto.DraftDTO;
 import com.jbgz.pancakejob.dto.FavoritesDTO;
 import com.jbgz.pancakejob.dto.JobDTO;
 import com.jbgz.pancakejob.entity.Job;
@@ -21,7 +22,7 @@ public interface JobService extends IService<Job> {
     JobDTO getJObDTO(Job job);
     List<JobDTO> getJobListDTO(List<Job> jobList);
     List<JobDTO> getJobList(String state);
-    List<JobDTO> getJobDraftList(int recruiterId);
+    List<DraftDTO> getJobDraftList(int recruiterId);
     List<JobDTO> getAllJobList(int recruiterId);
     List<JobDTO> getJobInfo(int jobId);
     List<FavoritesDTO> getFavoritesDTO(Integer dirId, Integer jobhunterId);

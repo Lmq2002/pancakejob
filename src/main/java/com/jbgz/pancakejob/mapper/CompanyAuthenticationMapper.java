@@ -27,6 +27,12 @@ public interface CompanyAuthenticationMapper extends BaseMapper<CompanyAuthentic
 
     @Select("SELECT * FROM company_authentication WHERE recruiter_id=#{recruiterId}")
     List<CompanyAuthenDTO> getOne(Integer recruiterId);
+
+    @Select("SELECT apply_id, company_name, company_id, company_type, certification," +
+            "MAX(apply_time) as apply_time,check_status, check_time, result " +
+            "FROM company_authentication WHERE recruiter_id=#{recruiterId}")
+    List<CompanyAuthenDTO> getNewestOne(Integer recruiterId);
+
 }
 
 

@@ -1,5 +1,6 @@
 package com.jbgz.pancakejob.mapper;
 
+import com.jbgz.pancakejob.dto.DraftDTO;
 import com.jbgz.pancakejob.dto.FavoritesDTO;
 import com.jbgz.pancakejob.entity.Job;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
@@ -20,7 +21,7 @@ public interface JobMapper extends BaseMapper<Job> {
 
 //    @Select("")
     @Select("SELECT * FROM job WHERE job_state= '未发布' AND recruiter_id= #{recruiterId}")
-    List<Job> getDraftListById(Integer recruiterId);
+    List<DraftDTO> getDraftListById(Integer recruiterId);
 
     @Update("UPDATE job SET job_state= #{newState} where job_state= #{oldState} AND job_id= #{jobId}")
     boolean alterJobState(Integer jobId, String oldState, String newState);

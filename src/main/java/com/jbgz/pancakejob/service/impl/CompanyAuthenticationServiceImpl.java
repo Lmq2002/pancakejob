@@ -36,7 +36,7 @@ public class CompanyAuthenticationServiceImpl extends ServiceImpl<CompanyAuthent
     }
 
     public List<CompanyAuthenDTO> getAuthen(Integer recruiterId){
-        return mapper.getOne(recruiterId);
+        return mapper.getNewestOne(recruiterId);
     }
 
 }

@@ -3,6 +3,7 @@ package com.jbgz.pancakejob.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jbgz.pancakejob.common.JobStatus;
+import com.jbgz.pancakejob.dto.DraftDTO;
 import com.jbgz.pancakejob.dto.FavoritesDTO;
 import com.jbgz.pancakejob.dto.JobDTO;
 import com.jbgz.pancakejob.entity.Job;
@@ -120,9 +121,9 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job>
     }
 
     //获取招聘方的兼职草稿箱列表
-    public List<JobDTO> getJobDraftList(int recruiterId){
-        List<Job> draft = jobMapper.getDraftListById(recruiterId);
-        return getJobListDTO(draft);
+    public List<DraftDTO> getJobDraftList(int recruiterId){
+        List<DraftDTO> draft = jobMapper.getDraftListById(recruiterId);
+        return draft;
     }
 
     //获取单个兼职信息
