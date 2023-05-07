@@ -17,7 +17,7 @@ import java.util.List;
 */
 public interface RealnameAuthenticationMapper extends BaseMapper<RealnameAuthentication> {
 
-    @Update("UPDATE realname_authentication SET result=#{result},check_status=#{checkStatus} " +
+    @Update("UPDATE realname_authentication SET result=#{result},check_status=#{checkStatus},check_time=#{checkTime} " +
             "WHERE apply_id=#{applyId} AND check_status='未审核'")
     boolean auditAuthentication(AuditVO vo);
 

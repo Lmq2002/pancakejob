@@ -18,7 +18,7 @@ import java.util.List;
 */
 public interface CompanyAuthenticationMapper extends BaseMapper<CompanyAuthentication> {
 
-    @Update("UPDATE company_authentication SET result=#{result},check_status=#{checkStatus} " +
+    @Update("UPDATE company_authentication SET result=#{result},check_status=#{checkStatus},check_time=#{checkTime} " +
             "WHERE apply_id=#{applyId} AND check_status='未审核'")
     boolean auditAuthentication(AuditVO vo);
 

@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -26,6 +27,7 @@ public class RealnameAuthenticationServiceImpl extends ServiceImpl<RealnameAuthe
     private RealnameAuthenticationMapper mapper;
 
     public boolean auditAuthentication(AuditVO vo){
+        vo.setCheckTime(new Date());
         return mapper.auditAuthentication(vo);
     }
     public List<PersonAuthenDTO> getAuthenList(Integer jobhunterId){

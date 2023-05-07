@@ -10,6 +10,7 @@ import com.jbgz.pancakejob.vo.AuditVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -25,6 +26,7 @@ public class CompanyAuthenticationServiceImpl extends ServiceImpl<CompanyAuthent
     private CompanyAuthenticationMapper mapper;
 
     public boolean auditAuthentication(AuditVO vo){
+        vo.setCheckTime(new Date());
         return mapper.auditAuthentication(vo);
     }
 
