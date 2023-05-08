@@ -10,6 +10,6 @@ import java.util.Objects;
 public class FavoritesDirDTO {
     private Integer favoritesDirId;
     private String favoritesDirName;
-    private Map<String,List<FavoritesDTO>> favorites;
-
+    private List<FavoritesDTO> favorites;
+    //private Map<String,List<FavoritesDTO>> favorites;
 }

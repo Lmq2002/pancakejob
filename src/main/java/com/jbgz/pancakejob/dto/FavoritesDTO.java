@@ -10,7 +10,9 @@ public class FavoritesDTO {
     private String workName;
     private String workPlace;
     private String startTime;
-    private String workTime;
+    private String endTime;
+    private int workTime;
     private String salary;
     private String jobType;
+    private int workerNum;
 }
