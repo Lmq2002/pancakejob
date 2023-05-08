@@ -26,7 +26,7 @@ public interface FavoritesDirMapper extends BaseMapper<FavoritesDir> {
     public String getDirName(Integer dirId);
 
     @Insert("INSERT INTO favorites_dir(jobhunter_id, favorites_dir_name,create_time) " +
-            "VALUES(10014,'??','2023-01-01 12:12:12')")
+            "VALUES(#{jobhunterId},#{dirName},#{date})")
     public boolean insertDir(Integer jobhunterId, String dirName, Date date);
 
     @Delete("DELETE FROM favorites_dir " +
