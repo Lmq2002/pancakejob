@@ -20,4 +20,7 @@ public class AppealDTO {
 
     @JsonProperty("appealResult")
     private String appealResult;
+
+    @JsonProperty("status")
+    private String status;
 }

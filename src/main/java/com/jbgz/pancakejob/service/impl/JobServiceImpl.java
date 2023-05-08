@@ -24,15 +24,16 @@ import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 /**
-* @author CSY0214
-* @description 针对表【job】的数据库操作Service实现
-* @createDate 2022-12-30 22:11:53
-*/
+ * @author CSY0214
+ * @description 针对表【job】的数据库操作Service实现
+ * @createDate 2022-12-30 22:11:53
+ */
 @Service
 public class JobServiceImpl extends ServiceImpl<JobMapper, Job>
-    implements JobService{
+        implements JobService {
     @Resource
     private JobMapper jobMapper;
     @Resource
@@ -42,7 +43,7 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job>
     @Resource
     private JobTypeMapper jobTypeMapper;
 
-//    @Override
+    //    @Override
 //    public ResultData getJobList(int pageNum, int pageSize){
 //
 //        ResultData result=new ResultData();
@@ -60,7 +61,7 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job>
 ////        List<VolActivityDTO> dtoList=volActivityService.cutIntoVolActivityDTOList((List<VolActivity>)iPage.getRecords());
 ////        return jobMapper.selectList(null);
 //    }
-    public JobDTO getJObDTO(Job job){
+    public JobDTO getJObDTO(Job job) {
         try {
             JobDTO jobDTO = new JobDTO();
             jobDTO.setJobId(job.getJobId());
@@ -87,64 +88,64 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job>
             jobDTO.setStartTime(DateTimeTrans.dateToString(job.getStartTime()));
             jobDTO.setEndTime(DateTimeTrans.dateToString(job.getEndTime()));
             return jobDTO;
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             System.out.println(e.getMessage());
             return null;
         }
     }
 
-    public List<JobDTO> getJobListDTO(List<Job> jobList){
-        List<JobDTO> jobDTOList=new ArrayList<>();
-        for(Job job : jobList){
-            JobDTO jobDTO=getJObDTO(job);
+    public List<JobDTO> getJobListDTO(List<Job> jobList) {
+        List<JobDTO> jobDTOList = new ArrayList<>();
+        for (Job job : jobList) {
+            JobDTO jobDTO = getJObDTO(job);
             jobDTOList.add(jobDTO);
         }
         return jobDTOList;
     }
 
     //获取已发布且审核通过的兼职列表
-    public List<JobDTO> getJobList(String state){
-        QueryWrapper<Job> jobQueryWrapper= new QueryWrapper<Job>();
+    public List<JobDTO> getJobList(String state) {
+        QueryWrapper<Job> jobQueryWrapper = new QueryWrapper<Job>();
         //筛选已发布且正在招聘的兼职
-        jobQueryWrapper.eq("job_state",state);
-        List<JobDTO> jobDTOList=getJobListDTO(jobMapper.selectList(jobQueryWrapper));
+        jobQueryWrapper.eq("job_state", state);
+        List<JobDTO> jobDTOList = getJobListDTO(jobMapper.selectList(jobQueryWrapper));
         return jobDTOList;
     }
 
     //获取招聘方管理的所有兼职
-    public List<JobDTO> getAllJobList(int recruiterId){
-        QueryWrapper<Job> jobQueryWrapper=new QueryWrapper<Job>();
-        jobQueryWrapper.eq("recruiter_id",recruiterId);
-        List<JobDTO> jobDTOList=getJobListDTO(jobMapper.selectList(jobQueryWrapper));
+    public List<JobDTO> getAllJobList(int recruiterId) {
+        QueryWrapper<Job> jobQueryWrapper = new QueryWrapper<Job>();
+        jobQueryWrapper.eq("recruiter_id", recruiterId);
+        List<JobDTO> jobDTOList = getJobListDTO(jobMapper.selectList(jobQueryWrapper));
         return jobDTOList;
     }
 
     //获取招聘方的兼职草稿箱列表
-    public List<DraftDTO> getJobDraftList(int recruiterId){
+    public List<DraftDTO> getJobDraftList(int recruiterId) {
         List<DraftDTO> draft = jobMapper.getDraftListById(recruiterId);
         return draft;
     }
 
     //获取单个兼职信息
-    public List<JobDTO> getJobInfo(int jobId){
-        Job job=jobMapper.selectById(jobId);
-        List<JobDTO> jobDTO=new ArrayList<>();
+    public List<JobDTO> getJobInfo(int jobId) {
+        Job job = jobMapper.selectById(jobId);
+        List<JobDTO> jobDTO = new ArrayList<>();
         jobDTO.add(getJObDTO(job));
         return jobDTO;
     }
 
     //发布兼职草稿
-    public boolean upJobDraft(Integer jobId){
-        return jobMapper.alterJobState(jobId, "未发布","未审核");
+    public boolean upJobDraft(Integer jobId) {
+        return jobMapper.alterJobState(jobId, "未发布", "未审核");
     }
+
     //发布兼职
-    public boolean createJob(JobUpVO jobUpVO){
-        JobInfoVO jobInfo=jobUpVO.getJobInfo();
-        Job job=new Job();
+    public boolean createJob(JobUpVO jobUpVO) {
+        JobInfoVO jobInfo = jobUpVO.getJobInfo();
+        Job job = new Job();
         job.setRecruiterId(jobUpVO.getRecruiterId());
         job.setReleaseTime(new Date());
-        if(jobUpVO.isIfRelease())
+        if (jobUpVO.isIfRelease())
             job.setJobState("未审核");
         else
             job.setJobState("未发布");
@@ -158,24 +159,28 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job>
         job.setEndTime(DateTimeTrans.stringToDate(jobInfo.getEndTime()));
         job.setWorkerNum(jobInfo.getEmployeeNum());
 
-        int re=jobMapper.insert(job);
-        System.out.println("insert:"+re);
-        return re>0;
+        int re = jobMapper.insert(job);
+        System.out.println("insert:" + re);
+        return re > 0;
     }
 
     //修改兼职草稿
-    public boolean changeJobDraft(JobDataVO jobData){
+    public boolean changeJobDraft(JobDataVO jobData) {
         return jobMapper.alterDraftContent(jobData);
     }
+
     //结束招聘
-    public boolean closeRecruit(int jobId){
-        Job job=jobMapper.selectById(jobId);
-        job.setJobState("已结束");
-        int re=jobMapper.updateById(job);
-        return re>0;
+    public boolean closeRecruit(int jobId) {
+        Job job = jobMapper.selectById(jobId);
+        if (job.getAcceptedNum().equals(job.getFinishedNum()))
+            job.setJobState("已完成");
+        else
+            job.setJobState("已结束");
+        int re = jobMapper.updateById(job);
+        return re > 0;
     }
 
-    public boolean deleteJob(Integer jobId, String jobType){
+    public boolean deleteJob(Integer jobId, String jobType) {
         return jobMapper.deleteJob(jobId, jobType);
     }
 
@@ -184,11 +189,11 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job>
     }
 
     //修改兼职状态
-    public boolean changeJobState(int jobId, String jobState){
-        Job job=jobMapper.selectById(jobId);
+    public boolean changeJobState(int jobId, String jobState) {
+        Job job = jobMapper.selectById(jobId);
         job.setJobState(jobState);
-        int re=jobMapper.updateById(job);
-        return re>0;
+        int re = jobMapper.updateById(job);
+        return re > 0;
     }
 
 }

@@ -67,6 +67,7 @@ public class ReportServiceImpl extends ServiceImpl<ReportMapper, Report>
     //获取兼职举报列表
     public List<ReportDTO> getReportList(){
         QueryWrapper<Report> reportWrapper=new QueryWrapper<>();
+        reportWrapper.orderByDesc("report_time");
         List<ReportDTO> reportDTOList=getReportDTOList(reportMapper.selectList(reportWrapper));
         return reportDTOList;
     }

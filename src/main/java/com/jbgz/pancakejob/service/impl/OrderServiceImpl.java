@@ -176,6 +176,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
     public List<OrderDTO> getOrderList(int jobhunterId) {
         QueryWrapper<Order> orderWrapper = new QueryWrapper<Order>();
         orderWrapper.eq("jobhunter_id", jobhunterId);
+        orderWrapper.orderByDesc("apply_time");
         List<OrderDTO> orderDTOList = getOrderDTOList(orderMapper.selectList(orderWrapper));
         return orderDTOList;
     }
@@ -191,6 +192,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
                 .eq("order_state", "已放弃").or()
                 .eq("order_state", "已完成").or()
                 .eq("order_state", "支付异常"));
+        orderWrapper.orderByDesc("apply_time");
         List<OrderAppliedDTO> orderAppliedDTOList = getOrderAppliedDTOList(orderMapper.selectList(orderWrapper));
         return orderAppliedDTOList;
     }
@@ -202,6 +204,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
                 .eq("order_state", "已录用").or()
                 .eq("order_state", "已完成").or()
                 .eq("order_state", "支付异常"));
+        orderWrapper.orderByDesc("pass_time");
         List<OrderAcceptedDTO> orderAcceptedDTOList = getOrderAcceptedDTOList(orderMapper.selectList(orderWrapper));
         return orderAcceptedDTOList;
     }

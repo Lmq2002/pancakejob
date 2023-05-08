@@ -40,6 +40,7 @@ public class AppealServiceImpl extends ServiceImpl<AppealMapper, Appeal>
         appealDTO.setAppealContent(appeal.getAppealContent());
         appealDTO.setAppealTime(DateTimeTrans.datetimeToString(appeal.getAppealTime()));
         appealDTO.setAppealResult(appeal.getAppealResult());
+        appealDTO.setStatus(appeal.getStatus());
         return appealDTO;
     }
 
@@ -82,6 +83,7 @@ public class AppealServiceImpl extends ServiceImpl<AppealMapper, Appeal>
     //获取某用户的申诉列表userId!=-1(暂无此api)
     public List<AppealDTO> getAppealList(int userId) {
         QueryWrapper<Appeal> appealWrapper = new QueryWrapper<Appeal>();
+        appealWrapper.orderByDesc("appeal_time");
         List<AppealDTO> appealDTOList = getAppealDTOList(userId, appealMapper.selectList(appealWrapper));
         return appealDTOList;
     }

@@ -2,6 +2,7 @@ package com.jbgz.pancakejob.controller;
 
 import com.jbgz.pancakejob.common.Constants;
 import com.jbgz.pancakejob.dto.CompanyAuthenDTO;
+import com.jbgz.pancakejob.dto.NoticeDTO;
 import com.jbgz.pancakejob.dto.PersonAuthenDTO;
 import com.jbgz.pancakejob.service.CompanyAuthenticationService;
 import com.jbgz.pancakejob.service.JobTypeService;
@@ -10,6 +11,7 @@ import com.jbgz.pancakejob.service.*;
 import com.jbgz.pancakejob.utils.ResultData;
 import com.jbgz.pancakejob.vo.AuditVO;
 import com.jbgz.pancakejob.vo.AppealDealVO;
+import com.jbgz.pancakejob.vo.NoticeVO;
 import com.jbgz.pancakejob.vo.ReportDealVO;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,6 +31,9 @@ public class AdminController {
     private JobService jobService;
     @Resource
     private OrderService orderService;
+
+    @Resource
+    private NoticeService noticeService;
 
     @Resource
     private RealnameAuthenticationService realnameAuthenticationService;
@@ -184,12 +189,12 @@ public class AdminController {
             //“求职者评价申诉”、“招聘方评价申诉”、“支付申诉”
             appealService.saveDealResult(appealDealVO);
             //申诉通过，将分数置为0
-            if(appealDealVO.isStatus()){
-                if (appealDealVO.getAppealType().equals("求职者评价申诉")){
+            if (appealDealVO.isStatus()) {
+                if (appealDealVO.getAppealType().equals("求职者评价申诉")) {
                     //对求职者分数存疑-求职者提出的申诉
-                    orderService.changeOrderScore(appealDealVO.getOrderId(),0,"jobhunter");
+                    orderService.changeOrderScore(appealDealVO.getOrderId(), 0, "jobhunter");
                 } else if (appealDealVO.getAppealType().equals("招聘方评价申诉")) {
-                    orderService.changeOrderScore(appealDealVO.getOrderId(),0,"recruiter");
+                    orderService.changeOrderScore(appealDealVO.getOrderId(), 0, "recruiter");
                 }
             }
             result.code = Constants.CODE_200;
@@ -237,6 +242,74 @@ public class AdminController {
         }
     }
 
+    //获取公告列表
+    @GetMapping("/getNoticeList")
+    public ResultData getNoticeList(String status) {
+        try {
+            ResultData result = new ResultData();
+            result.data.put("notice_list", noticeService.getNoticeList(status));
+            result.code = Constants.CODE_200;
+            result.message = "获取公告列表成功";
+            return result;
+        } catch (Exception e) {
+            System.out.println("错误信息：" + e.getMessage());
+            return ResultData.error();
+        }
+    }
+
+    //添加公告
+    @PostMapping("/addNotice")
+    public ResultData addNotice(@RequestBody NoticeVO noticeVO) {
+        try {
+            ResultData result = new ResultData();
+            boolean re = noticeService.addNotice(noticeVO);
+            result.code = Constants.CODE_200;
+            if (re)
+                result.message = "添加公告成功";
+            else
+                result.message = "添加公告失败";
+            return result;
+        } catch (Exception e) {
+            System.out.println("错误信息：" + e.getMessage());
+            return ResultData.error();
+        }
+    }
+
+    //发布、撤销公告
+    @PutMapping("/releaseOrRepealNotice")
+    public ResultData releaseOrRepealNotice(int noticeId, String status) {
+        try {
+            ResultData result = new ResultData();
+            boolean re = noticeService.manageNotice(noticeId, status);
+            if (re)
+                result.message = "发布/撤销公告成功";
+            else
+                result.message = "发布/撤销公告失败";
+            result.code = Constants.CODE_200;
+            return result;
+        } catch (Exception e) {
+            System.out.println("错误信息：" + e.getMessage());
+            return ResultData.error();
+        }
+    }
+
+    //删除公告
+    @DeleteMapping("/deleteNotice")
+    public ResultData deleteNotice(int noticeId) {
+        try {
+            ResultData result = new ResultData();
+            boolean re = noticeService.deleteNotice(noticeId);
+            if (re)
+                result.message = "删除公告成功";
+            else
+                result.message = "删除公告失败";
+            result.code = Constants.CODE_200;
+            return result;
+        } catch (Exception e) {
+            System.out.println("错误信息：" + e.getMessage());
+            return ResultData.error();
+        }
+    }
 
     /**
      * 功能：审查求职者实名申请
@@ -246,14 +319,13 @@ public class AdminController {
      * 完成时间：2023/5/6
      */
     @PostMapping("/auditUserAuthentication")
-    public ResultData auditUserAuthentication(@RequestBody AuditVO vo){
-        try{
+    public ResultData auditUserAuthentication(@RequestBody AuditVO vo) {
+        try {
             boolean tmp = realnameAuthenticationService.auditAuthentication(vo);
-            if(tmp) return new ResultData(Constants.CODE_200,"成功",null);
-            return new ResultData(Constants.CODE_400,"失败",null);
-        }
-        catch (Exception e){
-            System.out.println("异常情况："+e.getMessage());
+            if (tmp) return new ResultData(Constants.CODE_200, "成功", null);
+            return new ResultData(Constants.CODE_400, "失败", null);
+        } catch (Exception e) {
+            System.out.println("异常情况：" + e.getMessage());
             return ResultData.sys_error();
         }
     }
@@ -267,20 +339,18 @@ public class AdminController {
      * 完成时间：2023/5/6
      */
     @GetMapping("/getUserAuthenticationList")
-    public ResultData getUserAuthenticationList(@RequestParam(value = "jobhunterId",required = false)Integer jobhunterId){
+    public ResultData getUserAuthenticationList(@RequestParam(value = "jobhunterId", required = false) Integer jobhunterId) {
         try {
             List<PersonAuthenDTO> list = realnameAuthenticationService.getAuthenList(jobhunterId);
-            if(list!=null){
-                ResultData result=new ResultData();
-                result.data.put("personauthen_list",list);
-                result.code=Constants.CODE_200;
+            if (list != null) {
+                ResultData result = new ResultData();
+                result.data.put("personauthen_list", list);
+                result.code = Constants.CODE_200;
                 result.message = "成功";
                 return result;
-            }
-            else return new ResultData(Constants.CODE_400,"失败",null);
-        }
-        catch (Exception e){
-            System.out.println("异常情况："+e.getMessage());
+            } else return new ResultData(Constants.CODE_400, "失败", null);
+        } catch (Exception e) {
+            System.out.println("异常情况：" + e.getMessage());
             return ResultData.sys_error();
         }
 
@@ -295,14 +365,13 @@ public class AdminController {
      * 完成时间：2023/5/6
      */
     @PostMapping("/auditCompanyAuthentication")
-    public ResultData auditCompanyAuthentication(@RequestBody AuditVO vo){
-        try{
+    public ResultData auditCompanyAuthentication(@RequestBody AuditVO vo) {
+        try {
             boolean tmp = companyAuthenticationService.auditAuthentication(vo);
-            if(tmp) return new ResultData(Constants.CODE_200,"成功",null);
-            return new ResultData(Constants.CODE_400,"失败",null);
-        }
-        catch (Exception e){
-            System.out.println("异常情况："+e.getMessage());
+            if (tmp) return new ResultData(Constants.CODE_200, "成功", null);
+            return new ResultData(Constants.CODE_400, "失败", null);
+        } catch (Exception e) {
+            System.out.println("异常情况：" + e.getMessage());
             return ResultData.sys_error();
         }
     }
@@ -315,20 +384,18 @@ public class AdminController {
      * 完成时间：2023/5/6
      */
     @GetMapping("/getCompanyAuthenticationList")
-    public ResultData getCompanyAuthenticationList(@RequestParam(value = "recruiterId",required = false)Integer recruiterId){
+    public ResultData getCompanyAuthenticationList(@RequestParam(value = "recruiterId", required = false) Integer recruiterId) {
         try {
             List<CompanyAuthenDTO> list = companyAuthenticationService.getAuthenList(recruiterId);
-            if(list!=null){
-                ResultData result=new ResultData();
-                result.data.put("companyauthen_list",list);
-                result.code=Constants.CODE_200;
+            if (list != null) {
+                ResultData result = new ResultData();
+                result.data.put("companyauthen_list", list);
+                result.code = Constants.CODE_200;
                 result.message = "成功";
                 return result;
-            }
-            else return new ResultData(Constants.CODE_400,"失败",null);
-        }
-        catch (Exception e){
-            System.out.println("异常情况："+e.getMessage());
+            } else return new ResultData(Constants.CODE_400, "失败", null);
+        } catch (Exception e) {
+            System.out.println("异常情况：" + e.getMessage());
             return ResultData.sys_error();
         }
     }
