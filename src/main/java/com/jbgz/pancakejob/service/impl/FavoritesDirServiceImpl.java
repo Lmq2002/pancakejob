@@ -48,7 +48,7 @@ public class FavoritesDirServiceImpl extends ServiceImpl<FavoritesDirMapper, Fav
 
         for(FavoritesDirDTO dir : dirList){ //n个收藏夹
             Map<String, List<FavoritesDTO>> favoritesList = new HashMap<>();
-            favoritesList.put("favorites_list",jobService.getFavoritesDTO(dir.getFavoritesDirId(),jobhunterId));
+            favoritesList.put("favorites",jobService.getFavoritesDTO(dir.getFavoritesDirId(),jobhunterId));
             dir.setFavorites(favoritesList);
         }
         return  dirList;
