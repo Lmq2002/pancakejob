@@ -31,13 +31,14 @@ public interface JobMapper extends BaseMapper<Job> {
             "applied_num=#{jobdata.employeeNum},work_time=#{jobdata.workTime} WHERE job_id=#{jobdata.jobId}")
     boolean alterDraftContent(JobDataVO jobData);
 
-    @Select("SELECT job.job_id,work_name,work_place,start_time,end_time,work_time,salary,job_type " +
+    @Select("SELECT job.job_id,work_name,work_place,start_time,end_time,work_time,salary,t.type_name as job_type,worker_num " +
             "FROM job " +
-            "JOIN favorites_dir JOIN collect_job " +
+            "JOIN favorites_dir JOIN collect_job JOIN `job_type` as t " +
             "WHERE favorites_dir_id=#{dirId} AND " +
             "collect_job.job_id=job.job_id AND " +
             "collect_job.jobhunter_id=#{jobhunterId} AND " +
-            "favorites_dir.favorites_dir_id = collect_job.collect_position")
+            "favorites_dir.favorites_dir_id = collect_job.collect_position AND " +
+            "job.job_type=t.type_id")
     List<FavoritesDTO> getFavorites(Integer dirId, Integer jobhunterId);
 
     @Delete("DELETE FROM job WHERE job_id=#{jobId} AND job_state=#{jobType}")

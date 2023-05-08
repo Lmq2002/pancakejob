@@ -13,7 +13,6 @@ import com.jbgz.pancakejob.service.JobService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.util.*;
 
 /**
@@ -46,12 +45,12 @@ public class FavoritesDirServiceImpl extends ServiceImpl<FavoritesDirMapper, Fav
     public List<FavoritesDirDTO> getDirList(Integer jobhunterId) {
         //收藏夹列表
         List<FavoritesDirDTO> dirList = favoritesDirMapper.getDirList(jobhunterId);
+
         for(FavoritesDirDTO dir : dirList){ //n个收藏夹
-            List<FavoritesDTO> favoritesDTOList = jobService.getFavoritesDTO(dir.getFavoritesDirId(),jobhunterId);
+            List<FavoritesDTO> f=jobService.getFavoritesDTO(dir.getFavoritesDirId(),jobhunterId);
             //Map<String, List<FavoritesDTO>> favoritesList = new HashMap<>();
-            //favoritesList.put("favorites_list",jobService.getFavoritesDTO();
-            //dir.setFavorites(favoritesList);
-            dir.setFavorites(favoritesDTOList);
+            //favoritesList.put("favorites",jobService.getFavoritesDTO(dir.getFavoritesDirId(),jobhunterId));
+            dir.setFavorites(f);
         }
         return  dirList;
     }
