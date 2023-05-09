@@ -211,7 +211,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
 
     //修改订单状态
     public boolean changeOrderState(int orderId, String newState) {
-        Order order = new Order();
+        Order order=new Order();
         order.setOrderId(orderId);
         order.setOrderState(newState);
         int re = orderMapper.updateById(order);
@@ -269,7 +269,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
             int re = jobMapper.updateById(job);
             return re > 0;
         } else
-            return changeOrderState(orderId, "未录用");
+            return changeOrderState(orderId, "已放弃");
     }
 
     //招聘方确认工作完成
