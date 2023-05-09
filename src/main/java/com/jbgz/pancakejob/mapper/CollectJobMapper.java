@@ -30,6 +30,9 @@ public interface CollectJobMapper extends BaseMapper<CollectJob> {
 
     @Delete("DELETE FROM collect_job WHERE job_id=#{jobId} AND jobhunter_id=#{jobhunterId}")
     boolean deleteCollect(Integer jobhunterId, Integer jobId);
+
+    @Select("SELECT job_id FROM collect_job WHERE jobhunter_id=#{jobhunterId} AND job_id=#{jobId}")
+    List<Integer> findIfExist(Integer jobhunterId, Integer jobId);
 }
 
 

@@ -291,6 +291,28 @@ public class UserController {
     }
 
     /**
+     * 功能：检测兼职是否已被指定求职者收藏
+     * 状态：正在测试中
+     * 负责人：lmq
+     * 新建时间：2023/5/9
+     * 完成时间：2023/5/9
+     */
+    @GetMapping("/jobhunter/getCollectState")
+    public ResultData getCollectState(
+            @RequestParam("jobhunterId")Integer jobhunterId,
+            @RequestParam("jobId")Integer jobId){
+        try{
+            boolean tmp = collectJobService.findIfExist(jobhunterId,jobId);
+            if(tmp) return new ResultData(Constants.CODE_200,"已收藏",null);
+            else return new ResultData(Constants.CODE_400,"未收藏",null);
+        }
+        catch(Exception e){
+            System.out.println("异常情况: "+e.getMessage());
+            return ResultData.sys_error();
+        }
+    }
+
+    /**
      * 功能：添加收藏夹
      * 状态：正在测试中
      * 负责人：lmq

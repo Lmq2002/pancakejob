@@ -22,4 +22,5 @@ public interface CollectJobService extends IService<CollectJob> {
     public boolean addCollect(CollectVO vo);
     public boolean updatePosition(CollectVO vo);
     public boolean deleteCollect(Integer jobhunterId, Integer jobId);
+    public boolean findIfExist(Integer jobhunterId, Integer jobId);
 }

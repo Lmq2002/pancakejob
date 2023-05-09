@@ -46,6 +46,12 @@ public class CollectJobServiceImpl extends ServiceImpl<CollectJobMapper, Collect
         return collectMapper.deleteCollect(jobhunterId,jobId);
     }
 
+    public boolean findIfExist(Integer jobhunterId, Integer jobId){
+        List<Integer> finder = collectMapper.findIfExist(jobhunterId,jobId);
+        if(finder.size()!=0) return true;
+        return false;
+    }
+
 }
 
 
