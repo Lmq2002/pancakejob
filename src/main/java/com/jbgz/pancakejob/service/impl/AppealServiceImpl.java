@@ -67,25 +67,35 @@ public class AppealServiceImpl extends ServiceImpl<AppealMapper, Appeal>
 
     //创建申诉
     public boolean createAppeal(AppealOrderVO appealOrderVO) {
-        Appeal appeal = new Appeal();
-        appeal.setOrderId(appealOrderVO.getOrderId());
-        appeal.setAppealType(appealOrderVO.getAppealType());
-        appeal.setAppealContent(appealOrderVO.getAppealContent());
-        appeal.setAppealTime(new Date());
-        appeal.setStatus("未审核");
-        if (appealMapper.insert(appeal) > 0)
-            return true;
-        else
+        try{
+            Appeal appeal = new Appeal();
+            appeal.setOrderId(appealOrderVO.getOrderId());
+            appeal.setAppealType(appealOrderVO.getAppealType());
+            appeal.setAppealContent(appealOrderVO.getAppealContent());
+            appeal.setAppealTime(new Date());
+            appeal.setStatus("未审核");
+            return appealMapper.insert(appeal) > 0;
+        }
+        catch (Exception e){
+            System.out.println("service错误信息：" + e.getMessage());
             return false;
+        }
+
     }
 
     //获取待处理的申诉列表userId=-1
     //获取某用户的申诉列表userId!=-1(暂无此api)
     public List<AppealDTO> getAppealList(int userId) {
-        QueryWrapper<Appeal> appealWrapper = new QueryWrapper<Appeal>();
-        appealWrapper.orderByDesc("appeal_time");
-        List<AppealDTO> appealDTOList = getAppealDTOList(userId, appealMapper.selectList(appealWrapper));
-        return appealDTOList;
+        try{
+            QueryWrapper<Appeal> appealWrapper = new QueryWrapper<Appeal>();
+            appealWrapper.orderByDesc("appeal_time");
+            List<AppealDTO> appealDTOList = getAppealDTOList(userId, appealMapper.selectList(appealWrapper));
+            return appealDTOList;
+        }
+        catch (Exception e){
+            System.out.println("service错误信息："+e.getMessage());
+            return null;
+        }
     }
 
     //获取单个申诉详细信息
@@ -95,18 +105,24 @@ public class AppealServiceImpl extends ServiceImpl<AppealMapper, Appeal>
 //    }
     //保存申诉处理结果
     public boolean saveDealResult(AppealDealVO appealDealVO) {
-        QueryWrapper<Appeal> appealWrapper = new QueryWrapper<>();
-        appealWrapper.eq("order_id",appealDealVO.getOrderId()).eq("appeal_type",appealDealVO.getAppealType());
-        Appeal appeal = new Appeal();
-        appeal.setOrderId(appealDealVO.getOrderId());
-        appeal.setAppealType(appealDealVO.getAppealType());
-        appeal.setAppealResult(appealDealVO.getAppealResult());
-        if (appealDealVO.isStatus())
-            appeal.setStatus("已通过");
-        else
-            appeal.setStatus("未通过");
-        int re=appealMapper.update(appeal,appealWrapper);
-        return re>0;
+        try{
+            QueryWrapper<Appeal> appealWrapper = new QueryWrapper<>();
+            appealWrapper.eq("order_id",appealDealVO.getOrderId()).eq("appeal_type",appealDealVO.getAppealType());
+            Appeal appeal = new Appeal();
+            appeal.setOrderId(appealDealVO.getOrderId());
+            appeal.setAppealType(appealDealVO.getAppealType());
+            appeal.setAppealResult(appealDealVO.getAppealResult());
+            if (appealDealVO.isStatus())
+                appeal.setStatus("已通过");
+            else
+                appeal.setStatus("未通过");
+            int re=appealMapper.update(appeal,appealWrapper);
+            return re>0;
+        }
+        catch (Exception e){
+            System.out.println("service错误信息：" + e.getMessage());
+            return false;
+        }
     }
 
 

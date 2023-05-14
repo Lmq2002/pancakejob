@@ -1,6 +1,7 @@
 package com.jbgz.pancakejob.controller;
 
 import com.jbgz.pancakejob.common.Constants;
+import com.jbgz.pancakejob.dto.AppealDTO;
 import com.jbgz.pancakejob.dto.CompanyAuthenDTO;
 import com.jbgz.pancakejob.dto.NoticeDTO;
 import com.jbgz.pancakejob.dto.PersonAuthenDTO;
@@ -171,9 +172,15 @@ public class AdminController {
     public ResultData getAppealList() {
         try {
             ResultData result = new ResultData();
-            result.data.put("appeal_list", appealService.getAppealList(-1));
-            result.code = Constants.CODE_200;
-            result.message = "成功获取申诉列表";
+            List<AppealDTO> appealDTOList = appealService.getAppealList(-1);
+            if (appealDTOList != null) {
+                result.data.put("appeal_list", appealDTOList);
+                result.code = Constants.CODE_200;
+                result.message = "成功获取申诉列表";
+            } else {
+                result.code = Constants.CODE_400;
+                result.message = "获取申诉列表失败";
+            }
             return result;
         } catch (Exception e) {
             System.out.println("错误信息" + e.getMessage());
@@ -187,18 +194,23 @@ public class AdminController {
         try {
             ResultData result = new ResultData();
             //“求职者评价申诉”、“招聘方评价申诉”、“支付申诉”
-            appealService.saveDealResult(appealDealVO);
+            boolean re = appealService.saveDealResult(appealDealVO);
             //申诉通过，将分数置为0
-            if (appealDealVO.isStatus()) {
+            if (re && appealDealVO.isStatus()) {
                 if (appealDealVO.getAppealType().equals("求职者评价申诉")) {
                     //对求职者分数存疑-求职者提出的申诉
-                    orderService.changeOrderScore(appealDealVO.getOrderId(), 0, "jobhunter");
+                    re = orderService.changeOrderScore(appealDealVO.getOrderId(), 0, "jobhunter");
                 } else if (appealDealVO.getAppealType().equals("招聘方评价申诉")) {
-                    orderService.changeOrderScore(appealDealVO.getOrderId(), 0, "recruiter");
+                    re = orderService.changeOrderScore(appealDealVO.getOrderId(), 0, "recruiter");
                 }
             }
-            result.code = Constants.CODE_200;
-            result.message = "审核订单申诉成功";
+            if (re) {
+                result.code = Constants.CODE_200;
+                result.message = "审核订单申诉成功";
+            } else {
+                result.code = Constants.CODE_400;
+                result.message = "审核订单申诉失败";
+            }
             return result;
         } catch (Exception e) {
             System.out.println("错误信息" + e.getMessage());

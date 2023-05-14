@@ -49,4 +49,7 @@ public class JobDTO {
 
     @JsonProperty("endTime")
     private String endTime;
+
+    @JsonProperty("recruiterScore")
+    private BigDecimal recruiterScore;
 }

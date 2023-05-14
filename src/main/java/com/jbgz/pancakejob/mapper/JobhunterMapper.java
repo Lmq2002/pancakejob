@@ -13,19 +13,19 @@ import org.apache.ibatis.annotations.Update;
 import java.util.List;
 
 /**
-* @author CSY0214
-* @description 针对表【jobhunter】的数据库操作Mapper
-* @createDate 2022-12-30 22:39:02
-* @Entity com.jbgz.pancakejob.entity.Jobhunter
-*/
+ * @author CSY0214
+ * @description 针对表【jobhunter】的数据库操作Mapper
+ * @createDate 2022-12-30 22:39:02
+ * @Entity com.jbgz.pancakejob.entity.Jobhunter
+ */
 public interface JobhunterMapper extends BaseMapper<Jobhunter> {
 
-    @Select("SELECT DISTINCT nickname, headportrait, contact_method, email, introduction, birthday, school " +
+    @Select("SELECT DISTINCT nickname, headportrait, contact_method, email, introduction, birthday, school, score" +
             "FROM user AS a LEFT JOIN jobhunter AS b ON a.user_id = b.jobhunter_id " +
             "WHERE a.user_id = #{jobhunterId}")
     PersonalInfoDTO getInfo(GetPersonalInfoVO vo);
 
-    @Select("SELECT DISTINCT nickname, headportrait, contact_method, email, introduction, birthday, school " +
+    @Select("SELECT DISTINCT nickname, headportrait, contact_method, email, introduction, birthday, school, score" +
             "FROM user AS a LEFT JOIN jobhunter AS b ON a.user_id = b.jobhunter_id ")
     List<PersonalInfoDTO> getListAll();
 
@@ -36,10 +36,10 @@ public interface JobhunterMapper extends BaseMapper<Jobhunter> {
             " SET" +
             " nickname = #{nickname}," +
             " school = #{school}," +
-            " headportrait = #{headportrait},"+
-            " contact_method = #{contactMethod},"+
-            " introduction = #{introduction},"+
-            " birthday = #{birthday}"+
+            " headportrait = #{headportrait}," +
+            " contact_method = #{contactMethod}," +
+            " introduction = #{introduction}," +
+            " birthday = #{birthday}" +
             " WHERE" +
             " user_id = #{jobhunterId};")
     boolean updateInfo(PersonalInfoVO vo);

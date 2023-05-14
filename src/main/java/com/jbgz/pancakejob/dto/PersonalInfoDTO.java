@@ -2,6 +2,8 @@ package com.jbgz.pancakejob.dto;
 
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 @Data
 public class PersonalInfoDTO {
     private String nickname;
@@ -11,5 +13,6 @@ public class PersonalInfoDTO {
     private String introduction;
     private String birthday;
     private String school;
+    private BigDecimal score;
 
 }

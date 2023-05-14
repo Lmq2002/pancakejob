@@ -11,6 +11,9 @@ public class OrderDTO {
     @JsonProperty("orderState")
     private String orderState;
 
+    @JsonProperty("orderScore")
+    private OrderScoreDTO orderScore;
+
     @JsonProperty("job")
     private OrderJobDTO job;
 }

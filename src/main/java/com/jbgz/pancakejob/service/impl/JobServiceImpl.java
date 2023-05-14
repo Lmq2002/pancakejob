@@ -9,11 +9,9 @@ import com.jbgz.pancakejob.dto.JobDTO;
 import com.jbgz.pancakejob.entity.Job;
 import com.jbgz.pancakejob.entity.JobType;
 import com.jbgz.pancakejob.entity.Recruiter;
-import com.jbgz.pancakejob.mapper.JobTypeMapper;
-import com.jbgz.pancakejob.mapper.OrderMapper;
-import com.jbgz.pancakejob.mapper.RecruiterMapper;
+import com.jbgz.pancakejob.entity.User;
+import com.jbgz.pancakejob.mapper.*;
 import com.jbgz.pancakejob.service.JobService;
-import com.jbgz.pancakejob.mapper.JobMapper;
 import com.jbgz.pancakejob.utils.DateTimeTrans;
 import com.jbgz.pancakejob.vo.JobDataVO;
 import com.jbgz.pancakejob.vo.JobInfoVO;
@@ -21,6 +19,7 @@ import com.jbgz.pancakejob.vo.JobUpVO;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -37,11 +36,11 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job>
     @Resource
     private JobMapper jobMapper;
     @Resource
-    private OrderMapper orderMapper;
-    @Resource
     private RecruiterMapper recruiterMapper;
     @Resource
     private JobTypeMapper jobTypeMapper;
+    @Resource
+    private UserMapper userMapper;
 
     //    @Override
 //    public ResultData getJobList(int pageNum, int pageSize){
@@ -67,6 +66,7 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job>
             jobDTO.setJobId(job.getJobId());
             jobDTO.setRecruiterId(job.getRecruiterId());
 
+            User user = userMapper.selectById(job.getRecruiterId());
             Recruiter recruiter = recruiterMapper.selectById(job.getRecruiterId());
             jobDTO.setCompanyName(recruiter.getCompanyName());
 
@@ -87,6 +87,10 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job>
 
             jobDTO.setStartTime(DateTimeTrans.dateToString(job.getStartTime()));
             jobDTO.setEndTime(DateTimeTrans.dateToString(job.getEndTime()));
+            if (user.getScore() != null)
+                jobDTO.setRecruiterScore(user.getScore());
+            else
+                jobDTO.setRecruiterScore(BigDecimal.ZERO);
             return jobDTO;
         } catch (Exception e) {
             System.out.println(e.getMessage());

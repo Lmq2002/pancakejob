@@ -3,6 +3,8 @@ package com.jbgz.pancakejob.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 @Data
 public class OrderJobDTO {
     @JsonProperty("workName")
@@ -19,4 +21,7 @@ public class OrderJobDTO {
 
     @JsonProperty("workTime")
     private int workTime;
+
+    @JsonProperty("score")
+    private BigDecimal score;
 }

@@ -51,9 +51,15 @@ public class OrderController {
         try {
             ResultData result = new ResultData();
             int orderId = orderService.createOrder(applyJobVO);
-            result.code = 200;
-            result.message = "报名成功";
-            result.data.put("orderId", orderId);
+            if(orderId > -1){
+                result.code = 200;
+                result.message = "报名成功";
+                result.data.put("orderId", orderId);
+            }
+            else{
+                result.code = Constants.CODE_400;
+                result.message = "报名失败";
+            }
             return result;
         } catch (Exception e) {
             System.out.println("错误信息" + e.getMessage());

@@ -15,6 +15,7 @@ import com.jbgz.pancakejob.mapper.OrderMapper;
 import com.jbgz.pancakejob.utils.DateTimeTrans;
 import com.jbgz.pancakejob.vo.ApplyJobVO;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
@@ -53,7 +54,25 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
         orderJobDTO.setStartTime(DateTimeTrans.datetimeToString(job.getStartTime()));
         orderJobDTO.setEndTime(DateTimeTrans.datetimeToString(job.getEndTime()));
         orderJobDTO.setWorkTime(job.getWorkTime());
+        User user = userMapper.selectById(job.getRecruiterId());
+        if(user.getScore()!=null)
+            orderJobDTO.setScore(user.getScore());
+        else
+            orderJobDTO.setScore(BigDecimal.ZERO);
         orderDTO.setJob(orderJobDTO);
+
+        OrderScoreDTO orderScoreDTO = new OrderScoreDTO();
+        orderScoreDTO.setOrderId(order.getOrderId());
+        if (order.getRecruiterScore() == null)
+            orderScoreDTO.setRecruiterScore(0);
+        else
+            orderScoreDTO.setRecruiterScore(order.getRecruiterScore());
+        if (order.getJobhunterScore() == null)
+            orderScoreDTO.setJobhunterScore(0);
+        else
+            orderScoreDTO.setJobhunterScore(order.getJobhunterScore());
+        orderDTO.setOrderScore(orderScoreDTO);
+
         return orderDTO;
     }
 
@@ -81,6 +100,10 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
         jobhunterDTO.setHeadportrait(user.getHeadportrait());
         jobhunterDTO.setEmail(user.getEmail());
         jobhunterDTO.setSchool(jobhunter.getSchool());
+        if(user.getScore()!=null)
+            jobhunterDTO.setScore(user.getScore());
+        else
+            jobhunterDTO.setScore(BigDecimal.ZERO);
         orderAppliedDTO.setJobhunter(jobhunterDTO);
         return orderAppliedDTO;
     }
@@ -98,6 +121,9 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
     //获取某兼职录用人员的DTO
     public OrderAcceptedDTO getOrderAcceptedDTO(Order order) {
         OrderAcceptedDTO orderAcceptedDTO = new OrderAcceptedDTO();
+        orderAcceptedDTO.setOrderId(order.getOrderId());
+        orderAcceptedDTO.setOrderState(order.getOrderState());
+
         Jobhunter jobhunter = jobhunterMapper.selectById(order.getJobhunterId());
         User user = userMapper.selectById(jobhunter.getJobhunterId());
         JobhunterDTO jobhunterDTO = new JobhunterDTO();
@@ -105,6 +131,10 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
         jobhunterDTO.setHeadportrait(user.getHeadportrait());
         jobhunterDTO.setEmail(user.getEmail());
         jobhunterDTO.setSchool(jobhunter.getSchool());
+        if(user.getScore()!=null)
+            jobhunterDTO.setScore(user.getScore());
+        else
+            jobhunterDTO.setScore(BigDecimal.ZERO);
         orderAcceptedDTO.setJobhunter(jobhunterDTO);
 
         OrderScoreDTO orderScoreDTO = new OrderScoreDTO();
@@ -117,7 +147,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
             orderScoreDTO.setJobhunterScore(0);
         else
             orderScoreDTO.setJobhunterScore(order.getJobhunterScore());
-        orderAcceptedDTO.setOrder(orderScoreDTO);
+        orderAcceptedDTO.setOrderScore(orderScoreDTO);
 
         return orderAcceptedDTO;
     }
@@ -144,31 +174,38 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
 
     //报名兼职
     public int createOrder(ApplyJobVO applyJobVO) {
-        //兼职的已报名人数+1
-        Job job = jobMapper.selectById(applyJobVO.getJobId());
-        Order order = new Order();
-        order.setJobhunterId(applyJobVO.getJobhunterId());
-        order.setJobId(applyJobVO.getJobId());
-        order.setApplyTime(new Date());
-        order.setApplyDescription(applyJobVO.getApplyReason());
-        order.setOrderState("已报名");
-        if (orderMapper.insert(order) > 0) {
-            job.setAppliedNum(job.getAppliedNum() + 1);
-            jobMapper.updateById(job);
-            return order.getOrderId();
-        } else
+        try {
+            Job job = jobMapper.selectById(applyJobVO.getJobId());
+            Order order = new Order();
+            order.setJobhunterId(applyJobVO.getJobhunterId());
+            order.setJobId(applyJobVO.getJobId());
+            order.setApplyTime(new Date());
+            order.setApplyDescription(applyJobVO.getApplyReason());
+            order.setOrderState("已报名");
+            if (orderMapper.insert(order) > 0) {
+                //兼职的已报名人数+1
+                job.setAppliedNum(job.getAppliedNum() + 1);
+                jobMapper.updateById(job);
+                return order.getOrderId();
+            } else
+                return -1;
+        } catch (Exception e) {
+            System.out.println("service中错误信息：" + e.getMessage());
             return -1;
+        }
     }
 
     //取消报名
     public boolean cancelOrder(int orderId) {
         Order order = orderMapper.selectById(orderId);
         order.setOrderState("已取消");
-        orderMapper.updateById(order);
-        //兼职的已报名人数-1
-        Job job = jobMapper.selectById(order.getJobId());
-        job.setAppliedNum(job.getAppliedNum() - 1);
-        int re = jobMapper.updateById(job);
+        int re = orderMapper.updateById(order);
+        if (re > 0) {
+            //兼职的已报名人数-1
+            Job job = jobMapper.selectById(order.getJobId());
+            job.setAppliedNum(job.getAppliedNum() - 1);
+            re = jobMapper.updateById(job);
+        }
         return re > 0;
     }
 
@@ -211,7 +248,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
 
     //修改订单状态
     public boolean changeOrderState(int orderId, String newState) {
-        Order order=new Order();
+        Order order = new Order();
         order.setOrderId(orderId);
         order.setOrderState(newState);
         int re = orderMapper.updateById(order);
