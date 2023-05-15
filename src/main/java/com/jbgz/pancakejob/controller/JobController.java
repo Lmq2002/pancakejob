@@ -1,5 +1,6 @@
 package com.jbgz.pancakejob.controller;
 
+import com.jbgz.pancakejob.common.Constants;
 import com.jbgz.pancakejob.service.JobService;
 import com.jbgz.pancakejob.service.NotificationService;
 import com.jbgz.pancakejob.service.OrderService;
@@ -10,6 +11,7 @@ import com.jbgz.pancakejob.vo.ReportVO;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.lang.module.Configuration;
 import java.util.List;
 
 @RestController
@@ -33,8 +35,8 @@ public class JobController {
                 ResultData result = new ResultData();
                 result.data.put("job_list", jobService.getJobList(state));
                 result.message = "请求成功";
-                result.code = 200;
-                System.out.println(result);//打印观察
+                result.code = Constants.CODE_200;
+                //System.out.println(result);//打印观察
                 return result;
             } catch (Exception e) {
                 System.out.println("异常信息" + e.getMessage());
@@ -45,8 +47,8 @@ public class JobController {
                 ResultData result = new ResultData();
                 result.data.put("job_list", jobService.getJobInfo(jobId));
                 result.message = "请求成功";
-                result.code = 200;
-                System.out.println(result);//打印观察
+                result.code = Constants.CODE_200;
+                //System.out.println(result);//打印观察
                 return result;
             } catch (Exception e) {
                 return ResultData.error();
@@ -62,7 +64,7 @@ public class JobController {
             ResultData result = new ResultData();
             result.data.put("job_list", jobService.getAllJobList(recruiterId));
             result.message = "请求成功";
-            result.code = 200;
+            result.code = Constants.CODE_200;
             System.out.println(result);//打印观察
             return result;
         } catch (Exception e) {
@@ -79,10 +81,10 @@ public class JobController {
             boolean re = jobService.createJob(jobVO);
             if (re) {
                 result.message = "发布成功";
-                result.code = 200;
+                result.code = Constants.CODE_200;
             } else {
                 result.message = "发布失败";
-                result.code = 200;
+                result.code = Constants.CODE_400;
             }
             System.out.println("result:" + result);
             return result;
@@ -103,11 +105,13 @@ public class JobController {
             //向求职者发送信息
             boolean re = notificationService.noticeRestJobhunter(refuses);
             //调用NotificationService的方法
-            if (re)
+            if (re) {
+                result.code = Constants.CODE_200;
                 result.message = "已结束招聘";
-            else
+            } else {
+                result.code = Constants.CODE_400;
                 result.message = "结束招聘失败";
-            result.code = 200;
+            }
             return result;
         } catch (Exception e) {
             System.out.println("错误信息" + e.getMessage());
@@ -123,12 +127,12 @@ public class JobController {
             boolean re = reportService.createReport(reportVO);
             if (re) {
                 result.message = "举报成功";
-                result.code = 200;
+                result.code = Constants.CODE_200;
             } else {
                 result.message = "举报失败";
-                result.code = 200;
+                result.code = Constants.CODE_400;
             }
-            System.out.println("result:" + result);
+            //System.out.println("result:" + result);
             return result;
         } catch (Exception e) {
             System.out.println("错误信息" + e.getMessage());

@@ -33,11 +33,7 @@ public class OrderController {
     public ResultData getApplyState(int jobhunterId, int jobId) {
         try {
             ResultData result = new ResultData();
-            result.code = 200;
-//            if(orderService.getApplyState(jobhunterId,jobId))
-//                result.message="已报名";
-//            else
-//                result.message="未报名";
+            result.code = Constants.CODE_200;
             result.message = orderService.getApplyState(jobhunterId, jobId);
             return result;
         } catch (Exception e) {
@@ -51,12 +47,11 @@ public class OrderController {
         try {
             ResultData result = new ResultData();
             int orderId = orderService.createOrder(applyJobVO);
-            if(orderId > -1){
-                result.code = 200;
+            if (orderId > -1) {
+                result.code = Constants.CODE_200;
                 result.message = "报名成功";
                 result.data.put("orderId", orderId);
-            }
-            else{
+            } else {
                 result.code = Constants.CODE_400;
                 result.message = "报名失败";
             }
@@ -73,11 +68,14 @@ public class OrderController {
         try {
             ResultData result = new ResultData();
             boolean re = orderService.cancelOrder(orderId);
-            result.code = 200;
-            if (re)
+
+            if (re) {
+                result.code = Constants.CODE_200;
                 result.message = "取消报名成功";
-            else
+            } else {
+                result.code = Constants.CODE_400;
                 result.message = "取消报名失败";
+            }
             return result;
         } catch (Exception e) {
             System.out.println("错误信息" + e.getMessage());
@@ -93,7 +91,7 @@ public class OrderController {
             ResultData result = new ResultData();
             List<OrderDTO> order_list = orderService.getOrderList(jobhunterId);
             result.data.put("order_list", order_list);
-            result.code = 200;
+            result.code = Constants.CODE_200;
             result.message = "请求成功";
             return result;
         } catch (Exception e) {
@@ -109,7 +107,7 @@ public class OrderController {
             ResultData result = new ResultData();
             List<OrderAppliedDTO> order_list = orderService.getOrderAppliedList(jobId);
             result.data.put("order_list", order_list);
-            result.code = 200;
+            result.code = Constants.CODE_200;
             result.message = "请求成功";
             return result;
         } catch (Exception e) {
@@ -125,7 +123,7 @@ public class OrderController {
             ResultData result = new ResultData();
             List<OrderAcceptedDTO> order_list = orderService.getOrderAcceptedList(jobId);
             result.data.put("order_list", order_list);
-            result.code = 200;
+            result.code = Constants.CODE_200;
             result.message = "请求成功";
             return result;
         } catch (Exception e) {
@@ -142,21 +140,25 @@ public class OrderController {
             boolean accept = orderState.equals("已录用");
             boolean re = orderService.acceptOfferOrNot(orderId, accept);
             /*向招聘方发送通知*/
-            if (accept)
-                re = re && notificationService.addNotification(orderId, NotificationType.ACCEPT);
-            else
-                re = re && notificationService.addNotification(orderId, NotificationType.GIVEUP);
-            result.code = 200;
-            if (re)
+            if (re) {
+                if (accept)
+                    re = notificationService.addNotification(orderId, NotificationType.ACCEPT);
+                else
+                    re = notificationService.addNotification(orderId, NotificationType.GIVEUP);
+            }
+
+            if (re) {
+                result.code = Constants.CODE_200;
                 result.message = "修改成功";
-            else
+            } else {
+                result.code = Constants.CODE_400;
                 result.message = "修改失败";
+            }
             return result;
         } catch (Exception e) {
             System.out.println("错误信息" + e.getMessage());
             return ResultData.error();
         }
-
     }
 
     //招聘方确认是否通过
@@ -167,16 +169,19 @@ public class OrderController {
             boolean send = orderState.equals("已通过");
             boolean re = orderService.sendOfferOrNot(orderId, send);
             /*NotificationService向求职者发送通知*/
-            if (send)
-                re = re && notificationService.addNotification(orderId, NotificationType.PASS);
-            else
-                re = re && notificationService.addNotification(orderId, NotificationType.REFUSE);
-
-            result.code = 200;
-            if (re)
+            if (re) {
+                if (send)
+                    re = notificationService.addNotification(orderId, NotificationType.PASS);
+                else
+                    re = notificationService.addNotification(orderId, NotificationType.REFUSE);
+            }
+            if (re) {
+                result.code = Constants.CODE_200;
                 result.message = "修改成功";
-            else
+            } else {
+                result.code = Constants.CODE_400;
                 result.message = "修改失败";
+            }
             return result;
         } catch (Exception e) {
             System.out.println("错误信息" + e.getMessage());
@@ -190,11 +195,13 @@ public class OrderController {
         try {
             ResultData result = new ResultData();
             boolean re = orderService.finishOrder(orderId);
-            result.code = 200;
-            if (re)
+            if (re) {
+                result.code = Constants.CODE_200;
                 result.message = "确认成功";
-            else
+            } else {
+                result.code = Constants.CODE_400;
                 result.message = "确认失败";
+            }
             return result;
         } catch (Exception e) {
             System.out.println("错误信息" + e.getMessage());
@@ -208,11 +215,13 @@ public class OrderController {
         try {
             ResultData result = new ResultData();
             boolean re = orderService.changeOrderScore(orderId, jobhunterScore, "jobhunter");
-            result.code = 200;
-            if (re)
+            if (re) {
+                result.code = Constants.CODE_200;
                 result.message = "评分成功";
-            else
+            } else {
+                result.code = Constants.CODE_400;
                 result.message = "评分失败";
+            }
             return result;
         } catch (Exception e) {
             System.out.println("错误信息" + e.getMessage());
@@ -226,11 +235,13 @@ public class OrderController {
         try {
             ResultData result = new ResultData();
             boolean re = orderService.changeOrderScore(orderId, recruiterScore, "recruiter");
-            result.code = Constants.CODE_200;
-            if (re)
+            if (re) {
+                result.code = Constants.CODE_200;
                 result.message = "评分成功";
-            else
+            } else {
+                result.code = Constants.CODE_400;
                 result.message = "评分失败";
+            }
             return result;
         } catch (Exception e) {
             System.out.println("错误信息" + e.getMessage());
@@ -252,11 +263,13 @@ public class OrderController {
 
             boolean re = appealService.createAppeal(appealOrderVO);
             //“求职者评价申诉”、“招聘方评价申诉”、“支付申诉”
-            result.code = Constants.CODE_200;
-            if (re)
+            if (re) {
+                result.code = Constants.CODE_200;
                 result.message = "申诉成功";
-            else
+            } else {
+                result.code = Constants.CODE_400;
                 result.message = "申诉失败";
+            }
             return result;
         } catch (Exception e) {
             System.out.println("错误信息" + e.getMessage());

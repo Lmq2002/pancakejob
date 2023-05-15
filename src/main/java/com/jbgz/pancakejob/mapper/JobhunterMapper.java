@@ -20,12 +20,12 @@ import java.util.List;
  */
 public interface JobhunterMapper extends BaseMapper<Jobhunter> {
 
-    @Select("SELECT DISTINCT nickname, headportrait, contact_method, email, introduction, birthday, school, score" +
+    @Select("SELECT DISTINCT nickname, headportrait, contact_method, email, introduction, birthday, school, score " +
             "FROM user AS a LEFT JOIN jobhunter AS b ON a.user_id = b.jobhunter_id " +
             "WHERE a.user_id = #{jobhunterId}")
     PersonalInfoDTO getInfo(GetPersonalInfoVO vo);
 
-    @Select("SELECT DISTINCT nickname, headportrait, contact_method, email, introduction, birthday, school, score" +
+    @Select("SELECT DISTINCT nickname, headportrait, contact_method, email, introduction, birthday, school, score " +
             "FROM user AS a LEFT JOIN jobhunter AS b ON a.user_id = b.jobhunter_id ")
     List<PersonalInfoDTO> getListAll();
 

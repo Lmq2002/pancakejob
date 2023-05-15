@@ -20,13 +20,13 @@ public interface RecruiterMapper extends BaseMapper<Recruiter> {
     @Insert("INSERT INTO recruiter (recruiter_id) VALUES (#{recruiterId})")
     Integer registRecruiter(Recruiter recruiter);
 
-    @Select("SELECT DISTINCT recruiter_id, company_name, nickname, headportrait, contact_method, email, introduction, score" +
-            " FROM user AS a INNER JOIN recruiter AS b ON a.user_id = b.recruiter_id" +
-            " WHERE b.recruiter_id = #{recruiterId}")
+    @Select("SELECT DISTINCT recruiter_id, company_name, nickname, headportrait, contact_method, email, introduction, score " +
+            "FROM user AS a INNER JOIN recruiter AS b ON a.user_id = b.recruiter_id " +
+            "WHERE b.recruiter_id = #{recruiterId}")
     RecruiterPersonInfoDTO getInfo(Integer recruiterId);
 
-    @Select("SELECT DISTINCT recruiter_id, company_name, nickname, headportrait, contact_method, email, introduction, score" +
-            " FROM user AS a INNER JOIN recruiter AS b ON a.user_id = b.recruiter_id")
+    @Select("SELECT DISTINCT recruiter_id, company_name, nickname, headportrait, contact_method, email, introduction, score " +
+            "FROM user AS a INNER JOIN recruiter AS b ON a.user_id = b.recruiter_id")
     List<RecruiterPersonInfoDTO> getListAll();
 
     @Update("UPDATE user " +
