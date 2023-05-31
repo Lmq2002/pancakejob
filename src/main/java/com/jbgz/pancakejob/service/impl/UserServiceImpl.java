@@ -100,6 +100,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         if(tmp!=0 && regist2(vo,user.getUserId())){
             return true;
         }
+        if(tmp!=0){
+            userMapper.deleteById(user.getUserId());
+        }
         return false;
     }
 
