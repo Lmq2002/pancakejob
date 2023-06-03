@@ -3,6 +3,7 @@ package com.jbgz.pancakejob.service;
 import com.jbgz.pancakejob.entity.JobType;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.jbgz.pancakejob.utils.ResultData;
+import com.jbgz.pancakejob.utils.SelfDesignException;
 
 import java.util.List;
 
@@ -15,10 +16,10 @@ public interface JobTypeService extends IService<JobType> {
 
     List<JobType> getTypeList();
 
-    int addJobType(String typeName);
+    int addJobType(String typeName) throws SelfDesignException;
 
-    boolean deleteJobType(int typeId);
+    boolean deleteJobType(int typeId) throws SelfDesignException;
 
-    int changeJobType(int typeId,String typeName);
+    int changeJobType(int typeId,String typeName) throws SelfDesignException;
 
 }

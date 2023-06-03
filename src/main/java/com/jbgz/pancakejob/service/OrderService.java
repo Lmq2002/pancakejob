@@ -6,6 +6,7 @@ import com.jbgz.pancakejob.dto.OrderDTO;
 import com.jbgz.pancakejob.dto.RecruiterOrderDTO;
 import com.jbgz.pancakejob.entity.Order;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.jbgz.pancakejob.utils.SelfDesignException;
 import com.jbgz.pancakejob.vo.ApplyJobVO;
 
 import java.util.List;
@@ -18,23 +19,23 @@ import java.util.List;
 public interface OrderService extends IService<Order> {
     OrderDTO getOrderDTO(Order order);
     List<OrderDTO> getOrderDTOList(List<Order> orderList);
-    List<OrderDTO> getOrderList(int jobhunterId);
+    List<OrderDTO> getOrderList(int jobhunterId) throws SelfDesignException;
 
     OrderAppliedDTO getOrderAppliedDTO(Order order);
     List<OrderAppliedDTO> getOrderAppliedDTOList(List<Order> orderList);
-    List<OrderAppliedDTO> getOrderAppliedList(int jobId);
+    List<OrderAppliedDTO> getOrderAppliedList(int jobId) throws SelfDesignException;
 
     OrderAcceptedDTO getOrderAcceptedDTO(Order order);
     List<OrderAcceptedDTO> getOrderAcceptedDTOList(List<Order> orderList);
-    List<OrderAcceptedDTO> getOrderAcceptedList(int jobId);
+    List<OrderAcceptedDTO> getOrderAcceptedList(int jobId) throws SelfDesignException;
 
     String getApplyState(int jobhunterId,int jobId);
-    int createOrder(ApplyJobVO applyJobVO);
-    boolean cancelOrder(int orderId);
-    boolean changeOrderState(int orderId,String newState);
-    boolean changeOrderScore(int orderId, int newScore, String scoreType);
-    boolean sendOfferOrNot(int orderId,boolean send);
-    boolean acceptOfferOrNot(int orderId,boolean accept);
-    boolean finishOrder(int orderId);
+    int createOrder(ApplyJobVO applyJobVO) throws SelfDesignException;
+    boolean cancelOrder(int orderId) throws SelfDesignException ;
+    boolean changeOrderState(int orderId,String newState) throws SelfDesignException ;
+    boolean changeOrderScore(int orderId, int newScore, String scoreType) throws SelfDesignException ;
+    boolean sendOfferOrNot(int orderId,boolean send) throws SelfDesignException ;
+    boolean acceptOfferOrNot(int orderId,boolean accept) throws SelfDesignException ;
+    boolean finishOrder(int orderId) throws SelfDesignException ;
     List<Integer> refuseRestJobhunter(int jobId);
 }

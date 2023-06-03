@@ -3,7 +3,6 @@ package com.jbgz.pancakejob.controller;
 import com.jbgz.pancakejob.common.Constants;
 import com.jbgz.pancakejob.dto.AppealDTO;
 import com.jbgz.pancakejob.dto.CompanyAuthenDTO;
-import com.jbgz.pancakejob.dto.NoticeDTO;
 import com.jbgz.pancakejob.dto.PersonAuthenDTO;
 import com.jbgz.pancakejob.service.CompanyAuthenticationService;
 import com.jbgz.pancakejob.service.JobTypeService;
@@ -53,8 +52,8 @@ public class AdminController {
             System.out.println("result:" + result);
             return result;
         } catch (Exception e) {
-            System.out.println("错误信息" + e.getMessage());
-            return ResultData.error();
+            System.out.println("错误信息：" + e.getMessage());
+            return ResultData.error(Constants.CODE_400, e.getMessage());
         }
     }
 
@@ -65,17 +64,15 @@ public class AdminController {
             ResultData result = new ResultData();
             int re = jobTypeService.addJobType(typeName);
             result.code = 200;
-            if (re == -1)
-                result.message = "兼职类型已存在";
-            else if (re == 0)
+            if (re == 0)
                 result.message = "添加失败";
             else
                 result.message = "添加成功";
             System.out.println("result:" + result);
             return result;
         } catch (Exception e) {
-            System.out.println("错误信息" + e.getMessage());
-            return ResultData.error();
+            System.out.println("错误信息：" + e.getMessage());
+            return ResultData.error(Constants.CODE_400, e.getMessage());
         }
     }
 
@@ -93,8 +90,8 @@ public class AdminController {
             System.out.println("result:" + result);
             return result;
         } catch (Exception e) {
-            System.out.println("错误信息" + e.getMessage());
-            return ResultData.error();
+            System.out.println("错误信息：" + e.getMessage());
+            return ResultData.error(Constants.CODE_400, e.getMessage());
         }
     }
 
@@ -105,17 +102,15 @@ public class AdminController {
             ResultData result = new ResultData();
             int re = jobTypeService.changeJobType(typeId, typeName);
             result.code = 200;
-            if (re == -1)
-                result.message = "兼职类型已存在";
-            else if (re == 0)
+            if (re == 0)
                 result.message = "修改失败";
             else
                 result.message = "修改成功";
             System.out.println("result:" + result);
             return result;
         } catch (Exception e) {
-            System.out.println("错误信息" + e.getMessage());
-            return ResultData.error();
+            System.out.println("错误信息：" + e.getMessage());
+            return ResultData.error(Constants.CODE_400, e.getMessage());
         }
     }
 
@@ -132,8 +127,8 @@ public class AdminController {
                 System.out.println(result);//打印观察
                 return result;
             } catch (Exception e) {
-                System.out.println("错误信息" + e.getMessage());
-                return ResultData.error();
+                System.out.println("错误信息：" + e.getMessage());
+                return ResultData.error(Constants.CODE_400, e.getMessage());
             }
         } else {//获取单个兼职信息
             try {
@@ -144,8 +139,8 @@ public class AdminController {
                 System.out.println(result);//打印观察
                 return result;
             } catch (Exception e) {
-                System.out.println("错误信息" + e.getMessage());
-                return ResultData.error();
+                System.out.println("错误信息：" + e.getMessage());
+                return ResultData.error(Constants.CODE_400, e.getMessage());
             }
         }
     }
@@ -162,8 +157,8 @@ public class AdminController {
             result.code = Constants.CODE_200;
             return result;
         } catch (Exception e) {
-            System.out.println("错误信息" + e.getMessage());
-            return ResultData.error();
+            System.out.println("错误信息：" + e.getMessage());
+            return ResultData.error(Constants.CODE_400, e.getMessage());
         }
     }
 
@@ -183,8 +178,8 @@ public class AdminController {
             }
             return result;
         } catch (Exception e) {
-            System.out.println("错误信息" + e.getMessage());
-            return ResultData.error();
+            System.out.println("错误信息：" + e.getMessage());
+            return ResultData.error(Constants.CODE_400, e.getMessage());
         }
     }
 
@@ -213,8 +208,8 @@ public class AdminController {
             }
             return result;
         } catch (Exception e) {
-            System.out.println("错误信息" + e.getMessage());
-            return ResultData.error();
+            System.out.println("错误信息：" + e.getMessage());
+            return ResultData.error(Constants.CODE_400, e.getMessage());
         }
     }
 
@@ -228,8 +223,8 @@ public class AdminController {
             result.message = "获取兼职举报列表成功";
             return result;
         } catch (Exception e) {
-            System.out.println("错误信息" + e.getMessage());
-            return ResultData.error();
+            System.out.println("错误信息：" + e.getMessage());
+            return ResultData.error(Constants.CODE_400, e.getMessage());
         }
     }
 
@@ -249,8 +244,8 @@ public class AdminController {
             }
             return result;
         } catch (Exception e) {
-            System.out.println("错误信息" + e.getMessage());
-            return ResultData.error();
+            System.out.println("错误信息：" + e.getMessage());
+            return ResultData.error(Constants.CODE_400, e.getMessage());
         }
     }
 
@@ -265,7 +260,7 @@ public class AdminController {
             return result;
         } catch (Exception e) {
             System.out.println("错误信息：" + e.getMessage());
-            return ResultData.error();
+            return ResultData.error(Constants.CODE_400, e.getMessage());
         }
     }
 
@@ -283,7 +278,7 @@ public class AdminController {
             return result;
         } catch (Exception e) {
             System.out.println("错误信息：" + e.getMessage());
-            return ResultData.error();
+            return ResultData.error(Constants.CODE_400, e.getMessage());
         }
     }
 
@@ -301,7 +296,7 @@ public class AdminController {
             return result;
         } catch (Exception e) {
             System.out.println("错误信息：" + e.getMessage());
-            return ResultData.error();
+            return ResultData.error(Constants.CODE_400, e.getMessage());
         }
     }
 
@@ -319,7 +314,7 @@ public class AdminController {
             return result;
         } catch (Exception e) {
             System.out.println("错误信息：" + e.getMessage());
-            return ResultData.error();
+            return ResultData.error(Constants.CODE_400, e.getMessage());
         }
     }
 

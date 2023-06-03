@@ -37,7 +37,8 @@ public class OrderController {
             result.message = orderService.getApplyState(jobhunterId, jobId);
             return result;
         } catch (Exception e) {
-            return ResultData.error();
+            System.out.println("错误信息：" + e.getMessage());
+            return ResultData.error(Constants.CODE_400, e.getMessage());
         }
     }
 
@@ -57,8 +58,8 @@ public class OrderController {
             }
             return result;
         } catch (Exception e) {
-            System.out.println("错误信息" + e.getMessage());
-            return ResultData.error();
+            System.out.println("错误信息：" + e.getMessage());
+            return ResultData.error(Constants.CODE_400, e.getMessage());
         }
     }
 
@@ -78,8 +79,8 @@ public class OrderController {
             }
             return result;
         } catch (Exception e) {
-            System.out.println("错误信息" + e.getMessage());
-            return ResultData.error();
+            System.out.println("错误信息：" + e.getMessage());
+            return ResultData.error(Constants.CODE_400, e.getMessage());
         }
 
     }
@@ -95,8 +96,8 @@ public class OrderController {
             result.message = "请求成功";
             return result;
         } catch (Exception e) {
-            System.out.println("错误信息" + e.getMessage());
-            return ResultData.error();
+            System.out.println("错误信息：" + e.getMessage());
+            return ResultData.error(Constants.CODE_400, e.getMessage());
         }
     }
 
@@ -111,8 +112,8 @@ public class OrderController {
             result.message = "请求成功";
             return result;
         } catch (Exception e) {
-            System.out.println("错误信息" + e.getMessage());
-            return ResultData.error();
+            System.out.println("错误信息：" + e.getMessage());
+            return ResultData.error(Constants.CODE_400, e.getMessage());
         }
     }
 
@@ -127,8 +128,8 @@ public class OrderController {
             result.message = "请求成功";
             return result;
         } catch (Exception e) {
-            System.out.println("错误信息" + e.getMessage());
-            return ResultData.error();
+            System.out.println("错误信息：" + e.getMessage());
+            return ResultData.error(Constants.CODE_400, e.getMessage());
         }
     }
 
@@ -156,8 +157,8 @@ public class OrderController {
             }
             return result;
         } catch (Exception e) {
-            System.out.println("错误信息" + e.getMessage());
-            return ResultData.error();
+            System.out.println("错误信息：" + e.getMessage());
+            return ResultData.error(Constants.CODE_400, e.getMessage());
         }
     }
 
@@ -184,8 +185,8 @@ public class OrderController {
             }
             return result;
         } catch (Exception e) {
-            System.out.println("错误信息" + e.getMessage());
-            return ResultData.error();
+            System.out.println("错误信息：" + e.getMessage());
+            return ResultData.error(Constants.CODE_400, e.getMessage());
         }
     }
 
@@ -204,14 +205,14 @@ public class OrderController {
             }
             return result;
         } catch (Exception e) {
-            System.out.println("错误信息" + e.getMessage());
-            return ResultData.error();
+            System.out.println("错误信息：" + e.getMessage());
+            return ResultData.error(Constants.CODE_400, e.getMessage());
         }
     }
 
     //评价求职者
     @PostMapping("/commentOnJobhunter")
-    public ResultData commentOnJobhunter(int orderId, int jobhunterScore) {
+    public ResultData commentOnJobhunter(Integer orderId, int jobhunterScore) {
         try {
             ResultData result = new ResultData();
             boolean re = orderService.changeOrderScore(orderId, jobhunterScore, "jobhunter");
@@ -224,8 +225,8 @@ public class OrderController {
             }
             return result;
         } catch (Exception e) {
-            System.out.println("错误信息" + e.getMessage());
-            return ResultData.error();
+            System.out.println("错误信息：" + e.getMessage());
+            return ResultData.error(Constants.CODE_400, e.getMessage());
         }
     }
 
@@ -244,8 +245,8 @@ public class OrderController {
             }
             return result;
         } catch (Exception e) {
-            System.out.println("错误信息" + e.getMessage());
-            return ResultData.error();
+            System.out.println("错误信息：" + e.getMessage());
+            return ResultData.error(Constants.CODE_400, e.getMessage());
         }
     }
 
@@ -272,8 +273,8 @@ public class OrderController {
             }
             return result;
         } catch (Exception e) {
-            System.out.println("错误信息" + e.getMessage());
-            return ResultData.error();
+            System.out.println("错误信息：" + e.getMessage());
+            return ResultData.error(Constants.CODE_400, e.getMessage());
         }
     }
 }

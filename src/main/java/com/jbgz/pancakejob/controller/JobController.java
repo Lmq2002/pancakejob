@@ -39,8 +39,8 @@ public class JobController {
                 //System.out.println(result);//打印观察
                 return result;
             } catch (Exception e) {
-                System.out.println("异常信息" + e.getMessage());
-                return ResultData.error();
+                System.out.println("错误信息：" + e.getMessage());
+                return ResultData.error(Constants.CODE_400, e.getMessage());
             }
         } else {//获取单个兼职信息
             try {
@@ -51,7 +51,8 @@ public class JobController {
                 //System.out.println(result);//打印观察
                 return result;
             } catch (Exception e) {
-                return ResultData.error();
+                System.out.println("错误信息：" + e.getMessage());
+                return ResultData.error(Constants.CODE_400, e.getMessage());
             }
         }
 
@@ -68,8 +69,8 @@ public class JobController {
             System.out.println(result);//打印观察
             return result;
         } catch (Exception e) {
-            System.out.println("错误信息" + e.getMessage());
-            return ResultData.error();
+            System.out.println("错误信息：" + e.getMessage());
+            return ResultData.error(Constants.CODE_400, e.getMessage());
         }
     }
 
@@ -89,8 +90,8 @@ public class JobController {
             System.out.println("result:" + result);
             return result;
         } catch (Exception e) {
-            System.out.println("错误信息" + e.getMessage());
-            return ResultData.error();
+            System.out.println("错误信息：" + e.getMessage());
+            return ResultData.error(Constants.CODE_400, e.getMessage());
         }
     }
 
@@ -114,8 +115,8 @@ public class JobController {
             }
             return result;
         } catch (Exception e) {
-            System.out.println("错误信息" + e.getMessage());
-            return ResultData.error();
+            System.out.println("错误信息：" + e.getMessage());
+            return ResultData.error(Constants.CODE_400, e.getMessage());
         }
     }
 
@@ -135,8 +136,8 @@ public class JobController {
             //System.out.println("result:" + result);
             return result;
         } catch (Exception e) {
-            System.out.println("错误信息" + e.getMessage());
-            return ResultData.error();
+            System.out.println("错误信息：" + e.getMessage());
+            return ResultData.error(Constants.CODE_400, e.getMessage());
         }
     }
 }

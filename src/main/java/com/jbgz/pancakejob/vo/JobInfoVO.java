@@ -10,11 +10,11 @@ import java.math.BigDecimal;
 public class JobInfoVO {
     private String jobName;
 
-    private int jobType;
+    private Integer jobType;
 
     private String workDetails;
 
-    private int workTime;
+    private Integer workTime;
 
     private String startTime;
 

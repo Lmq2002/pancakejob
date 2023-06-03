@@ -7,8 +7,10 @@ import com.jbgz.pancakejob.entity.Appeal;
 import com.jbgz.pancakejob.entity.Order;
 import com.jbgz.pancakejob.mapper.AppealMapper;
 import com.jbgz.pancakejob.mapper.OrderMapper;
+import com.jbgz.pancakejob.mapper.UserMapper;
 import com.jbgz.pancakejob.service.AppealService;
 import com.jbgz.pancakejob.utils.DateTimeTrans;
+import com.jbgz.pancakejob.utils.SelfDesignException;
 import com.jbgz.pancakejob.vo.AppealDealVO;
 import com.jbgz.pancakejob.vo.AppealOrderVO;
 import org.springframework.stereotype.Service;
@@ -31,6 +33,9 @@ public class AppealServiceImpl extends ServiceImpl<AppealMapper, Appeal>
 
     @Resource
     private OrderMapper orderMapper;
+
+    @Resource
+    private UserMapper userMapper;
 
     //转换单个申诉的DTO
     AppealDTO getAppealDTO(Appeal appeal) {
@@ -66,36 +71,31 @@ public class AppealServiceImpl extends ServiceImpl<AppealMapper, Appeal>
     //转换
 
     //创建申诉
-    public boolean createAppeal(AppealOrderVO appealOrderVO) {
-        try{
-            Appeal appeal = new Appeal();
-            appeal.setOrderId(appealOrderVO.getOrderId());
-            appeal.setAppealType(appealOrderVO.getAppealType());
-            appeal.setAppealContent(appealOrderVO.getAppealContent());
-            appeal.setAppealTime(new Date());
-            appeal.setStatus("未审核");
-            return appealMapper.insert(appeal) > 0;
-        }
-        catch (Exception e){
-            System.out.println("service错误信息：" + e.getMessage());
-            return false;
-        }
-
+    public boolean createAppeal(AppealOrderVO appealOrderVO) throws SelfDesignException {
+        if (orderMapper.selectById(appealOrderVO.getOrderId()) == null)
+            throw new SelfDesignException("订单不存在");
+        else if (appealOrderVO.getAppealType() == null)
+            throw new SelfDesignException("申诉类型为空");
+        else if (appealOrderVO.getAppealContent() == null)
+            throw new SelfDesignException("申诉理由为空");
+        Appeal appeal = new Appeal();
+        appeal.setOrderId(appealOrderVO.getOrderId());
+        appeal.setAppealType(appealOrderVO.getAppealType());
+        appeal.setAppealContent(appealOrderVO.getAppealContent());
+        appeal.setAppealTime(new Date());
+        appeal.setStatus("未审核");
+        return appealMapper.insert(appeal) > 0;
     }
 
     //获取待处理的申诉列表userId=-1
     //获取某用户的申诉列表userId!=-1(暂无此api)
-    public List<AppealDTO> getAppealList(int userId) {
-        try{
-            QueryWrapper<Appeal> appealWrapper = new QueryWrapper<Appeal>();
-            appealWrapper.orderByDesc("appeal_time");
-            List<AppealDTO> appealDTOList = getAppealDTOList(userId, appealMapper.selectList(appealWrapper));
-            return appealDTOList;
-        }
-        catch (Exception e){
-            System.out.println("service错误信息："+e.getMessage());
-            return null;
-        }
+    public List<AppealDTO> getAppealList(int userId) throws SelfDesignException {
+        if (userId != -1 && userMapper.selectById(userId) == null)
+            throw new SelfDesignException("该用户不存在");
+        QueryWrapper<Appeal> appealWrapper = new QueryWrapper<Appeal>();
+        appealWrapper.orderByDesc("appeal_time");
+        List<AppealDTO> appealDTOList = getAppealDTOList(userId, appealMapper.selectList(appealWrapper));
+        return appealDTOList;
     }
 
     //获取单个申诉详细信息
@@ -104,25 +104,24 @@ public class AppealServiceImpl extends ServiceImpl<AppealMapper, Appeal>
 //        return appealDTO;
 //    }
     //保存申诉处理结果
-    public boolean saveDealResult(AppealDealVO appealDealVO) {
-        try{
-            QueryWrapper<Appeal> appealWrapper = new QueryWrapper<>();
-            appealWrapper.eq("order_id",appealDealVO.getOrderId()).eq("appeal_type",appealDealVO.getAppealType());
-            Appeal appeal = new Appeal();
-            appeal.setOrderId(appealDealVO.getOrderId());
-            appeal.setAppealType(appealDealVO.getAppealType());
-            appeal.setAppealResult(appealDealVO.getAppealResult());
-            if (appealDealVO.isStatus())
-                appeal.setStatus("已通过");
-            else
-                appeal.setStatus("未通过");
-            int re=appealMapper.update(appeal,appealWrapper);
-            return re>0;
-        }
-        catch (Exception e){
-            System.out.println("service错误信息：" + e.getMessage());
-            return false;
-        }
+    public boolean saveDealResult(AppealDealVO appealDealVO) throws SelfDesignException {
+        if(appealDealVO.getAppealResult() == null)
+            throw new SelfDesignException("申诉处理结果为空");
+
+        QueryWrapper<Appeal> appealWrapper = new QueryWrapper<>();
+        appealWrapper.eq("order_id", appealDealVO.getOrderId()).eq("appeal_type", appealDealVO.getAppealType());
+        Appeal appeal = new Appeal();
+        if(appealMapper.selectCount(appealWrapper) == 0)
+            throw new SelfDesignException("无相关申诉");
+        appeal.setOrderId(appealDealVO.getOrderId());
+        appeal.setAppealType(appealDealVO.getAppealType());
+        appeal.setAppealResult(appealDealVO.getAppealResult());
+        if (appealDealVO.isStatus())
+            appeal.setStatus("已通过");
+        else
+            appeal.setStatus("未通过");
+        int re = appealMapper.update(appeal, appealWrapper);
+        return re > 0;
     }
 
 
