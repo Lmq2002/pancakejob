@@ -4,6 +4,7 @@ import com.jbgz.pancakejob.dto.NotificationDTO;
 import com.jbgz.pancakejob.entity.Notification;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.jbgz.pancakejob.entity.Order;
+import com.jbgz.pancakejob.utils.SelfDesignException;
 
 import java.util.List;
 
@@ -14,12 +15,12 @@ import java.util.List;
 */
 public interface NotificationService extends IService<Notification> {
 
-    List<NotificationDTO> getNotificationList(int userId);
+    List<NotificationDTO> getNotificationList(int userId) throws SelfDesignException;
 
-    boolean addNotification(int order_id, String notificationType);
+    boolean addNotification(int order_id, String notificationType) throws SelfDesignException;
 
-    boolean noticeRestJobhunter(List<Integer> order_list);
+    boolean noticeRestJobhunter(List<Integer> order_list) throws SelfDesignException;
 
-    boolean deleteNotification(int notificationId);
+    boolean deleteNotification(int notificationId) throws SelfDesignException;
 
 }

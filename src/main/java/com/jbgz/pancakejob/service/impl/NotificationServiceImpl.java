@@ -9,6 +9,7 @@ import com.jbgz.pancakejob.entity.*;
 import com.jbgz.pancakejob.mapper.*;
 import com.jbgz.pancakejob.service.NotificationService;
 import com.jbgz.pancakejob.utils.DateTimeTrans;
+import com.jbgz.pancakejob.utils.SelfDesignException;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -29,8 +30,6 @@ public class NotificationServiceImpl extends ServiceImpl<NotificationMapper, Not
     private NotificationMapper notificationMapper;
     @Resource
     private JobMapper jobMapper;
-    @Resource
-    private RealnameAuthenticationMapper realnameAuthenticationMapper;
     @Resource
     private OrderMapper orderMapper;
     @Resource
@@ -54,7 +53,9 @@ public class NotificationServiceImpl extends ServiceImpl<NotificationMapper, Not
         return notificationDTOList;
     }
 
-    public List<NotificationDTO> getNotificationList(int userId) {
+    public List<NotificationDTO> getNotificationList(int userId) throws SelfDesignException {
+        if(userMapper.selectById(userId)==null)
+            throw new SelfDesignException("不存在该用户");
         QueryWrapper<Notification> notificationWrapper = new QueryWrapper<>();
         notificationWrapper.eq("user_id", userId);
         notificationWrapper.orderByDesc("send_time");
@@ -62,9 +63,11 @@ public class NotificationServiceImpl extends ServiceImpl<NotificationMapper, Not
         return notificationDTOList;
     }
 
-    public boolean addNotification(int order_id, String notificationType) {
+    public boolean addNotification(int order_id, String notificationType) throws SelfDesignException {
         //通知类型:结束招聘、录用、拒绝、接受、放弃
         Order order = orderMapper.selectById(order_id);
+        if(order == null)
+            throw new SelfDesignException("订单不存在");
         Notification notification = new Notification();
         Job job = jobMapper.selectById(order.getJobId());
         User user = userMapper.selectById(order.getJobhunterId());
@@ -96,18 +99,22 @@ public class NotificationServiceImpl extends ServiceImpl<NotificationMapper, Not
             notification.setSendTime(new Date());
             notification.setUserType(UserType.RECRUITER);
         }
+        else
+            throw new SelfDesignException("通知类型非法");
         int re = notificationMapper.insert(notification);
         return re > 0;
     }
 
-    public boolean noticeRestJobhunter(List<Integer> order_list) {
+    public boolean noticeRestJobhunter(List<Integer> order_list) throws SelfDesignException {
         boolean re = true;
         for (int order_id : order_list)
             re = re && addNotification(order_id, NotificationType.CLOSE);
         return re;
     }
 
-    public boolean deleteNotification(int notificationId) {
+    public boolean deleteNotification(int notificationId) throws SelfDesignException {
+        if(notificationMapper.selectById(notificationId) == null)
+            throw new SelfDesignException("不存在该通知信息");
         int re = notificationMapper.deleteById(notificationId);
         return re > 0;
     }

@@ -3,6 +3,7 @@ package com.jbgz.pancakejob.service;
 import com.jbgz.pancakejob.dto.AppealDTO;
 import com.jbgz.pancakejob.entity.Appeal;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.jbgz.pancakejob.utils.SelfDesignException;
 import com.jbgz.pancakejob.vo.AppealDealVO;
 import com.jbgz.pancakejob.vo.AppealOrderVO;
 import com.jbgz.pancakejob.vo.ReportDealVO;
@@ -16,10 +17,10 @@ import java.util.List;
 */
 public interface AppealService extends IService<Appeal> {
 
-    boolean createAppeal(AppealOrderVO appealOrderVO);
+    boolean createAppeal(AppealOrderVO appealOrderVO) throws SelfDesignException;
     //List<AppealDTO> getAppealToDeal();
-    List<AppealDTO> getAppealList(int userId);
+    List<AppealDTO> getAppealList(int userId) throws SelfDesignException;
     //AppealDTO getAppealInfo(int orderId,String appealType);
-    boolean saveDealResult(AppealDealVO appealDealVO);
+    boolean saveDealResult(AppealDealVO appealDealVO) throws SelfDesignException;
 
 }

@@ -13,10 +13,9 @@ import com.jbgz.pancakejob.mapper.UserMapper;
 import com.jbgz.pancakejob.service.OrderService;
 import com.jbgz.pancakejob.mapper.OrderMapper;
 import com.jbgz.pancakejob.utils.DateTimeTrans;
+import com.jbgz.pancakejob.utils.SelfDesignException;
 import com.jbgz.pancakejob.vo.ApplyJobVO;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
-
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
@@ -55,7 +54,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
         orderJobDTO.setEndTime(DateTimeTrans.datetimeToString(job.getEndTime()));
         orderJobDTO.setWorkTime(job.getWorkTime());
         User user = userMapper.selectById(job.getRecruiterId());
-        if(user.getScore()!=null)
+        if (user.getScore() != null)
             orderJobDTO.setScore(user.getScore());
         else
             orderJobDTO.setScore(BigDecimal.ZERO);
@@ -100,7 +99,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
         jobhunterDTO.setHeadportrait(user.getHeadportrait());
         jobhunterDTO.setEmail(user.getEmail());
         jobhunterDTO.setSchool(jobhunter.getSchool());
-        if(user.getScore()!=null)
+        if (user.getScore() != null)
             jobhunterDTO.setScore(user.getScore());
         else
             jobhunterDTO.setScore(BigDecimal.ZERO);
@@ -131,7 +130,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
         jobhunterDTO.setHeadportrait(user.getHeadportrait());
         jobhunterDTO.setEmail(user.getEmail());
         jobhunterDTO.setSchool(jobhunter.getSchool());
-        if(user.getScore()!=null)
+        if (user.getScore() != null)
             jobhunterDTO.setScore(user.getScore());
         else
             jobhunterDTO.setScore(BigDecimal.ZERO);
@@ -169,35 +168,50 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
         List<Order> orders = orderMapper.selectList(orderWrapper);
         //orderWrapper.eq("jobhunter_id",jobhunterId).eq("job_id",jobId).eq("order_state","已报名");
         //int re=orderMapper.selectCount(orderWrapper);
-        return orders.get(0).getOrderState();
+        if (orders.size() == 0)
+            return "未报名";
+        else
+            return orders.get(0).getOrderState();
     }
 
     //报名兼职
-    public int createOrder(ApplyJobVO applyJobVO) {
-        try {
-            Job job = jobMapper.selectById(applyJobVO.getJobId());
-            Order order = new Order();
-            order.setJobhunterId(applyJobVO.getJobhunterId());
-            order.setJobId(applyJobVO.getJobId());
-            order.setApplyTime(new Date());
-            order.setApplyDescription(applyJobVO.getApplyReason());
-            order.setOrderState("已报名");
-            if (orderMapper.insert(order) > 0) {
-                //兼职的已报名人数+1
-                job.setAppliedNum(job.getAppliedNum() + 1);
-                jobMapper.updateById(job);
-                return order.getOrderId();
-            } else
-                return -1;
-        } catch (Exception e) {
-            System.out.println("service中错误信息：" + e.getMessage());
+    public int createOrder(ApplyJobVO applyJobVO) throws SelfDesignException {
+        Job job = jobMapper.selectById(applyJobVO.getJobId());
+        if (job == null)
+            throw new SelfDesignException("不存在该兼职信息");
+        else if (!job.getJobState().equals("已通过"))
+            throw new SelfDesignException("该兼职当前未在招聘");
+        if (jobhunterMapper.selectById(applyJobVO.getJobhunterId()) == null)
+            throw new SelfDesignException("不存在该求职者");
+        QueryWrapper<Order> orderWrapper = new QueryWrapper<>();
+        orderWrapper.eq("jobhunter_id", applyJobVO.getJobhunterId())
+                .eq("job_id", applyJobVO.getJobId())
+                .and(i -> i.eq("order_state", "已报名").or()
+                        .eq("order_state", "已通过").or()
+                        .eq("order_state", "已录用").or()
+                        .eq("order_state", "支付异常"));
+        if (orderMapper.selectCount(orderWrapper) > 0)
+            throw new SelfDesignException("该求职者已报名该兼职");
+        Order order = new Order();
+        order.setJobhunterId(applyJobVO.getJobhunterId());
+        order.setJobId(applyJobVO.getJobId());
+        order.setApplyTime(new Date());
+        order.setApplyDescription(applyJobVO.getApplyReason());
+        order.setOrderState("已报名");
+        if (orderMapper.insert(order) > 0) {
+            //兼职的已报名人数+1
+            job.setAppliedNum(job.getAppliedNum() + 1);
+            jobMapper.updateById(job);
+            return order.getOrderId();
+        } else
             return -1;
-        }
     }
 
     //取消报名
-    public boolean cancelOrder(int orderId) {
+    public boolean cancelOrder(int orderId) throws SelfDesignException {
         Order order = orderMapper.selectById(orderId);
+        if (order == null)
+            throw new SelfDesignException("订单不存在");
         order.setOrderState("已取消");
         int re = orderMapper.updateById(order);
         if (re > 0) {
@@ -210,7 +224,9 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
     }
 
     //获取求职者的订单列表
-    public List<OrderDTO> getOrderList(int jobhunterId) {
+    public List<OrderDTO> getOrderList(int jobhunterId) throws SelfDesignException {
+        if (jobhunterMapper.selectById(jobhunterId) == null)
+            throw new SelfDesignException("不存在该求职者");
         QueryWrapper<Order> orderWrapper = new QueryWrapper<Order>();
         orderWrapper.eq("jobhunter_id", jobhunterId);
         orderWrapper.orderByDesc("apply_time");
@@ -219,7 +235,9 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
     }
 
     //获取某个兼职的已报名订单列表（除了已取消的所有状态）
-    public List<OrderAppliedDTO> getOrderAppliedList(int jobId) {
+    public List<OrderAppliedDTO> getOrderAppliedList(int jobId) throws SelfDesignException {
+        if (jobMapper.selectById(jobId) == null)
+            throw new SelfDesignException("不存在该兼职信息");
         QueryWrapper<Order> orderWrapper = new QueryWrapper<Order>();
         orderWrapper.eq("job_id", jobId).and(i -> i
                 .eq("order_state", "已报名").or()
@@ -235,7 +253,9 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
     }
 
     //获取某个兼职的录用名单(已录用、已完成、支付异常)
-    public List<OrderAcceptedDTO> getOrderAcceptedList(int jobId) {
+    public List<OrderAcceptedDTO> getOrderAcceptedList(int jobId) throws SelfDesignException {
+        if (jobMapper.selectById(jobId) == null)
+            throw new SelfDesignException("不存在该兼职信息");
         QueryWrapper<Order> orderWrapper = new QueryWrapper<Order>();
         orderWrapper.eq("job_id", jobId).and(i -> i
                 .eq("order_state", "已录用").or()
@@ -247,17 +267,26 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
     }
 
     //修改订单状态
-    public boolean changeOrderState(int orderId, String newState) {
-        Order order = new Order();
-        order.setOrderId(orderId);
+    public boolean changeOrderState(int orderId, String newState) throws SelfDesignException {
+        Order order = orderMapper.selectById(orderId);
+        if (order == null)
+            throw new SelfDesignException("订单不存在");
+        if (newState == null)
+            throw new SelfDesignException("订单状态不能为空");
         order.setOrderState(newState);
         int re = orderMapper.updateById(order);
         return re > 0;
     }
 
     //修改订单评分
-    public boolean changeOrderScore(int orderId, int newScore, String scoreType) {
+    public boolean changeOrderScore(int orderId, int newScore, String scoreType) throws SelfDesignException {
         Order order = orderMapper.selectById(orderId);
+        if (order == null)
+            throw new SelfDesignException("订单不存在");
+        else if (!order.getOrderState().equals("已完成"))
+            throw new SelfDesignException("订单还未完成");
+        if (newScore < 0)
+            throw new SelfDesignException("评价分数必须大于0");
         DecimalFormat dec = new DecimalFormat("0.00");
         int re1 = 0;
         int re2 = 0;
@@ -280,15 +309,20 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
             user.setScore(new BigDecimal(dec.format(avgScore)));
             re2 = userMapper.updateById(user);
             System.out.println("招聘方平均分数：" + avgScore);
-        }
+        } else
+            throw new SelfDesignException("评价类型错误");
 
         return re1 > 0 && re2 > 0;
     }
 
     //招聘方发放offer
-    public boolean sendOfferOrNot(int orderId, boolean send) {
+    public boolean sendOfferOrNot(int orderId, boolean send) throws SelfDesignException {
+        Order order = orderMapper.selectById(orderId);
+        if (order == null)
+            throw new SelfDesignException("订单不存在");
+        else if (!order.getOrderState().equals("已报名"))
+            throw new SelfDesignException("此订单非已报名状态");
         if (send) {
-            Order order = orderMapper.selectById(orderId);
             order.setPassTime(new Date());
             orderMapper.updateById(order);
             return changeOrderState(orderId, "已通过");
@@ -297,10 +331,14 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
     }
 
     //求职者确认是否接受录用
-    public boolean acceptOfferOrNot(int orderId, boolean accept) {
+    public boolean acceptOfferOrNot(int orderId, boolean accept) throws SelfDesignException {
+        Order order = orderMapper.selectById(orderId);
+        if (order == null)
+            throw new SelfDesignException("订单不存在");
+        else if (!order.getOrderState().equals("已通过"))
+            throw new SelfDesignException("此订单非已通过状态");
         if (accept) {
             changeOrderState(orderId, "已录用");
-            Order order = orderMapper.selectById(orderId);
             Job job = jobMapper.selectById(order.getJobId());
             job.setAcceptedNum(job.getAcceptedNum() + 1);
             int re = jobMapper.updateById(job);
@@ -310,9 +348,11 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
     }
 
     //招聘方确认工作完成
-    public boolean finishOrder(int orderId) {
+    public boolean finishOrder(int orderId) throws SelfDesignException {
         changeOrderState(orderId, "已完成");
         Order order = orderMapper.selectById(orderId);
+        if (order == null)
+            throw new SelfDesignException("订单不存在");
         Job job = jobMapper.selectById(order.getJobId());
         job.setFinishedNum(job.getFinishedNum() + 1);
         //如果所有工作订单均已完成且已结束招聘，将兼职状态修改为已完成

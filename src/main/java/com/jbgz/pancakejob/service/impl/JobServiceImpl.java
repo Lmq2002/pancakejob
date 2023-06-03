@@ -13,6 +13,7 @@ import com.jbgz.pancakejob.entity.User;
 import com.jbgz.pancakejob.mapper.*;
 import com.jbgz.pancakejob.service.JobService;
 import com.jbgz.pancakejob.utils.DateTimeTrans;
+import com.jbgz.pancakejob.utils.SelfDesignException;
 import com.jbgz.pancakejob.vo.JobDataVO;
 import com.jbgz.pancakejob.vo.JobInfoVO;
 import com.jbgz.pancakejob.vo.JobUpVO;
@@ -111,13 +112,15 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job>
     public List<JobDTO> getJobList(String state) {
         QueryWrapper<Job> jobQueryWrapper = new QueryWrapper<Job>();
         //筛选已发布且正在招聘的兼职
-        jobQueryWrapper.eq("job_state", state);
+        jobQueryWrapper.eq("job_state", "已通过");
         List<JobDTO> jobDTOList = getJobListDTO(jobMapper.selectList(jobQueryWrapper));
         return jobDTOList;
     }
 
     //获取招聘方管理的所有兼职
-    public List<JobDTO> getAllJobList(int recruiterId) {
+    public List<JobDTO> getAllJobList(int recruiterId) throws SelfDesignException {
+        if(recruiterMapper.selectById(recruiterId) == null)
+            throw new SelfDesignException("不存在该招聘方");
         QueryWrapper<Job> jobQueryWrapper = new QueryWrapper<Job>();
         jobQueryWrapper.eq("recruiter_id", recruiterId);
         List<JobDTO> jobDTOList = getJobListDTO(jobMapper.selectList(jobQueryWrapper));
@@ -131,8 +134,10 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job>
     }
 
     //获取单个兼职信息
-    public List<JobDTO> getJobInfo(int jobId) {
+    public List<JobDTO> getJobInfo(int jobId) throws SelfDesignException {
         Job job = jobMapper.selectById(jobId);
+        if(job == null)
+            throw new SelfDesignException("不存在该兼职信息");
         List<JobDTO> jobDTO = new ArrayList<>();
         jobDTO.add(getJObDTO(job));
         return jobDTO;
@@ -144,8 +149,22 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job>
     }
 
     //发布兼职
-    public boolean createJob(JobUpVO jobUpVO) {
+    public boolean createJob(JobUpVO jobUpVO) throws SelfDesignException {
+        if(recruiterMapper.selectById(jobUpVO.getRecruiterId()) == null)
+            throw new SelfDesignException("不存在该招聘方");
         JobInfoVO jobInfo = jobUpVO.getJobInfo();
+        if(jobInfo.getJobName() == null)
+            throw new SelfDesignException("兼职名称为空");
+        else if(jobInfo.getWorkDetails() == null)
+            throw new SelfDesignException("兼职详情为空");
+        else if(jobInfo.getStartTime() == null)
+            throw new SelfDesignException("兼职开始时间为空");
+        else if(jobInfo.getEndTime() == null)
+            throw new SelfDesignException("简直结束时间为空");
+        else if(jobInfo.getWorkPlace() == null)
+            throw new SelfDesignException("兼职地址信息为空");
+        else if(jobInfo.getSalary() == null)
+            throw new SelfDesignException("兼职工资信息为空");
         Job job = new Job();
         job.setRecruiterId(jobUpVO.getRecruiterId());
         job.setReleaseTime(new Date());
@@ -174,8 +193,12 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job>
     }
 
     //结束招聘
-    public boolean closeRecruit(int jobId) {
+    public boolean closeRecruit(int jobId) throws SelfDesignException{
         Job job = jobMapper.selectById(jobId);
+        if(job == null)
+            throw new SelfDesignException("不存在该兼职信息");
+        else if(!job.getJobState().equals("已通过"))
+            throw new SelfDesignException("该兼职未在招聘");
         if (job.getAcceptedNum().equals(job.getFinishedNum()))
             job.setJobState("已完成");
         else
@@ -193,8 +216,12 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job>
     }
 
     //修改兼职状态
-    public boolean changeJobState(int jobId, String jobState) {
+    public boolean changeJobState(int jobId, String jobState) throws SelfDesignException {
         Job job = jobMapper.selectById(jobId);
+        if(job == null)
+            throw new SelfDesignException("不存在该兼职信息");
+        if(jobState == null)
+            throw new SelfDesignException("兼职状态为空");
         job.setJobState(jobState);
         int re = jobMapper.updateById(job);
         return re > 0;
