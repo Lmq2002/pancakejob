@@ -28,7 +28,7 @@ public interface JobService extends IService<Job> {
     List<JobDTO> getJobInfo(int jobId) throws SelfDesignException;
     List<FavoritesDTO> getFavoritesDTO(Integer dirId, Integer jobhunterId);
     boolean upJobDraft(Integer jobId);
-    boolean createJob(JobUpVO jobUpVO) throws SelfDesignException;
+    boolean createJob(JobUpVO jobUpVO);
     boolean changeJobDraft(JobDataVO jobData);
     boolean closeRecruit(int jobId) throws SelfDesignException;
     boolean changeJobState(int jobId, String jobState) throws SelfDesignException;

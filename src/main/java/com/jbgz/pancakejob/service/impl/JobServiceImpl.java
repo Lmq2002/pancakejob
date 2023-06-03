@@ -149,22 +149,8 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job>
     }
 
     //发布兼职
-    public boolean createJob(JobUpVO jobUpVO) throws SelfDesignException {
-        if(recruiterMapper.selectById(jobUpVO.getRecruiterId()) == null)
-            throw new SelfDesignException("不存在该招聘方");
+    public boolean createJob(JobUpVO jobUpVO){
         JobInfoVO jobInfo = jobUpVO.getJobInfo();
-        if(jobInfo.getJobName() == null)
-            throw new SelfDesignException("兼职名称为空");
-        else if(jobInfo.getWorkDetails() == null)
-            throw new SelfDesignException("兼职详情为空");
-        else if(jobInfo.getStartTime() == null)
-            throw new SelfDesignException("兼职开始时间为空");
-        else if(jobInfo.getEndTime() == null)
-            throw new SelfDesignException("简直结束时间为空");
-        else if(jobInfo.getWorkPlace() == null)
-            throw new SelfDesignException("兼职地址信息为空");
-        else if(jobInfo.getSalary() == null)
-            throw new SelfDesignException("兼职工资信息为空");
         Job job = new Job();
         job.setRecruiterId(jobUpVO.getRecruiterId());
         job.setReleaseTime(new Date());
