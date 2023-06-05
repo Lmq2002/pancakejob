@@ -17,6 +17,7 @@ import com.jbgz.pancakejob.utils.SelfDesignException;
 import com.jbgz.pancakejob.vo.JobDataVO;
 import com.jbgz.pancakejob.vo.JobInfoVO;
 import com.jbgz.pancakejob.vo.JobUpVO;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -166,27 +167,38 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job>
             throw new SelfDesignException("兼职地点不能为空");
         if (jobUpVO.getJobInfo().getSalary()==null)
             throw new SelfDesignException("兼职日薪资不能为空");
-        JobInfoVO jobInfo = jobUpVO.getJobInfo();
-        Job job = new Job();
-        job.setRecruiterId(jobUpVO.getRecruiterId());
-        job.setReleaseTime(new Date());
-        if (jobUpVO.isIfRelease())
-            job.setJobState("未审核");
-        else
-            job.setJobState("未发布");
-        job.setJobType(jobInfo.getJobType());
-        job.setWorkName(jobInfo.getJobName());
-        job.setWorkTime(jobInfo.getWorkTime());
-        job.setWorkPlace(jobInfo.getWorkPlace());
-        job.setWorkDetails(jobInfo.getWorkDetails());
-        job.setSalary(jobInfo.getSalary());
-        job.setStartTime(DateTimeTrans.stringToDate(jobInfo.getStartTime()));
-        job.setEndTime(DateTimeTrans.stringToDate(jobInfo.getEndTime()));
-        job.setWorkerNum(jobInfo.getEmployeeNum());
+        try {
+            JobInfoVO jobInfo = jobUpVO.getJobInfo();
+            Job job = new Job();
+            job.setRecruiterId(jobUpVO.getRecruiterId());
+            job.setReleaseTime(new Date());
+            if (jobUpVO.isIfRelease())
+                job.setJobState("未审核");
+            else
+                job.setJobState("未发布");
+            job.setJobType(jobInfo.getJobType());
+            job.setWorkName(jobInfo.getJobName());
+            job.setWorkTime(jobInfo.getWorkTime());
+            job.setWorkPlace(jobInfo.getWorkPlace());
+            job.setWorkDetails(jobInfo.getWorkDetails());
+            job.setSalary(jobInfo.getSalary());
+            job.setStartTime(DateTimeTrans.stringToDate(jobInfo.getStartTime()));
+            job.setEndTime(DateTimeTrans.stringToDate(jobInfo.getEndTime()));
+            job.setWorkerNum(jobInfo.getEmployeeNum());
 
-        int re = jobMapper.insert(job);
-        System.out.println("insert:" + re);
-        return re > 0;
+            int re = jobMapper.insert(job);
+            System.out.println("insert:" + re);
+            return re > 0;
+        }catch (Exception e){
+            System.out.print(e.getMessage());
+            if(e.getClass()== DataIntegrityViolationException.class){
+               if(e.getMessage().contains("FOREIGN KEY (`recruiter_id`)"))
+                   throw new SelfDesignException("不存在该招聘方");
+               if(e.getMessage().contains("FOREIGN KEY (`job_type`)"))
+                   throw new SelfDesignException("不存在该兼职类型");
+            }
+        }
+        return false;
     }
 
     //修改兼职草稿

@@ -21,6 +21,7 @@ import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -57,12 +58,9 @@ JobInfoVO jobInfoVO;
         jobInfoVO.setSalary(new BigDecimal("800.00"));
         jobInfoVO.setEmployeeNum(30);
         jobUpVO.setJobInfo(jobInfoVO);
-        try{
-            jobService.createJob(jobUpVO);
-        }catch (Exception e){
-            assertTrue(e instanceof SelfDesignException);
-            assertEquals("兼职名称不能为空",e.getMessage());
-        }
+        assertThatThrownBy(()->jobService.createJob(jobUpVO))
+                .isInstanceOf(SelfDesignException.class)
+                .hasMessage("兼职名称不能为空");
     }
 
     @Test
@@ -81,12 +79,9 @@ JobInfoVO jobInfoVO;
         jobInfoVO.setSalary(new BigDecimal("800.00"));
         jobInfoVO.setEmployeeNum(30);
         jobUpVO.setJobInfo(jobInfoVO);
-        try{
-            jobService.createJob(jobUpVO);
-        }catch (Exception e){
-            assertTrue(e instanceof SelfDesignException);
-            assertEquals("兼职类型不能为空",e.getMessage());
-        }
+        assertThatThrownBy(()->jobService.createJob(jobUpVO))
+                .isInstanceOf(SelfDesignException.class)
+                .hasMessage("兼职类型不能为空");
     }
 
     @Test
@@ -105,12 +100,9 @@ JobInfoVO jobInfoVO;
         jobInfoVO.setSalary(new BigDecimal("800.00"));
         jobInfoVO.setEmployeeNum(30);
         jobUpVO.setJobInfo(jobInfoVO);
-        try{
-            jobService.createJob(jobUpVO);
-        }catch (Exception e){
-            assertTrue(e instanceof SelfDesignException);
-            assertEquals("兼职详情不能为空",e.getMessage());
-        }
+        assertThatThrownBy(()->jobService.createJob(jobUpVO))
+                .isInstanceOf(SelfDesignException.class)
+                .hasMessage("兼职详情不能为空");
     }
 
     @Test
@@ -129,12 +121,9 @@ JobInfoVO jobInfoVO;
         jobInfoVO.setSalary(new BigDecimal("800.00"));
         jobInfoVO.setEmployeeNum(30);
         jobUpVO.setJobInfo(jobInfoVO);
-        try{
-            jobService.createJob(jobUpVO);
-        }catch (Exception e){
-            assertTrue(e instanceof SelfDesignException);
-            assertEquals("兼职每日时长不能为空",e.getMessage());
-        }
+        assertThatThrownBy(()->jobService.createJob(jobUpVO))
+                .isInstanceOf(SelfDesignException.class)
+                .hasMessage("兼职每日时长不能为空");
     }
 
     @Test
@@ -153,12 +142,9 @@ JobInfoVO jobInfoVO;
         jobInfoVO.setSalary(new BigDecimal("800.00"));
         jobInfoVO.setEmployeeNum(30);
         jobUpVO.setJobInfo(jobInfoVO);
-        try{
-            jobService.createJob(jobUpVO);
-        }catch (Exception e){
-            assertTrue(e instanceof SelfDesignException);
-            assertEquals("兼职开始时间不能为空",e.getMessage());
-        }
+        assertThatThrownBy(()->jobService.createJob(jobUpVO))
+                .isInstanceOf(SelfDesignException.class)
+                .hasMessage("兼职开始时间不能为空");
     }
 
     @Test
@@ -177,12 +163,9 @@ JobInfoVO jobInfoVO;
         jobInfoVO.setSalary(new BigDecimal("800.00"));
         jobInfoVO.setEmployeeNum(30);
         jobUpVO.setJobInfo(jobInfoVO);
-        try{
-            jobService.createJob(jobUpVO);
-        }catch (Exception e){
-            assertTrue(e instanceof SelfDesignException);
-            assertEquals("兼职结束时间不能为空",e.getMessage());
-        }
+        assertThatThrownBy(()->jobService.createJob(jobUpVO))
+                .isInstanceOf(SelfDesignException.class)
+                .hasMessage("兼职结束时间不能为空");
     }
 
     @Test
@@ -201,12 +184,9 @@ JobInfoVO jobInfoVO;
         jobInfoVO.setSalary(new BigDecimal("800.00"));
         jobInfoVO.setEmployeeNum(30);
         jobUpVO.setJobInfo(jobInfoVO);
-        try{
-            jobService.createJob(jobUpVO);
-        }catch (Exception e){
-            assertTrue(e instanceof SelfDesignException);
-            assertEquals("兼职地点不能为空",e.getMessage());
-        }
+        assertThatThrownBy(()->jobService.createJob(jobUpVO))
+                .isInstanceOf(SelfDesignException.class)
+                .hasMessage("兼职地点不能为空");
     }
 
     @Test
@@ -225,12 +205,9 @@ JobInfoVO jobInfoVO;
         jobInfoVO.setSalary(null);
         jobInfoVO.setEmployeeNum(30);
         jobUpVO.setJobInfo(jobInfoVO);
-        try{
-            jobService.createJob(jobUpVO);
-        }catch (Exception e){
-            assertTrue(e instanceof SelfDesignException);
-            assertEquals("兼职日薪资不能为空",e.getMessage());
-        }
+        assertThatThrownBy(()->jobService.createJob(jobUpVO))
+                .isInstanceOf(SelfDesignException.class)
+                .hasMessage("兼职薪资不能为空");
     }
 
     @Test
@@ -270,12 +247,9 @@ JobInfoVO jobInfoVO;
         jobInfoVO.setSalary(new BigDecimal("800.00"));
         jobInfoVO.setEmployeeNum(30);
         jobUpVO.setJobInfo(jobInfoVO);
-        try{
-            jobService.createJob(jobUpVO);
-        }catch (Exception e){
-            assertTrue(e instanceof SelfDesignException);
-            assertEquals("不存在该兼职类型",e.getMessage());
-        }
+        assertThatThrownBy(()->jobService.createJob(jobUpVO))
+                .isInstanceOf(SelfDesignException.class)
+                .hasMessage("不存在该兼职类型");
     }
 
     @Test
@@ -294,12 +268,9 @@ JobInfoVO jobInfoVO;
         jobInfoVO.setSalary(new BigDecimal("800.00"));
         jobInfoVO.setEmployeeNum(30);
         jobUpVO.setJobInfo(jobInfoVO);
-        try{
-            jobService.createJob(jobUpVO);
-        }catch (Exception e){
-            assertTrue(e instanceof SelfDesignException);
-            assertEquals("不存在该招聘方",e.getMessage());
-        }
+        assertThatThrownBy(()->jobService.createJob(jobUpVO))
+                .isInstanceOf(SelfDesignException.class)
+                .hasMessage("不存在该招聘方");
     }
 
 
