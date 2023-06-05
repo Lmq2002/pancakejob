@@ -3,6 +3,7 @@ package com.jbgz.pancakejob.service;
 import com.jbgz.pancakejob.dto.CreateAccountDTO;
 import com.jbgz.pancakejob.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.jbgz.pancakejob.utils.SelfDesignException;
 import com.jbgz.pancakejob.vo.*;
 
 /**
@@ -30,9 +31,9 @@ public interface UserService extends IService<User> {
      * 插入新用户
      * 返回 boolean
      * */
-    boolean regist(RegistVO vo);
+    boolean regist(RegistVO vo) throws SelfDesignException;
 
-    boolean regist2(RegistVO vo,Integer id);
+    boolean regist2(RegistVO vo,Integer id) throws SelfDesignException;
 
     /**
      * 根据user_id修改密码

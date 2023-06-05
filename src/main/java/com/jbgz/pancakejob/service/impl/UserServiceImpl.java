@@ -15,6 +15,7 @@ import com.jbgz.pancakejob.mapper.JobhunterMapper;
 import com.jbgz.pancakejob.mapper.RecruiterMapper;
 import com.jbgz.pancakejob.service.UserService;
 import com.jbgz.pancakejob.mapper.UserMapper;
+import com.jbgz.pancakejob.utils.SelfDesignException;
 import com.jbgz.pancakejob.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -84,12 +85,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     }
 
     @Override
-    public boolean regist(RegistVO vo) {
+    public boolean regist(RegistVO vo) throws SelfDesignException {
+        if(vo.getPassword()==null) throw new SelfDesignException("密码不能为空");
+        if(vo.getEmail()==null) throw new SelfDesignException("邮箱不能为空");
         QueryWrapper<User> qw = new QueryWrapper<>();
         qw.eq("email",vo.getEmail());
         int tmp = userMapper.selectCount(qw);
         if(tmp!=0)
-            return false;
+        {
+            throw new SelfDesignException("该邮箱已被注册");
+        }
         User user = new User();
         user.setEmail(vo.getEmail());
         user.setUserType(vo.getUserType());
@@ -107,10 +112,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     }
 
     @Override
-    public boolean regist2(RegistVO vo, Integer id) {
+    public boolean regist2(RegistVO vo, Integer id) throws SelfDesignException {
         boolean tmp = false;
+        if (id==null) throw new SelfDesignException("ID不能为空");
         if(id<10000)
-            return false;
+            throw new SelfDesignException("ID不合法");
+
         if(vo.getUserType().equals(UserType.ADMIN)){
             Administrator admin = new Administrator();
             admin.setAdminId(id);
@@ -128,6 +135,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
             jobhunter.setJobhunterId(id);
             if(1 == jobhunterMapper.registJobhunter(jobhunter))return true;
         }
+        else throw new SelfDesignException("用户类型不合法");
         return false;
     }
 
