@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class NoticeVO {
 
-    private int adminId;
+    private Integer adminId;
 
     private String content;
 

@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class AppealOrderVO {
-    private int orderId;
+    private Integer orderId;
 
     private String appealContent;
 

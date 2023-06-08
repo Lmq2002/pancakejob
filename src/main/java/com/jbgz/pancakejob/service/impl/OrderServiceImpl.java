@@ -288,8 +288,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
         if (newScore < 0)
             throw new SelfDesignException("评价分数必须大于0");
         DecimalFormat dec = new DecimalFormat("0.00");
-        int re1 = 0;
-        int re2 = 0;
+        int re1,re2;
         if (scoreType.equals("jobhunter")) {
             order.setJobhunterScore(newScore);
             re1 = orderMapper.updateById(order);

@@ -4,9 +4,9 @@ import lombok.Data;
 
 @Data
 public class ReportDealVO {
-    private int jobhunterId;
+    private Integer jobhunterId;
 
-    private int jobId;
+    private Integer jobId;
 
     private String reportResult;
 
