@@ -6,6 +6,7 @@ import com.jbgz.pancakejob.service.NotificationService;
 import com.jbgz.pancakejob.service.OrderService;
 import com.jbgz.pancakejob.service.ReportService;
 import com.jbgz.pancakejob.utils.ResultData;
+import com.jbgz.pancakejob.utils.SelfDesignException;
 import com.jbgz.pancakejob.vo.JobUpVO;
 import com.jbgz.pancakejob.vo.ReportVO;
 import org.springframework.web.bind.annotation.*;
@@ -28,40 +29,38 @@ public class JobController {
 
     //获取所有审核通过的兼职列表
     @GetMapping("/getJobList")
-    public ResultData getJobList(int jobId) {
-        String state = "已通过";
-        if (jobId == -1) {//获取整个兼职列表
-            try {
-                ResultData result = new ResultData();
+    public ResultData getJobList(Integer jobId) {
+        try {
+            if(jobId == null)
+                throw new SelfDesignException("兼职ID为空");
+            ResultData result = new ResultData();
+            String state = "已通过";
+            if (jobId == -1) {//获取整个兼职列表
                 result.data.put("job_list", jobService.getJobList(state));
                 result.message = "请求成功";
                 result.code = Constants.CODE_200;
                 //System.out.println(result);//打印观察
-                return result;
-            } catch (Exception e) {
-                System.out.println("错误信息：" + e.getMessage());
-                return ResultData.error(Constants.CODE_400, e.getMessage());
-            }
-        } else {//获取单个兼职信息
-            try {
-                ResultData result = new ResultData();
+            } else {//获取单个兼职信息
                 result.data.put("job_list", jobService.getJobInfo(jobId));
                 result.message = "请求成功";
                 result.code = Constants.CODE_200;
                 //System.out.println(result);//打印观察
-                return result;
-            } catch (Exception e) {
-                System.out.println("错误信息：" + e.getMessage());
-                return ResultData.error(Constants.CODE_400, e.getMessage());
             }
+            return result;
+        } catch (Exception e) {
+            System.out.println("错误信息：" + e.getMessage());
+            return ResultData.error(Constants.CODE_400, e.getMessage());
         }
+
 
     }
 
     //获取所有招聘方管理的兼职列表
     @GetMapping("/getAllJobList")
-    public ResultData getAllJobList(int recruiterId) {
+    public ResultData getAllJobList(Integer recruiterId) {
         try {
+            if(recruiterId == null)
+                throw new SelfDesignException("招聘方ID为空");
             ResultData result = new ResultData();
             result.data.put("job_list", jobService.getAllJobList(recruiterId));
             result.message = "请求成功";
@@ -78,6 +77,8 @@ public class JobController {
     @PostMapping("/upJob")
     public ResultData upJob(@RequestBody JobUpVO jobVO) {
         try {
+            if(jobVO.getRecruiterId() == null)
+                throw new SelfDesignException("招聘方ID为空");
             ResultData result = new ResultData();
             boolean re = jobService.createJob(jobVO);
             if (re) {
@@ -97,8 +98,10 @@ public class JobController {
 
     //结束招聘
     @PutMapping("/closeRecruit")
-    public ResultData closeRecruit(int jobId) {
+    public ResultData closeRecruit(Integer jobId) {
         try {
+            if(jobId == null)
+                throw new SelfDesignException("兼职ID为空");
             ResultData result = new ResultData();
             jobService.closeRecruit(jobId);
             //修改剩余报名者的结果为未通过
@@ -124,6 +127,12 @@ public class JobController {
     @PostMapping("/reportJob")
     public ResultData reportJob(@RequestBody ReportVO reportVO) {
         try {
+            if(reportVO.getJobId() == null)
+                throw new SelfDesignException("兼职ID为空");
+            if(reportVO.getJobhunterId() == null)
+                throw new SelfDesignException("求职者ID为空");
+            if(reportVO.getReason()== null)
+                throw new SelfDesignException("举报理由为空");
             ResultData result = new ResultData();
             boolean re = reportService.createReport(reportVO);
             if (re) {

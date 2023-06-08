@@ -8,5 +8,5 @@ public class NotificationVO {
 
     private String content;
 
-    private int userId;
+    private Integer userId;
 }

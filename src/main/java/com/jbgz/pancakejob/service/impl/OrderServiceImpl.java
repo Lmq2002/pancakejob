@@ -16,6 +16,7 @@ import com.jbgz.pancakejob.utils.DateTimeTrans;
 import com.jbgz.pancakejob.utils.SelfDesignException;
 import com.jbgz.pancakejob.vo.ApplyJobVO;
 import org.springframework.stereotype.Service;
+
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
@@ -176,6 +177,8 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
 
     //报名兼职
     public int createOrder(ApplyJobVO applyJobVO) throws SelfDesignException {
+        if(applyJobVO.getApplyReason() == null)
+            throw new SelfDesignException("申请理由为空");
         Job job = jobMapper.selectById(applyJobVO.getJobId());
         if (job == null)
             throw new SelfDesignException("不存在该兼职信息");
@@ -285,12 +288,13 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
             throw new SelfDesignException("订单不存在");
         else if (!order.getOrderState().equals("已完成"))
             throw new SelfDesignException("订单还未完成");
-        if (newScore < 0)
-            throw new SelfDesignException("评价分数必须大于0");
+        if (newScore < 1 || newScore > 5)
+            throw new SelfDesignException("评分分数不在1-5区间");
         DecimalFormat dec = new DecimalFormat("0.00");
-        int re1 = 0;
-        int re2 = 0;
-        if (scoreType.equals("jobhunter")) {
+        int re1, re2;
+        if(scoreType == null)
+            throw new SelfDesignException("评价类型为空");
+        else if (scoreType.equals("jobhunter")) {
             order.setJobhunterScore(newScore);
             re1 = orderMapper.updateById(order);
             double avgScore = orderMapper.averageJobhunterScore(order.getJobhunterId());

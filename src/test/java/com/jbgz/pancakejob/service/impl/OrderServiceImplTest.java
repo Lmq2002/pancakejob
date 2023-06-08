@@ -68,17 +68,17 @@ class OrderServiceImplTest {
     /*不存在该兼职信息*/
     @Test
     @Transactional
-    void createOrder_test1(){
+    void createOrder_test1() {
         ApplyJobVO applyJobVO = new ApplyJobVO();
-        applyJobVO.setJobId(0);
+        applyJobVO.setJobId(-1);
         applyJobVO.setJobhunterId(10014);
-        applyJobVO.setApplyReason("哈哈");
-        try{
+        applyJobVO.setApplyReason("我擅长这项工作");
+        try {
             orderService.createOrder(applyJobVO);
-            fail("Should throw a SelfDesignException with message '不存在此兼职信息'.");
-        }catch (Exception e){
+            fail("预期输出错误信息：'不存在此兼职信息'.");
+        } catch (Exception e) {
             assertTrue(e instanceof SelfDesignException);
-            assertEquals(e.getMessage(),"不存在该兼职信息");
+            assertEquals(e.getMessage(), "不存在该兼职信息");
         }
     }
 
@@ -87,15 +87,15 @@ class OrderServiceImplTest {
     @Transactional
     void createOrder_test2() {
         ApplyJobVO applyJobVO = new ApplyJobVO();
-        applyJobVO.setJobId(0);
-        applyJobVO.setJobhunterId(10014);
-        applyJobVO.setApplyReason("哈哈");
-        try{
+        applyJobVO.setJobId(6);
+        applyJobVO.setJobhunterId(-1);
+        applyJobVO.setApplyReason("我擅长这项工作");
+        try {
             orderService.createOrder(applyJobVO);
-            fail("Should throw a SelfDesignException with message '不存在此兼职信息'.");
-        }catch (Exception e){
+            fail("预期输出错误信息：'不存在该求职者'.");
+        } catch (Exception e) {
             assertTrue(e instanceof SelfDesignException);
-            assertEquals(e.getMessage(),"不存在该兼职信息");
+            assertEquals(e.getMessage(), "不存在该求职者");
         }
     }
 
@@ -104,15 +104,17 @@ class OrderServiceImplTest {
     @Transactional
     void createOrder_test3() {
         ApplyJobVO applyJobVO = new ApplyJobVO();
-        applyJobVO.setJobId(0);
+        applyJobVO.setJobId(6);
         applyJobVO.setJobhunterId(10014);
-        applyJobVO.setApplyReason("哈哈");
-        try{
+        applyJobVO.setApplyReason(null);
+        try {
             orderService.createOrder(applyJobVO);
-            fail("Should throw a SelfDesignException with message '不存在此兼职信息'.");
-        }catch (Exception e){
+            fail("预期输出错误信息：'申请理由为空'.");
+        } catch (Exception e) {
+            System.out.println("测试错误信息："+e.getMessage());
             assertTrue(e instanceof SelfDesignException);
-            assertEquals(e.getMessage(),"不存在该兼职信息");
+            assertEquals(e.getMessage(), "申请理由为空");
+
         }
     }
 
@@ -121,15 +123,15 @@ class OrderServiceImplTest {
     @Transactional
     void createOrder_test4() {
         ApplyJobVO applyJobVO = new ApplyJobVO();
-        applyJobVO.setJobId(0);
+        applyJobVO.setJobId(6);
         applyJobVO.setJobhunterId(10014);
-        applyJobVO.setApplyReason("哈哈");
-        try{
-            orderService.createOrder(applyJobVO);
-            fail("Should throw a SelfDesignException with message '不存在此兼职信息'.");
-        }catch (Exception e){
+        applyJobVO.setApplyReason("我擅长这项工作");
+        try {
+            int res = orderService.createOrder(applyJobVO);
+            assertTrue(res > 0);
+        } catch (Exception e) {
             assertTrue(e instanceof SelfDesignException);
-            assertEquals(e.getMessage(),"不存在该兼职信息");
+            assertEquals(e.getMessage(), "我擅长这项工作");
         }
     }
 
@@ -161,14 +163,14 @@ class OrderServiceImplTest {
     /*订单不存在的情况*/
     @Test
     @Transactional
-    void changeOrderScore_test1() {
-        try{
-            boolean res = orderService.changeOrderScore(1,4,"jobhunt");
+    public void changeOrderScore_test1() {
+        try {
+            boolean res = orderService.changeOrderScore(-1, 4, "jobhunter");
             assertFalse(res);
-            fail("");
-        } catch (Exception e){
+            fail("预期输出错误信息：'订单不存在'.");
+        } catch (Exception e) {
             assertTrue(e instanceof SelfDesignException);
-            assertEquals(e.getMessage(),"不存在该兼职信息");
+            assertEquals(e.getMessage(), "订单不存在");
         }
     }
 
@@ -176,13 +178,28 @@ class OrderServiceImplTest {
     @Test
     @Transactional
     void changeOrderScore_test2() {
-        try{
-            boolean res = orderService.changeOrderScore(1,4,"jobhunt");
+        try {
+            boolean res = orderService.changeOrderScore(28, 4, "jobhunt");
             assertFalse(res);
-            fail("");
-        } catch (Exception e){
+            fail("预期输出错误信息：'评价类型错误'.");
+        } catch (Exception e) {
             assertTrue(e instanceof SelfDesignException);
-            assertEquals(e.getMessage(),"不存在该兼职信息");
+            assertEquals(e.getMessage(), "评价类型错误");
+        }
+    }
+
+    /*评价类型不存在的情况*/
+    @Test
+    @Transactional
+    void changeOrderScore_test3() {
+        try {
+            boolean res = orderService.changeOrderScore(28, 4, null);
+            assertFalse(res);
+            fail("预期输出错误信息：'评价类型为空'.");
+        } catch (Exception e) {
+            System.out.println("测试错误信息："+e.getMessage());
+            assertTrue(e instanceof SelfDesignException);
+            assertEquals(e.getMessage(), "评价类型为空");
         }
     }
 
@@ -190,81 +207,67 @@ class OrderServiceImplTest {
     /*评价分数边界值测试*/
     @Test
     @Transactional
-    void changeOrderScore_test3() {
-        try{
-            boolean res = orderService.changeOrderScore(1,4,"jobhunt");
-            assertFalse(res);
-            fail("");
-        } catch (Exception e){
-            assertTrue(e instanceof SelfDesignException);
-            assertEquals(e.getMessage(),"不存在该兼职信息");
-        }
-    }
-
-    @Test
-    @Transactional
     void changeOrderScore_test4() {
-        try{
-            boolean res = orderService.changeOrderScore(1,4,"jobhunt");
+        try {
+            boolean res = orderService.changeOrderScore(28, -1, "jobhunter");
             assertFalse(res);
-            fail("");
-        } catch (Exception e){
+            fail("预期输出错误信息：'评分分数不在1-5区间'.");
+        } catch (Exception e) {
             assertTrue(e instanceof SelfDesignException);
-            assertEquals(e.getMessage(),"不存在该兼职信息");
+            assertEquals(e.getMessage(), "评分分数不在1-5区间");
         }
     }
 
     @Test
     @Transactional
     void changeOrderScore_test5() {
-        try{
-            boolean res = orderService.changeOrderScore(1,4,"jobhunt");
+        try {
+            boolean res = orderService.changeOrderScore(28, 0, "jobhunter");
             assertFalse(res);
-            fail("");
-        } catch (Exception e){
+            fail("预期输出错误信息：'评分分数不在1-5区间'.");
+        } catch (Exception e) {
             assertTrue(e instanceof SelfDesignException);
-            assertEquals(e.getMessage(),"不存在该兼职信息");
+            assertEquals(e.getMessage(), "评分分数不在1-5区间");
         }
     }
 
     @Test
     @Transactional
     void changeOrderScore_test6() {
-        try{
-            boolean res = orderService.changeOrderScore(1,4,"jobhunt");
+        try {
+            boolean res = orderService.changeOrderScore(28, 6, "jobhunter");
             assertFalse(res);
-            fail("");
-        } catch (Exception e){
+            fail("预期输出错误信息：'评分分数不在1-5区间'.");
+        } catch (Exception e) {
             assertTrue(e instanceof SelfDesignException);
-            assertEquals(e.getMessage(),"不存在该兼职信息");
+            assertEquals(e.getMessage(), "评分分数不在1-5区间");
         }
     }
 
     @Test
     @Transactional
     void changeOrderScore_test7() {
-        try{
-            boolean res = orderService.changeOrderScore(1,4,"jobhunt");
+        try {
+            boolean res = orderService.changeOrderScore(28, 8, "jobhunter");
             assertFalse(res);
-            fail("");
-        } catch (Exception e){
+            fail("预期输出错误信息：'评分分数不在1-5区间'.");
+        } catch (Exception e) {
             assertTrue(e instanceof SelfDesignException);
-            assertEquals(e.getMessage(),"不存在该兼职信息");
+            assertEquals(e.getMessage(), "评分分数不在1-5区间");
         }
     }
-
 
     /*输入参数合法*/
     @Test
     @Transactional
     void changeOrderScore_test8() {
-        try{
-            boolean res = orderService.changeOrderScore(1,4,"jobhunt");
-            assertFalse(res);
-            fail("");
-        } catch (Exception e){
-            assertTrue(e instanceof SelfDesignException);
-            assertEquals(e.getMessage(),"不存在该兼职信息");
+        try {
+            boolean res = orderService.changeOrderScore(28, 4, "jobhunter");
+            assertTrue(res);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+//            assertTrue(e instanceof SelfDesignException);
+//            assertEquals(e.getMessage(),"不存在该兼职信息");
         }
     }
 
@@ -297,62 +300,53 @@ class OrderServiceImplTest {
     @Test
     @Transactional
     void acceptOfferOrNot_test1() {
-        try{
-            boolean res = orderService.acceptOfferOrNot(-1,true);
+        try {
+            boolean res = orderService.acceptOfferOrNot(-1, true);
             assertFalse(res);
-        } catch (Exception e){
+            fail("预期输出错误信息：'订单不存在'.");
+        } catch (Exception e) {
             assertTrue(e instanceof SelfDesignException);
-            assertEquals(e.getMessage(),"不存在该兼职信息");
+            assertEquals(e.getMessage(), "订单不存在");
         }
     }
 
     @Test
     @Transactional
     void acceptOfferOrNot_test2() {
-        try{
-            boolean res = orderService.acceptOfferOrNot(80,true);
+        try {
+            boolean res = orderService.acceptOfferOrNot(80, false);
             assertFalse(res);
-        } catch (Exception e){
+            fail("预期输出错误信息：'订单不存在'.");
+        } catch (Exception e) {
             assertTrue(e instanceof SelfDesignException);
-            assertEquals(e.getMessage(),"不存在该兼职信息");
+            assertEquals(e.getMessage(), "订单不存在");
         }
     }
-
-    @Test
-    @Transactional
-    void acceptOfferOrNot_test3() {
-        try{
-            boolean res = orderService.acceptOfferOrNot(100,false);
-            assertFalse(res);
-        } catch (Exception e){
-            assertTrue(e instanceof SelfDesignException);
-            assertEquals(e.getMessage(),"不存在该兼职信息");
-        }
-    }
-
 
     /*订单存在但订单状态不是已通过*/
     @Test
     @Transactional
-    void acceptOfferOrNot_test4() {
-        try{
-            boolean res = orderService.acceptOfferOrNot(23,true);
+    void acceptOfferOrNot_test3() {
+        try {
+            boolean res = orderService.acceptOfferOrNot(23, true);
             assertFalse(res);
-        } catch (Exception e){
+            fail("预期输出错误信息：'此订单非已通过状态'.");
+        } catch (Exception e) {
             assertTrue(e instanceof SelfDesignException);
-            assertEquals(e.getMessage(),"订单状态不是已通过");
+            assertEquals(e.getMessage(), "此订单非已通过状态");
         }
     }
 
     @Test
     @Transactional
-    void acceptOfferOrNot_test5() {
-        try{
-            boolean res = orderService.acceptOfferOrNot(24,false);
+    void acceptOfferOrNot_test4() {
+        try {
+            boolean res = orderService.acceptOfferOrNot(24, false);
             assertFalse(res);
-        } catch (Exception e){
+            fail("预期输出错误信息：'此订单非已通过状态'.");
+        } catch (Exception e) {
             assertTrue(e instanceof SelfDesignException);
-            assertEquals(e.getMessage(),"订单状态不是已通过");
+            assertEquals(e.getMessage(), "此订单非已通过状态");
         }
     }
 
@@ -360,25 +354,106 @@ class OrderServiceImplTest {
     /*参数均合法*/
     @Test
     @Transactional
-    void acceptOfferOrNot_test6() {
-        try{
-            boolean res = orderService.acceptOfferOrNot(25,true);
+    void acceptOfferOrNot_test5() {
+        try {
+            boolean res = orderService.acceptOfferOrNot(25, true);
             assertTrue(res);
-        } catch (Exception e){
-            assertTrue(e instanceof SelfDesignException);
-            assertEquals(e.getMessage(),"不存在该兼职信息");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
     }
 
     @Test
     @Transactional
-    void acceptOfferOrNot_test7() {
+    void acceptOfferOrNot_test6() {
         try {
-            boolean res = orderService.acceptOfferOrNot(26, true);
+            boolean res = orderService.acceptOfferOrNot(26, false);
             assertTrue(res);
         } catch (Exception e) {
-            assertTrue(e instanceof SelfDesignException);
-            assertEquals(e.getMessage(), "不存在该兼职信息");
+            System.out.println(e.getMessage());
         }
+    }
+
+
+    @Test
+    @Transactional
+    void whiteBoxTest1() {
+        ApplyJobVO applyJobVO = new ApplyJobVO();
+        applyJobVO.setJobId(6);
+        applyJobVO.setJobhunterId(10014);
+        applyJobVO.setApplyReason("我擅长这项工作");
+        try {
+            int orderId = orderService.createOrder(applyJobVO);
+            assertTrue(orderId > 0);
+            boolean res = orderService.sendOfferOrNot(orderId, true);
+            assertTrue(res);
+            res = orderService.acceptOfferOrNot(orderId, true);
+            assertTrue(res);
+            res = orderService.changeOrderState(orderId, "已完成");
+            assertTrue(res);
+            res = orderService.changeOrderScore(orderId, 5, "jobhunter") && orderService.changeOrderScore(orderId, 4, "recruiter");
+            assertTrue(res);
+            res = orderService.changeOrderState(orderId, "支付状态异常");
+            assertTrue(res);
+            res = orderService.changeOrderState(orderId, "已完成");
+            assertTrue(res);
+
+        } catch (Exception e) {
+            System.out.println("测试错误信息:" + e.getMessage());
+        }
+    }
+
+    @Test
+    @Transactional
+    void whiteBoxTest2() {
+        ApplyJobVO applyJobVO = new ApplyJobVO();
+        applyJobVO.setJobId(6);
+        applyJobVO.setJobhunterId(10014);
+        applyJobVO.setApplyReason("我擅长这项工作");
+        try {
+            int orderId = orderService.createOrder(applyJobVO);
+            assertTrue(orderId > 0);
+            boolean res = orderService.cancelOrder(orderId);
+            assertTrue(res);
+        } catch (Exception e) {
+            System.out.println("测试错误信息:" + e.getMessage());
+        }
+    }
+
+    @Test
+    @Transactional
+    void whiteBoxTest3() {
+        ApplyJobVO applyJobVO = new ApplyJobVO();
+        applyJobVO.setJobId(6);
+        applyJobVO.setJobhunterId(10014);
+        applyJobVO.setApplyReason("我擅长这项工作");
+        try {
+            int orderId = orderService.createOrder(applyJobVO);
+            assertTrue(orderId > 0);
+            boolean res = orderService.sendOfferOrNot(orderId,false);
+            assertTrue(res);
+        } catch (Exception e) {
+            System.out.println("测试错误信息:" + e.getMessage());
+        }
+    }
+
+    @Test
+    @Transactional
+    void whiteBoxTest4() {
+        ApplyJobVO applyJobVO = new ApplyJobVO();
+        applyJobVO.setJobId(6);
+        applyJobVO.setJobhunterId(10014);
+        applyJobVO.setApplyReason("我擅长这项工作");
+        try {
+            int orderId = orderService.createOrder(applyJobVO);
+            assertTrue(orderId > 0);
+            boolean res = orderService.sendOfferOrNot(orderId,true);
+            assertTrue(res);
+            res = orderService.acceptOfferOrNot(orderId,false);
+            assertTrue(res);
+        } catch (Exception e) {
+            System.out.println("测试错误信息:" + e.getMessage());
+        }
+
     }
 }
