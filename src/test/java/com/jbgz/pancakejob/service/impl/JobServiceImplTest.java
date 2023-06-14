@@ -207,7 +207,7 @@ JobInfoVO jobInfoVO;
         jobUpVO.setJobInfo(jobInfoVO);
         assertThatThrownBy(()->jobService.createJob(jobUpVO))
                 .isInstanceOf(SelfDesignException.class)
-                .hasMessage("兼职薪资不能为空");
+                .hasMessage("兼职日薪资不能为空");
     }
 
     @Test
