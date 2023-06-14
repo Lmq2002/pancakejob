@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class JobUpVO {
-    private int recruiterId;
+    private Integer recruiterId;
 
     private boolean ifRelease;
 

@@ -3,6 +3,7 @@ package com.jbgz.pancakejob.controller;
 import com.jbgz.pancakejob.common.Constants;
 import com.jbgz.pancakejob.service.NotificationService;
 import com.jbgz.pancakejob.utils.ResultData;
+import com.jbgz.pancakejob.utils.SelfDesignException;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,8 +18,10 @@ public class MessageController {
     private NotificationService notificationService;
 
     @GetMapping("/getNotificationList")
-    public ResultData getNotificationList(int userId) {
+    public ResultData getNotificationList(Integer userId) {
         try {
+            if(userId == null)
+                throw new SelfDesignException("用户ID为空");
             ResultData result = new ResultData();
             result.data.put("notification_list", notificationService.getNotificationList(userId));
             result.code = Constants.CODE_200;
@@ -31,8 +34,10 @@ public class MessageController {
     }
 
     @DeleteMapping("/deleteNotification")
-    public ResultData deleteNotification(int notificationId) {
+    public ResultData deleteNotification(Integer notificationId) {
         try {
+            if(notificationId == null)
+                throw new SelfDesignException("通知ID为空");
             ResultData result = new ResultData();
             boolean re = notificationService.deleteNotification(notificationId);
             result.code = Constants.CODE_200;

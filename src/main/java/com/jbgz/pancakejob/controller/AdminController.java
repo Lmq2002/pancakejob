@@ -9,6 +9,7 @@ import com.jbgz.pancakejob.service.JobTypeService;
 import com.jbgz.pancakejob.service.RealnameAuthenticationService;
 import com.jbgz.pancakejob.service.*;
 import com.jbgz.pancakejob.utils.ResultData;
+import com.jbgz.pancakejob.utils.SelfDesignException;
 import com.jbgz.pancakejob.vo.AuditVO;
 import com.jbgz.pancakejob.vo.AppealDealVO;
 import com.jbgz.pancakejob.vo.NoticeVO;
@@ -61,6 +62,8 @@ public class AdminController {
     @PostMapping("/addType")
     public ResultData addType(String typeName) {
         try {
+            if (typeName == null)
+                throw new SelfDesignException("兼职类型名称为空");
             ResultData result = new ResultData();
             int re = jobTypeService.addJobType(typeName);
             result.code = 200;
@@ -78,8 +81,10 @@ public class AdminController {
 
     //删除兼职类型
     @DeleteMapping("/deleteType")
-    public ResultData deleteType(int typeId) {
+    public ResultData deleteType(Integer typeId) {
         try {
+            if (typeId == null)
+                throw new SelfDesignException("兼职类型ID为空");
             ResultData result = new ResultData();
             boolean re = jobTypeService.deleteJobType(typeId);
             result.code = 200;
@@ -97,8 +102,12 @@ public class AdminController {
 
     //修改兼职类型
     @PutMapping("/changeType")
-    public ResultData changeType(int typeId, String typeName) {
+    public ResultData changeType(Integer typeId, String typeName) {
         try {
+            if (typeId == null)
+                throw new SelfDesignException("兼职类型ID为空");
+            if (typeName == null)
+                throw new SelfDesignException("兼职类型名称为空");
             ResultData result = new ResultData();
             int re = jobTypeService.changeJobType(typeId, typeName);
             result.code = 200;
@@ -116,45 +125,47 @@ public class AdminController {
 
     //获取所有待审核的兼职列表
     @GetMapping("/getJobUnreviewed")
-    public ResultData getJobUnreviewed(int jobId) {
-        String state = "未审核";
-        if (jobId == -1) {//获取整个兼职列表
-            try {
-                ResultData result = new ResultData();
+    public ResultData getJobUnreviewed(Integer jobId) {
+        try {
+            if(jobId == null)
+                throw new SelfDesignException("兼职ID为空");
+            ResultData result = new ResultData();
+            String state = "未审核";
+            if (jobId == -1) {//获取整个兼职列表
                 result.data.put("job_list", jobService.getJobList(state));
                 result.message = "请求成功";
-                result.code = 200;
-                System.out.println(result);//打印观察
-                return result;
-            } catch (Exception e) {
-                System.out.println("错误信息：" + e.getMessage());
-                return ResultData.error(Constants.CODE_400, e.getMessage());
-            }
-        } else {//获取单个兼职信息
-            try {
-                ResultData result = new ResultData();
+//              System.out.println(result);//打印观察
+            } else {//获取单个兼职信息
                 result.data.put("job_list", jobService.getJobInfo(jobId));
                 result.message = "请求成功";
-                result.code = 200;
-                System.out.println(result);//打印观察
-                return result;
-            } catch (Exception e) {
-                System.out.println("错误信息：" + e.getMessage());
-                return ResultData.error(Constants.CODE_400, e.getMessage());
+//              System.out.println(result);//打印观察
             }
+            result.code = Constants.CODE_200;
+            return result;
+        } catch (Exception e) {
+            System.out.println("错误信息：" + e.getMessage());
+            return ResultData.error(Constants.CODE_400, e.getMessage());
         }
+
     }
 
     //审核or冻结兼职
     @PostMapping("/auditJobUnreviewed")
-    public ResultData auditJobUnreviewed(int jobId, String jobState) {
+    public ResultData auditJobUnreviewed(Integer jobId, String jobState) {
         try {
+            if(jobId == null)
+                throw new SelfDesignException("兼职ID为空");
+            if (jobState == null)
+                throw new SelfDesignException("兼职状态为空");
             ResultData result = new ResultData();
-            if (jobService.changeJobState(jobId, jobState))
+            if (jobService.changeJobState(jobId, jobState)){
                 result.message = "审核兼职处理成功";
-            else
+                result.code = Constants.CODE_200;
+            }
+            else{
+                result.code = Constants.CODE_400;
                 result.message = "审核兼职处理失败";
-            result.code = Constants.CODE_200;
+            }
             return result;
         } catch (Exception e) {
             System.out.println("错误信息：" + e.getMessage());
@@ -187,6 +198,13 @@ public class AdminController {
     @PostMapping("/dealAppeal")
     public ResultData dealAppeal(@RequestBody AppealDealVO appealDealVO) {
         try {
+            if(appealDealVO.getOrderId() == null)
+                throw new SelfDesignException("订单ID为空");
+            if(appealDealVO.getAppealType() == null)
+                throw new SelfDesignException("申诉类型为空");
+            if(appealDealVO.getAppealResult() == null)
+                throw new SelfDesignException("申诉结果为空");
+
             ResultData result = new ResultData();
             //“求职者评价申诉”、“招聘方评价申诉”、“支付申诉”
             boolean re = appealService.saveDealResult(appealDealVO);
@@ -232,6 +250,12 @@ public class AdminController {
     @PostMapping("/auditReport")
     public ResultData auditReport(@RequestBody ReportDealVO reportDealVO) {
         try {
+            if(reportDealVO.getJobId() == null)
+                throw new SelfDesignException("兼职ID为空");
+            if(reportDealVO.getJobhunterId() == null)
+                throw new SelfDesignException("求职者ID为空");
+            if(reportDealVO.getReportResult() == null)
+                throw new SelfDesignException("举报结果为空");
             ResultData result = new ResultData();
             if (reportDealVO.isReportState())
                 jobService.changeJobState(reportDealVO.getJobId(), "已冻结");
@@ -268,6 +292,8 @@ public class AdminController {
     @PostMapping("/addNotice")
     public ResultData addNotice(@RequestBody NoticeVO noticeVO) {
         try {
+            if(noticeVO.getAdminId() == null)
+                throw new SelfDesignException("管理员ID为空");
             ResultData result = new ResultData();
             boolean re = noticeService.addNotice(noticeVO);
             result.code = Constants.CODE_200;
@@ -284,8 +310,12 @@ public class AdminController {
 
     //发布、撤销公告
     @PutMapping("/releaseOrRepealNotice")
-    public ResultData releaseOrRepealNotice(int noticeId, String status) {
+    public ResultData releaseOrRepealNotice(Integer noticeId, String status) {
         try {
+            if(noticeId == null)
+                throw new SelfDesignException("公告ID为空");
+            if(status == null)
+                throw new SelfDesignException("公告状态为空");
             ResultData result = new ResultData();
             boolean re = noticeService.manageNotice(noticeId, status);
             if (re)
@@ -302,8 +332,10 @@ public class AdminController {
 
     //删除公告
     @DeleteMapping("/deleteNotice")
-    public ResultData deleteNotice(int noticeId) {
+    public ResultData deleteNotice(Integer noticeId) {
         try {
+            if(noticeId == null)
+                throw new SelfDesignException("公告ID为空");
             ResultData result = new ResultData();
             boolean re = noticeService.deleteNotice(noticeId);
             if (re)
@@ -408,4 +440,3 @@ public class AdminController {
     }
 
 }
-

@@ -4,9 +4,9 @@ import lombok.Data;
 
 @Data
 public class ReportVO {
-    private int jobId;
+    private Integer jobId;
 
-    private int jobhunterId;
+    private Integer jobhunterId;
 
     private String reason;
 }
