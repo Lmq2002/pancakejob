@@ -78,13 +78,27 @@ public class AppealServiceImpl extends ServiceImpl<AppealMapper, Appeal>
             throw new SelfDesignException("申诉类型为空");
         else if (appealOrderVO.getAppealContent() == null)
             throw new SelfDesignException("申诉理由为空");
-        Appeal appeal = new Appeal();
-        appeal.setOrderId(appealOrderVO.getOrderId());
-        appeal.setAppealType(appealOrderVO.getAppealType());
-        appeal.setAppealContent(appealOrderVO.getAppealContent());
-        appeal.setAppealTime(new Date());
-        appeal.setStatus("未审核");
-        return appealMapper.insert(appeal) > 0;
+
+        QueryWrapper<Appeal> appealWrapper = new QueryWrapper<>();
+        appealWrapper.eq("order_id", appealOrderVO.getOrderId())
+                .eq("appeal_type", appealOrderVO.getAppealType())
+                .eq("status","未审核");
+//                .orderByDesc("appeal_time");
+//        List<Appeal> appealList = appealMapper.selectList(appealWrapper);
+//        if(appealList.size() > 0)
+//            if(appealList.get(0).getStatus().equals("未审核"))
+//                throw new SelfDesignException("对此订单提出的当前类型的申诉还未处理");
+        if(appealMapper.selectOne(appealWrapper) != null)
+            throw new SelfDesignException("对此订单提出的当前类型的申诉还未处理");
+        else{
+            Appeal appeal = new Appeal();
+            appeal.setOrderId(appealOrderVO.getOrderId());
+            appeal.setAppealType(appealOrderVO.getAppealType());
+            appeal.setAppealContent(appealOrderVO.getAppealContent());
+            appeal.setAppealTime(new Date());
+            appeal.setStatus("未审核");
+            return appealMapper.insert(appeal) > 0;
+        }
     }
 
     //获取待处理的申诉列表userId=-1
@@ -109,18 +123,27 @@ public class AppealServiceImpl extends ServiceImpl<AppealMapper, Appeal>
             throw new SelfDesignException("申诉处理结果为空");
 
         QueryWrapper<Appeal> appealWrapper = new QueryWrapper<>();
-        appealWrapper.eq("order_id", appealDealVO.getOrderId()).eq("appeal_type", appealDealVO.getAppealType());
-        Appeal appeal = new Appeal();
-        if(appealMapper.selectCount(appealWrapper) == 0)
-            throw new SelfDesignException("无相关申诉");
-        appeal.setOrderId(appealDealVO.getOrderId());
-        appeal.setAppealType(appealDealVO.getAppealType());
-        appeal.setAppealResult(appealDealVO.getAppealResult());
-        if (appealDealVO.isStatus())
-            appeal.setStatus("已通过");
-        else
-            appeal.setStatus("未通过");
-        int re = appealMapper.update(appeal, appealWrapper);
+        appealWrapper.eq("order_id", appealDealVO.getOrderId())
+                .eq("appeal_type", appealDealVO.getAppealType())
+                .eq("status","未审核");
+//                .orderByDesc("appeal_time");
+//        Appeal appeal = new Appeal();
+        int re;
+        List<Appeal> appealList = appealMapper.selectList(appealWrapper);
+        if(appealList.size() == 0)
+            throw new SelfDesignException("无相关申诉或申诉已处理");
+        else{
+            Appeal appeal = appealList.get(0);
+            appeal.setAppealResult(appealDealVO.getAppealResult());
+            if (appealDealVO.isStatus())
+                appeal.setStatus("已通过");
+            else
+                appeal.setStatus("未通过");
+//            appealWrapper.eq("order_id", appealDealVO.getOrderId())
+//                    .eq("appeal_type", appealDealVO.getAppealType())
+//                    .eq("appeal_time", appeal.getAppealTime());
+            re = appealMapper.update(appeal, appealWrapper);
+        }
         return re > 0;
     }
 

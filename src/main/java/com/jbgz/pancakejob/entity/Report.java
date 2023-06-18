@@ -30,6 +30,7 @@ public class Report implements Serializable {
     /**
      * 
      */
+    @TableId
     private Date reportTime;
 
     /**
