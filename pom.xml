@@ -15,6 +15,11 @@
     <description>pancakejob</description>
     <properties>
         <java.version>17</java.version>
+        <jacoco.version>0.8.8</jacoco.version>
+<!--        <jacoco.report.minimum>0.80</jacoco.report.minimum>-->
+<!--        <jacoco.report.excludes>**/*Test*</jacoco.report.excludes>-->
+        <jacoco.report.includes>com/jbgz/pancakejob/service/impl/**.class</jacoco.report.includes>
+<!--        <jacoc.report.excludes>com/jbgz/pancakejob/**</jacoc.report.excludes>-->
     </properties>
     <dependencies>
         <dependency>
@@ -80,15 +85,18 @@
             <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
+
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-junit5</artifactId>
+            <version>2.14.0</version>
             <scope>test</scope>
         </dependency>
+
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-maven</artifactId>
+            <version>2.10.0</version>
         </dependency>
 
     </dependencies>
@@ -108,6 +116,21 @@
                     </excludes>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0-M5</version>
+                <configuration>
+                    <testFailureIgnore>true</testFailureIgnore>
+                    <systemProperties>
+                        <property>
+                            <name>allure.results.directory</name>
+                            <value>${project.build.directory}/allure-results</value>
+                        </property>
+                    </systemProperties>
+                </configuration>
+            </plugin>
+
         </plugins>
     </build>
 
