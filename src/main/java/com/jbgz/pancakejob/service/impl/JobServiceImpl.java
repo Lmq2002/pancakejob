@@ -113,7 +113,8 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job>
     public List<JobDTO> getJobList(String state) {
         QueryWrapper<Job> jobQueryWrapper = new QueryWrapper<Job>();
         //筛选已发布且正在招聘的兼职
-        jobQueryWrapper.eq("job_state", "已通过");
+        //state没用上，前端需要多状态，lmq 2023/6/18
+        jobQueryWrapper.eq("job_state", state);
         List<JobDTO> jobDTOList = getJobListDTO(jobMapper.selectList(jobQueryWrapper));
         return jobDTOList;
     }

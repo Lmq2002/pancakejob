@@ -7,6 +7,10 @@ import java.math.BigDecimal;
 
 @Data
 public class OrderJobDTO {
+
+    @JsonProperty("jobId")
+    private Integer jobId;
+
     @JsonProperty("workName")
     private String workName;
 

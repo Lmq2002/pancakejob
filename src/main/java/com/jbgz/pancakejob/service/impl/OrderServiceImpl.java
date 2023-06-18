@@ -45,10 +45,12 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
     //转换单个订单的DTO
     public OrderDTO getOrderDTO(Order order) {
         OrderDTO orderDTO = new OrderDTO();
+
         orderDTO.setOrderId(order.getOrderId());
         orderDTO.setOrderState(order.getOrderState());
         OrderJobDTO orderJobDTO = new OrderJobDTO();
         Job job = jobMapper.selectById(order.getJobId());
+        orderJobDTO.setJobId(job.getJobId());       // 添加jobId 2023/6/18 lmq 跳转需求
         orderJobDTO.setWorkName(job.getWorkName());
         orderJobDTO.setWorkPlace(job.getWorkPlace());
         orderJobDTO.setStartTime(DateTimeTrans.datetimeToString(job.getStartTime()));
