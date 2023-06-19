@@ -7,8 +7,8 @@
     <resultMap id="BaseResultMap" type="com.jbgz.pancakejob.entity.Appeal">
             <id property="orderId" column="order_id" jdbcType="INTEGER"/>
             <id property="appealType" column="appeal_type" jdbcType="VARCHAR"/>
+            <id property="appealTime" column="appeal_time" jdbcType="TIMESTAMP"/>
             <result property="appealContent" column="appeal_content" jdbcType="VARCHAR"/>
-            <result property="appealTime" column="appeal_time" jdbcType="TIMESTAMP"/>
             <result property="appealResult" column="appeal_result" jdbcType="VARCHAR"/>
             <result property="status" column="status" jdbcType="VARCHAR"/>
     </resultMap>

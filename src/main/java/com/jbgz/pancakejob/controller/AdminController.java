@@ -217,6 +217,10 @@ public class AdminController {
                     re = orderService.changeOrderScore(appealDealVO.getOrderId(), 0, "recruiter");
                 }
             }
+            else if(!appealDealVO.isStatus()){
+                if(appealDealVO.getAppealType().equals("支付申诉"))
+                    re = orderService.changeOrderState(appealDealVO.getOrderId(),"已完成");
+            }
             if (re) {
                 result.code = Constants.CODE_200;
                 result.message = "审核订单申诉成功";

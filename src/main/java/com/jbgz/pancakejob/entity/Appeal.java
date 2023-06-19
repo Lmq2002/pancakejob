@@ -35,6 +35,7 @@ public class Appeal implements Serializable {
     /**
      * 
      */
+    @TableId
     private Date appealTime;
 
     /**

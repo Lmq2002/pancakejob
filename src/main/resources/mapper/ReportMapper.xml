@@ -7,7 +7,7 @@
     <resultMap id="BaseResultMap" type="com.jbgz.pancakejob.entity.Report">
             <id property="jobhunterId" column="jobhunter_id" jdbcType="INTEGER"/>
             <id property="jobId" column="job_id" jdbcType="INTEGER"/>
-            <result property="reportTime" column="report_time" jdbcType="TIMESTAMP"/>
+            <id property="reportTime" column="report_time" jdbcType="TIMESTAMP"/>
             <result property="reportReason" column="report_reason" jdbcType="VARCHAR"/>
             <result property="reportState" column="report_state" jdbcType="VARCHAR"/>
             <result property="reportResult" column="report_result" jdbcType="VARCHAR"/>
