@@ -157,7 +157,16 @@ public class OrderController {
             if(orderId == null)
                 throw new SelfDesignException("订单ID为空");
             ResultData result = new ResultData();
-            boolean accept = orderState.equals("已录用");
+            boolean accept;
+            if(orderState == null)
+                throw new SelfDesignException("接受结果为空");
+            else if(orderState.equals("已录用"))
+                accept = true;
+            else if(orderState.equals("已放弃"))
+                accept = false;
+            else
+                throw new SelfDesignException("接受结果不合理");
+
             boolean re = orderService.acceptOfferOrNot(orderId, accept);
             /*向招聘方发送通知*/
             if (re) {
@@ -188,7 +197,16 @@ public class OrderController {
             if(orderId == null)
                 throw new SelfDesignException("订单ID为空");
             ResultData result = new ResultData();
-            boolean send = orderState.equals("已通过");
+            boolean send;
+            if(orderState == null)
+                throw new SelfDesignException("通过结果为空");
+            else if(orderState.equals("已通过"))
+                send = true;
+            else if(orderState.equals("未通过"))
+                send = false;
+            else
+                throw new SelfDesignException("通过结果不合理");
+
             boolean re = orderService.sendOfferOrNot(orderId, send);
             /*NotificationService向求职者发送通知*/
             if (re) {
@@ -287,8 +305,16 @@ public class OrderController {
         try {
             if(appealOrderVO.getOrderId() == null)
                 throw new SelfDesignException("订单ID为空");
+            if(appealOrderVO.getAppealType() == null)
+                throw new SelfDesignException("申诉类型为空");
+            if(appealOrderVO.getAppealContent() == null)
+                throw new SelfDesignException("申诉理由为空");
             ResultData result = new ResultData();
 
+            if(!(appealOrderVO.getAppealType().equals("求职者评价申诉")
+                    || appealOrderVO.getAppealType().equals("求职者评价申诉")
+                    || appealOrderVO.getAppealType().equals("求职者评价申诉")))
+                throw new SelfDesignException("申诉类型不合理");
             //是否要判断订单是否已有某类型的申诉？
 
             if (appealOrderVO.getAppealType().equals("支付申诉"))

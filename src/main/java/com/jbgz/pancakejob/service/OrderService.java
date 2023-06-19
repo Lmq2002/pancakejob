@@ -29,7 +29,7 @@ public interface OrderService extends IService<Order> {
     List<OrderAcceptedDTO> getOrderAcceptedDTOList(List<Order> orderList);
     List<OrderAcceptedDTO> getOrderAcceptedList(int jobId) throws SelfDesignException;
 
-    String getApplyState(int jobhunterId,int jobId);
+    String getApplyState(int jobhunterId,int jobId) throws SelfDesignException;
     int createOrder(ApplyJobVO applyJobVO) throws SelfDesignException;
     boolean cancelOrder(int orderId) throws SelfDesignException ;
     boolean changeOrderState(int orderId,String newState) throws SelfDesignException ;
