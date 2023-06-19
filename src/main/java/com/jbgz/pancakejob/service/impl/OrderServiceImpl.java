@@ -162,7 +162,11 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
     }
 
     //获取兼职报名状态
-    public String getApplyState(int jobhunterId, int jobId) {
+    public String getApplyState(int jobhunterId, int jobId) throws SelfDesignException {
+        if(jobMapper.selectById(jobId) == null)
+            throw new SelfDesignException("不存在该兼职信息");
+        if(jobhunterMapper.selectById(jobhunterId) == null)
+            throw new SelfDesignException("不存在该求职者");
         QueryWrapper<Order> orderWrapper = new QueryWrapper<Order>();
         orderWrapper.eq("jobhunter_id", jobhunterId).eq("job_id", jobId).orderByDesc("apply_time");
         List<Order> orders = orderMapper.selectList(orderWrapper);
@@ -348,10 +352,11 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
 
     //招聘方确认工作完成
     public boolean finishOrder(int orderId) throws SelfDesignException {
-        changeOrderState(orderId, "已完成");
+
         Order order = orderMapper.selectById(orderId);
         if (order == null)
             throw new SelfDesignException("订单不存在");
+        changeOrderState(orderId, "已完成");
         Job job = jobMapper.selectById(order.getJobId());
         job.setFinishedNum(job.getFinishedNum() + 1);
         //如果所有工作订单均已完成且已结束招聘，将兼职状态修改为已完成

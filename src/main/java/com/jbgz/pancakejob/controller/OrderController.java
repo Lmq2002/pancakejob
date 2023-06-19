@@ -287,6 +287,10 @@ public class OrderController {
         try {
             if(appealOrderVO.getOrderId() == null)
                 throw new SelfDesignException("订单ID为空");
+            if(appealOrderVO.getAppealType() == null)
+                throw new SelfDesignException("申诉类型为空");
+            if(appealOrderVO.getAppealContent() == null)
+                throw new SelfDesignException("申诉理由为空");
             ResultData result = new ResultData();
 
             //是否要判断订单是否已有某类型的申诉？
