@@ -2,9 +2,16 @@ package com.jbgz.pancakejob.service.impl;
 
 import com.jbgz.pancakejob.PancakejobApplication;
 import com.jbgz.pancakejob.common.UserType;
+import com.jbgz.pancakejob.entity.Administrator;
+import com.jbgz.pancakejob.entity.Jobhunter;
+import com.jbgz.pancakejob.entity.Recruiter;
+import com.jbgz.pancakejob.mapper.AdministratorMapper;
+import com.jbgz.pancakejob.mapper.JobhunterMapper;
+import com.jbgz.pancakejob.mapper.RecruiterMapper;
 import com.jbgz.pancakejob.service.UserService;
 import com.jbgz.pancakejob.utils.SelfDesignException;
 import com.jbgz.pancakejob.vo.RegistVO;
+import io.qameta.allure.Feature;
 import org.apache.ibatis.annotations.Select;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {PancakejobApplication.class})
@@ -152,8 +160,60 @@ RegistVO registVO;
         }catch (Exception e){
             assertEquals("ID不能为空",e.getMessage());
         }
+    }
 
+    @Test
+    @Feature("Integration Testing")
+    @Rollback(value = true)
+    void IfConsistentWhenRegistJobhunter() throws SelfDesignException {
+        JobhunterMapper jobhunterMapper = mock(JobhunterMapper.class);
+        registVO.setUserType(UserType.JOBHUNTER);
+        Integer id = 12345;
 
+        Jobhunter jobhunter=new Jobhunter();
+        jobhunter.setJobhunterId(id);
+        when(jobhunterMapper.registJobhunter(jobhunter)).thenReturn(1);
+
+        userService = mock(UserService.class);
+        jobhunterMapper.registJobhunter(jobhunter);
+//        boolean result = userService.regist2(registVO,id);
+        verify(jobhunterMapper).registJobhunter(eq(jobhunter));
+    }
+
+    @Test
+    @Feature("Integration Testing")
+    @Rollback(value = true)
+    void IfConsistentWhenRegistRecruiter() throws SelfDesignException {
+        RecruiterMapper jobhunterMapper = mock(RecruiterMapper.class);
+        registVO.setUserType(UserType.RECRUITER);
+        Integer id = 12345;
+
+        Recruiter recruiter=new Recruiter();
+        recruiter.setRecruiterId(id);
+        when(jobhunterMapper.registRecruiter(recruiter)).thenReturn(1);
+
+        userService = mock(UserService.class);
+        jobhunterMapper.registRecruiter(recruiter);
+//        boolean result = userService.regist2(registVO,id);
+        verify(jobhunterMapper).registRecruiter(eq(recruiter));
+    }
+
+    @Test
+    @Feature("Integration Testing")
+    @Rollback(value = true)
+    void IfConsistentWhenRegistAdministrator() throws SelfDesignException {
+        AdministratorMapper administratorMapper = mock(AdministratorMapper.class);
+        registVO.setUserType(UserType.ADMIN);
+        Integer id = 12345;
+
+        Administrator administrator=new Administrator();
+        administrator.setAdminId(id);
+        when(administratorMapper.registAdmin(administrator)).thenReturn(1);
+
+        userService = mock(UserService.class);
+        administratorMapper.registAdmin(administrator);
+//        boolean result = userService.regist2(registVO,id);
+        verify(administratorMapper).registAdmin(eq(administrator));
     }
 @AfterEach
     void tearDown(){

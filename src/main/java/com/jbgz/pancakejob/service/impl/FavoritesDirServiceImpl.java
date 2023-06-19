@@ -13,6 +13,7 @@ import com.jbgz.pancakejob.service.JobService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.*;
 
 /**
@@ -24,16 +25,16 @@ import java.util.*;
 public class FavoritesDirServiceImpl extends ServiceImpl<FavoritesDirMapper, FavoritesDir>
     implements FavoritesDirService{
 
-    @Autowired
+    @Resource
     private FavoritesDirMapper favoritesDirMapper;
 
-    @Autowired
-    private CollectJobMapper collectJobMapper;
+//    @Autowired
+//    private CollectJobMapper collectJobMapper;
 
 //    @Autowired
 //    private JobMapper jobMapper;
 
-    @Autowired
+    @Resource
     private JobService jobService;
 
 //    @Override

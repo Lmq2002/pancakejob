@@ -43,6 +43,7 @@ public class LoginController {
     public ResultData createAccount(@RequestBody EmailAccountVO vo){
         UserService service = new UserServiceImpl();
         try{
+            if(vo.getEmail()==null)return new ResultData(Constants.CODE_400,"邮箱为空",null);
             CreateAccountDTO dto = service.createAccount(vo);
             if(dto!=null){
                 ResultData result = new ResultData(Constants.CODE_200,"SUCCESS",new HashMap<>());
@@ -69,6 +70,7 @@ public class LoginController {
     public ResultData ifEmailExist(@RequestBody EmailAccountVO vo){
         //UserService service = new UserServiceImpl();
         try{
+            if (vo.getEmail()==null)return new ResultData(Constants.CODE_400,"邮箱为空",null);
             boolean exist = userService.findEmail(vo);
             if(exist){
                 return ResultData.error(Constants.CODE_400,"邮箱已注册");
@@ -106,7 +108,7 @@ public class LoginController {
         }
         catch (Exception e){
             System.out.println("异常情况:"+e.getMessage());
-            return ResultData.sys_error();
+            return new ResultData(Constants.CODE_400, e.getMessage(),null);
         }
     }
 
@@ -122,6 +124,8 @@ public class LoginController {
     public ResultData alterPassword(@RequestBody FindPasswordVO vo)
     {
         try{
+            if(vo.getPassword()==null) return new ResultData(Constants.CODE_400,"密码为空",null);
+            if(vo.getEmail()==null) return new ResultData(Constants.CODE_400,"邮箱为空",null);
             boolean tmp = userService.alterPassword(vo);
             if(tmp)
                 return new ResultData(Constants.CODE_200,"修改成功",null);
@@ -146,6 +150,8 @@ public class LoginController {
     public ResultData login(@RequestBody LoginVO vo)
     {
         try{
+            if(vo.getAccount()==null)return new ResultData(Constants.CODE_400,"账号为空",null);
+            if(vo.getPassword()==null)return new ResultData(Constants.CODE_400,"密码为空",null);
             User user = null;
             if(vo.getAccount().contains("@")){
                 QueryWrapper<User> qw = new QueryWrapper<>();
@@ -201,21 +207,21 @@ public class LoginController {
         //return ResultData.sys_error();
     }
 
-    /**
-     * 功能：修改密码
-     * 状态：正在开发中
-     * 负责人：Lmq
-     * 新建时间：2022/12/28
-     * */
-    @PutMapping("/password")
-    public ResultData modifyPassword(@RequestBody User user)
-    {
-        return ResultData.error();
-    }
-    @RequestMapping("/hello")
-    public String hello() {
-        return "hello springboot";
-    }
+//    /**
+//     * 功能：修改密码
+//     * 状态：正在开发中
+//     * 负责人：Lmq
+//     * 新建时间：2022/12/28
+//     * */
+//    @PutMapping("/password")
+//    public ResultData modifyPassword(@RequestBody User user)
+//    {
+//        return ResultData.error();
+//    }
+//    @RequestMapping("/hello")
+//    public String hello() {
+//        return "hello springboot";
+//    }
 //
 //    @PostMapping("/find")
 //    public int find(@RequestBody User user){

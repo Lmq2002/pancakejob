@@ -20,6 +20,7 @@ import com.jbgz.pancakejob.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.Date;
 
 /**
@@ -31,13 +32,13 @@ import java.util.Date;
 public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     implements UserService{
 
-    @Autowired
+    @Resource
     private UserMapper userMapper;
-    @Autowired
+    @Resource
     private JobhunterMapper jobhunterMapper;
-    @Autowired
+    @Resource
     private RecruiterMapper recruiterMapper;
-    @Autowired
+    @Resource
     private AdministratorMapper administratorMapper;
     @Override
     public User login(LoginVO vo) {
@@ -88,6 +89,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     public boolean regist(RegistVO vo) throws SelfDesignException {
         if(vo.getPassword()==null) throw new SelfDesignException("密码不能为空");
         if(vo.getEmail()==null) throw new SelfDesignException("邮箱不能为空");
+        if(vo.getUserType()==null) throw new SelfDesignException("用户类型不能为空");
         QueryWrapper<User> qw = new QueryWrapper<>();
         qw.eq("email",vo.getEmail());
         int tmp = userMapper.selectCount(qw);
