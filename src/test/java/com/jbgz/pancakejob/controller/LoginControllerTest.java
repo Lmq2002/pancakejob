@@ -56,16 +56,6 @@ class LoginControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @LocalServerPort
-    private int port;
-
-    @Autowired
-    private WebTestClient webTestClient;
-    @Autowired
-    private PlatformTransactionManager transactionManager;
-
-    @Autowired
-    private TestRestTemplate restTemplate;
 
     @BeforeEach
     void setUp() {
