@@ -9,6 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,6 +39,7 @@ class OrderServiceImplTest {
 
 //    测试控制台输出的代码版本
 //    @Test
+//    @Rollback
 //    @Transactional
 //    void createOrder_test() {
 //        ApplyJobVO applyJobVO = new ApplyJobVO();
@@ -67,6 +69,7 @@ class OrderServiceImplTest {
 
     /*不存在该兼职信息*/
     @Test
+    @Rollback
     @Transactional
     void createOrder_test1() {
         ApplyJobVO applyJobVO = new ApplyJobVO();
@@ -84,6 +87,7 @@ class OrderServiceImplTest {
 
     /*不存在该求职者*/
     @Test
+    @Rollback
     @Transactional
     void createOrder_test2() {
         ApplyJobVO applyJobVO = new ApplyJobVO();
@@ -101,6 +105,7 @@ class OrderServiceImplTest {
 
     /*申请原因为空*/
     @Test
+    @Rollback
     @Transactional
     void createOrder_test3() {
         ApplyJobVO applyJobVO = new ApplyJobVO();
@@ -120,6 +125,7 @@ class OrderServiceImplTest {
 
     /*参数合法*/
     @Test
+    @Rollback
     @Transactional
     void createOrder_test4() {
         ApplyJobVO applyJobVO = new ApplyJobVO();
@@ -162,6 +168,7 @@ class OrderServiceImplTest {
 
     /*订单不存在的情况*/
     @Test
+    @Rollback
     @Transactional
     public void changeOrderScore_test1() {
         try {
@@ -176,6 +183,7 @@ class OrderServiceImplTest {
 
     /*评价类型不存在的情况*/
     @Test
+    @Rollback
     @Transactional
     void changeOrderScore_test2() {
         try {
@@ -190,6 +198,7 @@ class OrderServiceImplTest {
 
     /*评价类型不存在的情况*/
     @Test
+    @Rollback
     @Transactional
     void changeOrderScore_test3() {
         try {
@@ -206,6 +215,7 @@ class OrderServiceImplTest {
 
     /*评价分数边界值测试*/
     @Test
+    @Rollback
     @Transactional
     void changeOrderScore_test4() {
         try {
@@ -219,6 +229,7 @@ class OrderServiceImplTest {
     }
 
     @Test
+    @Rollback
     @Transactional
     void changeOrderScore_test5() {
         try {
@@ -232,6 +243,7 @@ class OrderServiceImplTest {
     }
 
     @Test
+    @Rollback
     @Transactional
     void changeOrderScore_test6() {
         try {
@@ -245,6 +257,7 @@ class OrderServiceImplTest {
     }
 
     @Test
+    @Rollback
     @Transactional
     void changeOrderScore_test7() {
         try {
@@ -259,6 +272,7 @@ class OrderServiceImplTest {
 
     /*输入参数合法*/
     @Test
+    @Rollback
     @Transactional
     void changeOrderScore_test8() {
         try {
@@ -278,6 +292,7 @@ class OrderServiceImplTest {
 
 //    测试控制台输出的版本
 //    @Test
+//    @Rollback
 //    @Transactional
 //    void acceptOfferOrNot_test() {
 //        //记录“标准”输出流（控制台输出）
@@ -298,6 +313,7 @@ class OrderServiceImplTest {
 
     /*订单不存在的情况*/
     @Test
+    @Rollback
     @Transactional
     void acceptOfferOrNot_test1() {
         try {
@@ -311,6 +327,7 @@ class OrderServiceImplTest {
     }
 
     @Test
+    @Rollback
     @Transactional
     void acceptOfferOrNot_test2() {
         try {
@@ -325,6 +342,7 @@ class OrderServiceImplTest {
 
     /*订单存在但订单状态不是已通过*/
     @Test
+    @Rollback
     @Transactional
     void acceptOfferOrNot_test3() {
         try {
@@ -338,6 +356,7 @@ class OrderServiceImplTest {
     }
 
     @Test
+    @Rollback
     @Transactional
     void acceptOfferOrNot_test4() {
         try {
@@ -353,6 +372,7 @@ class OrderServiceImplTest {
 
     /*参数均合法*/
     @Test
+    @Rollback
     @Transactional
     void acceptOfferOrNot_test5() {
         try {
@@ -364,6 +384,7 @@ class OrderServiceImplTest {
     }
 
     @Test
+    @Rollback
     @Transactional
     void acceptOfferOrNot_test6() {
         try {
@@ -376,6 +397,7 @@ class OrderServiceImplTest {
 
 
     @Test
+    @Rollback
     @Transactional
     void whiteBoxTest1() {
         ApplyJobVO applyJobVO = new ApplyJobVO();
@@ -404,6 +426,7 @@ class OrderServiceImplTest {
     }
 
     @Test
+    @Rollback
     @Transactional
     void whiteBoxTest2() {
         ApplyJobVO applyJobVO = new ApplyJobVO();
@@ -421,6 +444,7 @@ class OrderServiceImplTest {
     }
 
     @Test
+    @Rollback
     @Transactional
     void whiteBoxTest3() {
         ApplyJobVO applyJobVO = new ApplyJobVO();
@@ -438,6 +462,7 @@ class OrderServiceImplTest {
     }
 
     @Test
+    @Rollback
     @Transactional
     void whiteBoxTest4() {
         ApplyJobVO applyJobVO = new ApplyJobVO();
