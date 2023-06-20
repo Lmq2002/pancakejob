@@ -65,6 +65,7 @@ public class NotificationServiceImpl extends ServiceImpl<NotificationMapper, Not
 
     public boolean addNotification(int order_id, String notificationType) throws SelfDesignException {
         //通知类型:结束招聘、录用、拒绝、接受、放弃
+//        System.out.println("订单ID："+ order_id);
         Order order = orderMapper.selectById(order_id);
         if(order == null)
             throw new SelfDesignException("订单不存在");

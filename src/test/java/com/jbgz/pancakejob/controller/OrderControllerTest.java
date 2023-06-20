@@ -349,7 +349,7 @@ class OrderControllerTest {
 
         ApplyJobVO applyJobVO = new ApplyJobVO();
         applyJobVO.setJobhunterId(10015);
-        applyJobVO.setJobId(30);
+        applyJobVO.setJobId(38);
         applyJobVO.setApplyReason("我很细心且认真负责");
 
         MvcResult mvcResult =

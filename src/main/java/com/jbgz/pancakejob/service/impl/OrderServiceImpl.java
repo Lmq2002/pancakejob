@@ -381,9 +381,10 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
         List<Integer> refuseList = new ArrayList<>();
         orders.forEach(order -> {
             order.setOrderState("未通过");
-            refuseList.add(order.getJobhunterId());//获得需要发送未通过通知的人员列表
+            refuseList.add(order.getOrderId());//获得需要发送未通过通知的订单列表
             orderMapper.updateById(order);
         });
+//        System.out.println("订单列表："+ refuseList);
         return refuseList;
     }
 }
