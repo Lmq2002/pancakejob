@@ -5,6 +5,7 @@ import com.jbgz.pancakejob.common.Constants;
 import com.jbgz.pancakejob.utils.ResultData;
 import com.jbgz.pancakejob.vo.AppealOrderVO;
 import com.jbgz.pancakejob.vo.ApplyJobVO;
+import io.qameta.allure.Feature;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -46,6 +47,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @WebAppConfiguration
 @SpringBootTest(classes = {PancakejobApplication.class})
+@Feature("Integration Testing")
 class OrderControllerTest {
 
     @Autowired
@@ -291,7 +293,7 @@ class OrderControllerTest {
 
         ApplyJobVO applyJobVO = new ApplyJobVO();
         applyJobVO.setJobhunterId(10100);
-        applyJobVO.setJobId(6);
+        applyJobVO.setJobId(27);
         applyJobVO.setApplyReason("我很细心且认真负责");
 
         MvcResult mvcResult =

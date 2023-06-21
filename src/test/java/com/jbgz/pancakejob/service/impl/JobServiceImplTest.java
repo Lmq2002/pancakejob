@@ -1,13 +1,24 @@
 package com.jbgz.pancakejob.service.impl;
 
+import com.baomidou.mybatisplus.extension.api.R;
 import com.jbgz.pancakejob.PancakejobApplication;
+import com.jbgz.pancakejob.entity.Job;
+import com.jbgz.pancakejob.entity.Recruiter;
+import com.jbgz.pancakejob.entity.User;
 import com.jbgz.pancakejob.mapper.JobMapper;
+import com.jbgz.pancakejob.mapper.JobTypeMapper;
+import com.jbgz.pancakejob.mapper.RecruiterMapper;
+import com.jbgz.pancakejob.mapper.UserMapper;
 import com.jbgz.pancakejob.service.JobService;
 import com.jbgz.pancakejob.utils.SelfDesignException;
 import com.jbgz.pancakejob.vo.JobInfoVO;
 import com.jbgz.pancakejob.vo.JobUpVO;
+import io.qameta.allure.Feature;
 import org.junit.jupiter.api.*;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,12 +34,15 @@ import java.sql.SQLException;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.*;
 
 
 //@ContextConfiguration(locations = {"classpath:../../main/resources/mapper/JobMapper.xml"})
 //@ContextConfiguration(locations = {"classpath:../../main/java/com/jbgz/pancakejob/service/impl/JobServiceImpl.java"})
 @SpringBootTest(classes = {PancakejobApplication.class})
 @RunWith(SpringRunner.class)
+@Feature("Unit Testing")
 class JobServiceImplTest {
 
     @Resource

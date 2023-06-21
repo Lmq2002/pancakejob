@@ -4,6 +4,7 @@ import com.jbgz.pancakejob.PancakejobApplication;
 import com.jbgz.pancakejob.service.OrderService;
 import com.jbgz.pancakejob.utils.SelfDesignException;
 import com.jbgz.pancakejob.vo.ApplyJobVO;
+import io.qameta.allure.Feature;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {PancakejobApplication.class})
+@Feature("Unit Testing")
 class OrderServiceImplTest {
 
     @Resource
@@ -91,7 +93,7 @@ class OrderServiceImplTest {
     @Transactional
     void createOrder_test2() {
         ApplyJobVO applyJobVO = new ApplyJobVO();
-        applyJobVO.setJobId(6);
+        applyJobVO.setJobId(27);
         applyJobVO.setJobhunterId(-1);
         applyJobVO.setApplyReason("我擅长这项工作");
         try {
@@ -129,7 +131,7 @@ class OrderServiceImplTest {
     @Transactional
     void createOrder_test4() {
         ApplyJobVO applyJobVO = new ApplyJobVO();
-        applyJobVO.setJobId(6);
+        applyJobVO.setJobId(27);
         applyJobVO.setJobhunterId(10014);
         applyJobVO.setApplyReason("我擅长这项工作");
         try {

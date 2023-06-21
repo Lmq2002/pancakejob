@@ -12,6 +12,7 @@ import com.jbgz.pancakejob.vo.EmailAccountVO;
 import com.jbgz.pancakejob.vo.FindPasswordVO;
 import com.jbgz.pancakejob.vo.LoginVO;
 import com.jbgz.pancakejob.vo.RegistVO;
+import io.qameta.allure.Feature;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -51,6 +52,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @Transactional
+@Feature("Integration Testing")
 class LoginControllerTest {
 
     @Autowired

@@ -101,7 +101,7 @@ class JobControllerTest {
 
     @Test
     void NormalCloseRecruit() throws Exception {
-        String jobId="11";
+        String jobId="27";
 
         mockMvc.perform(put("/job/closeRecruit")
                         .contentType(MediaType.APPLICATION_JSON)
