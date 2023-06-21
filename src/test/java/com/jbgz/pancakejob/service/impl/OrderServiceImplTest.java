@@ -1,9 +1,12 @@
 package com.jbgz.pancakejob.service.impl;
 
 import com.jbgz.pancakejob.PancakejobApplication;
+import com.jbgz.pancakejob.service.AppealService;
 import com.jbgz.pancakejob.service.OrderService;
 import com.jbgz.pancakejob.utils.SelfDesignException;
+import com.jbgz.pancakejob.vo.AppealOrderVO;
 import com.jbgz.pancakejob.vo.ApplyJobVO;
+import io.qameta.allure.Feature;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -445,7 +448,7 @@ class OrderServiceImplTest {
                 res = orderService.changeOrderState(orderId, "已完成");
                 assertTrue(res);
 
-        } catch (Exception e) {
+        }); }catch (Exception e) {
             System.out.println("测试错误信息:" + e.getMessage());
         }
     }
