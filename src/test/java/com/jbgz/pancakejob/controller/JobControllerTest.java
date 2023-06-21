@@ -1,9 +1,21 @@
 package com.jbgz.pancakejob.controller;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jbgz.pancakejob.PancakejobApplication;
 import com.jbgz.pancakejob.common.Constants;
+import com.jbgz.pancakejob.dto.DraftDTO;
+import com.jbgz.pancakejob.dto.FavoritesDTO;
+import com.jbgz.pancakejob.dto.JobDTO;
+import com.jbgz.pancakejob.entity.Job;
+import com.jbgz.pancakejob.service.JobService;
+import com.jbgz.pancakejob.service.NotificationService;
+import com.jbgz.pancakejob.service.OrderService;
+import com.jbgz.pancakejob.service.impl.JobServiceImpl;
+import com.jbgz.pancakejob.utils.SelfDesignException;
+import com.jbgz.pancakejob.vo.JobDataVO;
 import com.jbgz.pancakejob.vo.JobInfoVO;
 import com.jbgz.pancakejob.vo.JobUpVO;
 import com.jbgz.pancakejob.vo.ReportVO;
@@ -12,18 +24,30 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.client.AutoConfigureMockRestServiceServer;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -188,8 +212,8 @@ class JobControllerTest {
     @Test
     void NormalReportJob() throws Exception {
         ReportVO vo = new ReportVO();
-        vo.setJobId(3);
-        vo.setJobhunterId(10028);
+        vo.setJobId(1);
+        vo.setJobhunterId(10009);
         vo.setReason("此兼职信息不实");
 
         mockMvc.perform(post("/job/reportJob")
@@ -462,7 +486,72 @@ class JobControllerTest {
                 .andExpect(jsonPath("$.code").value(Constants.CODE_200))
                 .andExpect(jsonPath("$.message").value("发布成功"));
     }
+
+    @InjectMocks
+    JobServiceImpl jobService;
+
+    @Mock
+    private OrderService orderService;
+
+    @Mock
+    private NotificationService notificationService;
+
+    @Test
+    @Rollback
+    @Transactional
+    void refuseJobhuterWhenCloseRecruiter() {
+        try{
+            int jobId = 35;
+            jobService.closeRecruit(jobId);
+            ArgumentCaptor<Integer> refuseArgumentCaptor = ArgumentCaptor.forClass(Integer.class);
+            ArgumentCaptor<List<Integer>> notificationsCaptor = ArgumentCaptor.forClass(List.class);
+            verify(orderService).refuseRestJobhunter(refuseArgumentCaptor.capture());
+            verify(notificationService).noticeRestJobhunter(notificationsCaptor.capture());
+            Integer cap_jobId = refuseArgumentCaptor.getValue();
+            assertEquals(jobId,cap_jobId);
+            assertEquals(notificationsCaptor.getValue().size(),11);
+//            assertTrue(notificationsCaptor.getValue().size() == 11);
+        }
+        catch (Exception e){
+            System.out.println("测试错误信息："+e.getMessage());
+        }
+    }
+
+
+    /*
+    @InjectMocks UserServiceImpl service;
+    @Mock
+    private JobhunterMapper jobhunterMapper;
+
+    @Mock
+    private RecruiterMapper recruiterMapper;
+
+    @Mock
+    private AdministratorMapper administratorMapper;
+    @Test
+    @Feature("Integration Testing")
+    @Rollback(value = true)
+    @Transactional
+    void IfConsistentWhenRegistJobhunter() throws SelfDesignException {
+        registVO.setUserType(UserType.JOBHUNTER);
+        Integer id = 10449;
+
+        Jobhunter jobhunter=new Jobhunter();
+        jobhunter.setJobhunterId(id);
+
+        service.regist2(registVO,id);
+        ArgumentCaptor<Jobhunter> jobhunterArgumentCaptor =
+                ArgumentCaptor.forClass(Jobhunter.class);
+
+        verify(jobhunterMapper).registJobhunter(jobhunterArgumentCaptor.capture());
+        Jobhunter capturedJonbunter = jobhunterArgumentCaptor.getValue();
+        assertEquals(jobhunter, capturedJonbunter);
+    }
+    */
+
+
     @AfterEach
     void tearDown() {
+
     }
 }

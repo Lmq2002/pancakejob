@@ -12,6 +12,8 @@ import com.jbgz.pancakejob.entity.Recruiter;
 import com.jbgz.pancakejob.entity.User;
 import com.jbgz.pancakejob.mapper.*;
 import com.jbgz.pancakejob.service.JobService;
+import com.jbgz.pancakejob.service.NotificationService;
+import com.jbgz.pancakejob.service.OrderService;
 import com.jbgz.pancakejob.utils.DateTimeTrans;
 import com.jbgz.pancakejob.utils.SelfDesignException;
 import com.jbgz.pancakejob.vo.JobDataVO;
@@ -44,6 +46,12 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job>
     @Resource
     private UserMapper userMapper;
 
+    @Resource
+    private OrderService orderService;
+
+    @Resource
+    private NotificationService notificationService;
+
     //    @Override
 //    public ResultData getJobList(int pageNum, int pageSize){
 //
@@ -62,7 +70,7 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job>
 ////        List<VolActivityDTO> dtoList=volActivityService.cutIntoVolActivityDTOList((List<VolActivity>)iPage.getRecords());
 ////        return jobMapper.selectList(null);
 //    }
-    public JobDTO getJObDTO(Job job) {
+    public JobDTO getJobDTO(Job job) {
         try {
             JobDTO jobDTO = new JobDTO();
             jobDTO.setJobId(job.getJobId());
@@ -103,7 +111,7 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job>
     public List<JobDTO> getJobListDTO(List<Job> jobList) {
         List<JobDTO> jobDTOList = new ArrayList<>();
         for (Job job : jobList) {
-            JobDTO jobDTO = getJObDTO(job);
+            JobDTO jobDTO = getJobDTO(job);
             jobDTOList.add(jobDTO);
         }
         return jobDTOList;
@@ -141,7 +149,7 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job>
         if(job == null)
             throw new SelfDesignException("不存在该兼职信息");
         List<JobDTO> jobDTO = new ArrayList<>();
-        jobDTO.add(getJObDTO(job));
+        jobDTO.add(getJobDTO(job));
         return jobDTO;
     }
 
@@ -214,11 +222,15 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job>
             throw new SelfDesignException("不存在该兼职信息");
         else if(!job.getJobState().equals("已通过"))
             throw new SelfDesignException("该兼职未在招聘");
-        if (job.getAcceptedNum().equals(job.getFinishedNum()))
+        if (job.getAcceptedNum()>0 && job.getFinishedNum()>0 && job.getAcceptedNum().equals(job.getFinishedNum()))
             job.setJobState("已完成");
         else
             job.setJobState("已结束");
         int re = jobMapper.updateById(job);
+        if(re>0){
+            List<Integer> refuses = orderService.refuseRestJobhunter(jobId);
+            return notificationService.noticeRestJobhunter(refuses);
+        }
         return re > 0;
     }
 

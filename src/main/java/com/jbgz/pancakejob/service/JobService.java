@@ -20,7 +20,7 @@ import java.util.List;
 public interface JobService extends IService<Job> {
     //List<Job> getJobList(int pageNum, int pageSize);
     //ResultData getJobList(int pageNum,int pageSize);
-    JobDTO getJObDTO(Job job);
+    JobDTO getJobDTO(Job job);
     List<JobDTO> getJobListDTO(List<Job> jobList);
     List<JobDTO> getJobList(String state);
     List<DraftDTO> getJobDraftList(int recruiterId) throws SelfDesignException;

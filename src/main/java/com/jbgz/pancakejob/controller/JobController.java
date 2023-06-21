@@ -103,12 +103,12 @@ public class JobController {
             if(jobId == null)
                 throw new SelfDesignException("兼职ID为空");
             ResultData result = new ResultData();
-            jobService.closeRecruit(jobId);
-            //修改剩余报名者的结果为未通过
-            List<Integer> refuses = orderService.refuseRestJobhunter(jobId);
-            //向求职者发送信息(refuses是订单列表)
-            boolean re = notificationService.noticeRestJobhunter(refuses);
-            //调用NotificationService的方法
+            boolean re=jobService.closeRecruit(jobId);
+//            //修改剩余报名者的结果为未通过
+//            List<Integer> refuses = orderService.refuseRestJobhunter(jobId);
+//            //向求职者发送信息(refuses是订单列表)
+//            boolean re = notificationService.noticeRestJobhunter(refuses);
+//            //调用NotificationService的方法
             if (re) {
                 result.code = Constants.CODE_200;
                 result.message = "结束招聘成功";
