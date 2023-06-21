@@ -312,8 +312,8 @@ public class OrderController {
             ResultData result = new ResultData();
 
             if(!(appealOrderVO.getAppealType().equals("求职者评价申诉")
-                    || appealOrderVO.getAppealType().equals("求职者评价申诉")
-                    || appealOrderVO.getAppealType().equals("求职者评价申诉")))
+                    || appealOrderVO.getAppealType().equals("招聘方评价申诉")
+                    || appealOrderVO.getAppealType().equals("支付申诉")))
                 throw new SelfDesignException("申诉类型不合理");
             //是否要判断订单是否已有某类型的申诉？
 

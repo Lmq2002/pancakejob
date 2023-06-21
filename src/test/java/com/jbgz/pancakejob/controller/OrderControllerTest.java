@@ -9,6 +9,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -32,6 +33,7 @@ import java.nio.charset.StandardCharsets;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.annotation.Resource;
+import javax.inject.Inject;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -291,7 +293,7 @@ class OrderControllerTest {
 
         ApplyJobVO applyJobVO = new ApplyJobVO();
         applyJobVO.setJobhunterId(10100);
-        applyJobVO.setJobId(6);
+        applyJobVO.setJobId(27);
         applyJobVO.setApplyReason("我很细心且认真负责");
 
         MvcResult mvcResult =
@@ -1518,6 +1520,5 @@ class OrderControllerTest {
         assertEquals(Constants.CODE_200,result.code);
         assertEquals("申诉成功",result.message);
     }
-
 
 }
