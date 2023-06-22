@@ -287,7 +287,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
         Order order = orderMapper.selectById(orderId);
         if (order == null)
             throw new SelfDesignException("订单不存在");
-        else if (!order.getOrderState().equals("已完成"))
+        else if (!(order.getOrderState().equals("已完成")||!order.getOrderState().equals("支付状态异常")))
             throw new SelfDesignException("订单还未完成");
         if (newScore < 0)
             throw new SelfDesignException("评价分数必须大于0");

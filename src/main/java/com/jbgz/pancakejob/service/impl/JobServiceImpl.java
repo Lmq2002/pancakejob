@@ -160,7 +160,7 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job>
         else if(jobInfo.getStartTime() == null)
             throw new SelfDesignException("兼职开始时间为空");
         else if(jobInfo.getEndTime() == null)
-            throw new SelfDesignException("简直结束时间为空");
+            throw new SelfDesignException("兼职结束时间为空");
         else if(jobInfo.getWorkPlace() == null)
             throw new SelfDesignException("兼职地址信息为空");
         else if(jobInfo.getSalary() == null)
