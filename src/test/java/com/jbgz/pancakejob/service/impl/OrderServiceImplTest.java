@@ -4,7 +4,9 @@ import com.jbgz.pancakejob.PancakejobApplication;
 import com.jbgz.pancakejob.service.AppealService;
 import com.jbgz.pancakejob.service.OrderService;
 import com.jbgz.pancakejob.utils.SelfDesignException;
+import com.jbgz.pancakejob.vo.AppealOrderVO;
 import com.jbgz.pancakejob.vo.ApplyJobVO;
+import io.qameta.allure.Feature;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {PancakejobApplication.class})
-//@Feature("Unit Testing")
+@Feature("Unit Testing")
 class OrderServiceImplTest {
 
     @Resource
@@ -333,7 +335,7 @@ class OrderServiceImplTest {
         }
     }
 
-    /*评价时订单未完成*/
+    /*订单还未完成*/
     @Test
     @Rollback
     @Transactional
@@ -343,7 +345,6 @@ class OrderServiceImplTest {
             assertFalse(res);
             fail("预期输出错误信息：'订单还未完成'.");
         } catch (Exception e) {
-            System.out.println("测试错误信息："+e.getMessage());
             assertTrue(e instanceof SelfDesignException);
             assertEquals(e.getMessage(), "订单还未完成");
         }
@@ -466,105 +467,105 @@ class OrderServiceImplTest {
 
     /*集成测试部分-基于功能*/
 
-//    @Test
-//    @Rollback
-//    @Transactional
-//    void whiteBoxTest1() {
-//        ApplyJobVO applyJobVO = new ApplyJobVO();
-//        applyJobVO.setJobId(27);
-//        applyJobVO.setJobhunterId(10009);
-//        applyJobVO.setApplyReason("我擅长这项工作");
-//        try {
-//            assertDoesNotThrow(()->{
-//                int orderId = orderService.createOrder(applyJobVO);
-//                assertTrue(orderId > 0);
-//                boolean res = orderService.sendOfferOrNot(orderId, true);
-//                assertTrue(res);
-//                res = orderService.acceptOfferOrNot(orderId, true);
-//                assertTrue(res);
-//                res = orderService.changeOrderState(orderId, "已完成");
-//                assertTrue(res);
-//                res = orderService.changeOrderScore(orderId, 5, "jobhunter") && orderService.changeOrderScore(orderId, 4, "recruiter");
-//                assertTrue(res);
-//
-//                AppealOrderVO appealOrderVO = new AppealOrderVO();
-//                appealOrderVO.setOrderId(orderId);
-//                appealOrderVO.setAppealType("求职者评价申诉");
-//                appealOrderVO.setAppealContent("评分不合理");
-//                res =appealService.createAppeal(appealOrderVO);
-//                assertTrue(res);
-//                appealOrderVO.setAppealType("招聘方评价申诉");
-//                res =appealService.createAppeal(appealOrderVO);
-//                assertTrue(res);
-//
-//                res = orderService.changeOrderState(orderId, "支付状态异常");
-//                assertTrue(res);
-//                res = orderService.changeOrderState(orderId, "已完成");
-//                assertTrue(res);
-//
-//        }); }catch (Exception e) {
-//            System.out.println("测试错误信息:" + e.getMessage());
-//        }
-//    }
-//
-//    @Test
-//    @Rollback
-//    @Transactional
-//    void whiteBoxTest2() {
-//        ApplyJobVO applyJobVO = new ApplyJobVO();
-//        applyJobVO.setJobId(6);
-//        applyJobVO.setJobhunterId(10014);
-//        applyJobVO.setApplyReason("我擅长这项工作");
-//        try {
-//            int orderId = orderService.createOrder(applyJobVO);
-//            assertTrue(orderId > 0);
-//            boolean res = orderService.cancelOrder(orderId);
-//            assertTrue(res);
-//        } catch (Exception e) {
-//            System.out.println("测试错误信息:" + e.getMessage());
-//        }
-//    }
-//
-//    @Test
-//    @Rollback
-//    @Transactional
-//    void whiteBoxTest3() {
-//        ApplyJobVO applyJobVO = new ApplyJobVO();
-//        applyJobVO.setJobId(27);
-//        applyJobVO.setJobhunterId(10009);
-//        applyJobVO.setApplyReason("我擅长这项工作");
-//        try {
-//            assertDoesNotThrow(()->{
-//                int orderId = orderService.createOrder(applyJobVO);
-//                assertTrue(orderId > 0);
-//                boolean res = orderService.sendOfferOrNot(orderId,false);
-//                assertTrue(res);
-//            });
-//        } catch (Exception e) {
-//            System.out.println("测试错误信息:" + e.getMessage());
-//        }
-//    }
-//
-//    @Test
-//    @Rollback
-//    @Transactional
-//    void whiteBoxTest4() {
-//        ApplyJobVO applyJobVO = new ApplyJobVO();
-//        applyJobVO.setJobId(27);
-//        applyJobVO.setJobhunterId(10009);
-//        applyJobVO.setApplyReason("我擅长这项工作");
-//        try {
-//            assertDoesNotThrow(()->{
-//                int orderId = orderService.createOrder(applyJobVO);
-//                assertTrue(orderId > 0);
-//                boolean res = orderService.sendOfferOrNot(orderId,true);
-//                assertTrue(res);
-//                res = orderService.acceptOfferOrNot(orderId,false);
-//                assertTrue(res);
-//            });
-//        } catch (Exception e) {
-//            System.out.println("测试错误信息:" + e.getMessage());
-//        }
-//
-//    }
+    @Test
+    @Rollback
+    @Transactional
+    void whiteBoxTest1() {
+        ApplyJobVO applyJobVO = new ApplyJobVO();
+        applyJobVO.setJobId(27);
+        applyJobVO.setJobhunterId(10009);
+        applyJobVO.setApplyReason("我擅长这项工作");
+        try {
+            assertDoesNotThrow(()->{
+                int orderId = orderService.createOrder(applyJobVO);
+                assertTrue(orderId > 0);
+                boolean res = orderService.sendOfferOrNot(orderId, true);
+                assertTrue(res);
+                res = orderService.acceptOfferOrNot(orderId, true);
+                assertTrue(res);
+                res = orderService.changeOrderState(orderId, "已完成");
+                assertTrue(res);
+                res = orderService.changeOrderScore(orderId, 5, "jobhunter") && orderService.changeOrderScore(orderId, 4, "recruiter");
+                assertTrue(res);
+
+                AppealOrderVO appealOrderVO = new AppealOrderVO();
+                appealOrderVO.setOrderId(orderId);
+                appealOrderVO.setAppealType("求职者评价申诉");
+                appealOrderVO.setAppealContent("评分不合理");
+                res =appealService.createAppeal(appealOrderVO);
+                assertTrue(res);
+                appealOrderVO.setAppealType("招聘方评价申诉");
+                res =appealService.createAppeal(appealOrderVO);
+                assertTrue(res);
+
+                res = orderService.changeOrderState(orderId, "支付状态异常");
+                assertTrue(res);
+                res = orderService.changeOrderState(orderId, "已完成");
+                assertTrue(res);
+
+            }); }catch (Exception e) {
+            System.out.println("测试错误信息:" + e.getMessage());
+        }
+    }
+
+    @Test
+    @Rollback
+    @Transactional
+    void whiteBoxTest2() {
+        ApplyJobVO applyJobVO = new ApplyJobVO();
+        applyJobVO.setJobId(6);
+        applyJobVO.setJobhunterId(10014);
+        applyJobVO.setApplyReason("我擅长这项工作");
+        try {
+            int orderId = orderService.createOrder(applyJobVO);
+            assertTrue(orderId > 0);
+            boolean res = orderService.cancelOrder(orderId);
+            assertTrue(res);
+        } catch (Exception e) {
+            System.out.println("测试错误信息:" + e.getMessage());
+        }
+    }
+
+    @Test
+    @Rollback
+    @Transactional
+    void whiteBoxTest3() {
+        ApplyJobVO applyJobVO = new ApplyJobVO();
+        applyJobVO.setJobId(27);
+        applyJobVO.setJobhunterId(10009);
+        applyJobVO.setApplyReason("我擅长这项工作");
+        try {
+            assertDoesNotThrow(()->{
+                int orderId = orderService.createOrder(applyJobVO);
+                assertTrue(orderId > 0);
+                boolean res = orderService.sendOfferOrNot(orderId,false);
+                assertTrue(res);
+            });
+        } catch (Exception e) {
+            System.out.println("测试错误信息:" + e.getMessage());
+        }
+    }
+
+    @Test
+    @Rollback
+    @Transactional
+    void whiteBoxTest4() {
+        ApplyJobVO applyJobVO = new ApplyJobVO();
+        applyJobVO.setJobId(27);
+        applyJobVO.setJobhunterId(10009);
+        applyJobVO.setApplyReason("我擅长这项工作");
+        try {
+            assertDoesNotThrow(()->{
+                int orderId = orderService.createOrder(applyJobVO);
+                assertTrue(orderId > 0);
+                boolean res = orderService.sendOfferOrNot(orderId,true);
+                assertTrue(res);
+                res = orderService.acceptOfferOrNot(orderId,false);
+                assertTrue(res);
+            });
+        } catch (Exception e) {
+            System.out.println("测试错误信息:" + e.getMessage());
+        }
+
+    }
 }

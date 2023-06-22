@@ -12,11 +12,14 @@ import com.jbgz.pancakejob.entity.Recruiter;
 import com.jbgz.pancakejob.entity.User;
 import com.jbgz.pancakejob.mapper.*;
 import com.jbgz.pancakejob.service.JobService;
+import com.jbgz.pancakejob.service.NotificationService;
+import com.jbgz.pancakejob.service.OrderService;
 import com.jbgz.pancakejob.utils.DateTimeTrans;
 import com.jbgz.pancakejob.utils.SelfDesignException;
 import com.jbgz.pancakejob.vo.JobDataVO;
 import com.jbgz.pancakejob.vo.JobInfoVO;
 import com.jbgz.pancakejob.vo.JobUpVO;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -43,6 +46,12 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job>
     @Resource
     private UserMapper userMapper;
 
+    @Resource
+    private OrderService orderService;
+
+    @Resource
+    private NotificationService notificationService;
+
     //    @Override
 //    public ResultData getJobList(int pageNum, int pageSize){
 //
@@ -61,7 +70,7 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job>
 ////        List<VolActivityDTO> dtoList=volActivityService.cutIntoVolActivityDTOList((List<VolActivity>)iPage.getRecords());
 ////        return jobMapper.selectList(null);
 //    }
-    public JobDTO getJObDTO(Job job) {
+    public JobDTO getJobDTO(Job job) {
         try {
             JobDTO jobDTO = new JobDTO();
             jobDTO.setJobId(job.getJobId());
@@ -102,7 +111,7 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job>
     public List<JobDTO> getJobListDTO(List<Job> jobList) {
         List<JobDTO> jobDTOList = new ArrayList<>();
         for (Job job : jobList) {
-            JobDTO jobDTO = getJObDTO(job);
+            JobDTO jobDTO = getJobDTO(job);
             jobDTOList.add(jobDTO);
         }
         return jobDTOList;
@@ -112,7 +121,8 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job>
     public List<JobDTO> getJobList(String state) {
         QueryWrapper<Job> jobQueryWrapper = new QueryWrapper<Job>();
         //筛选已发布且正在招聘的兼职
-        jobQueryWrapper.eq("job_state", "已通过");
+        //state没用上，前端需要多状态，lmq 2023/6/18
+        jobQueryWrapper.eq("job_state", state);
         List<JobDTO> jobDTOList = getJobListDTO(jobMapper.selectList(jobQueryWrapper));
         return jobDTOList;
     }
@@ -139,7 +149,7 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job>
         if(job == null)
             throw new SelfDesignException("不存在该兼职信息");
         List<JobDTO> jobDTO = new ArrayList<>();
-        jobDTO.add(getJObDTO(job));
+        jobDTO.add(getJobDTO(job));
         return jobDTO;
     }
 
@@ -150,41 +160,54 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job>
 
     //发布兼职
     public boolean createJob(JobUpVO jobUpVO) throws SelfDesignException {
-        if(recruiterMapper.selectById(jobUpVO.getRecruiterId()) == null)
-            throw new SelfDesignException("不存在该招聘方");
-        JobInfoVO jobInfo = jobUpVO.getJobInfo();
-        if(jobInfo.getJobName() == null)
-            throw new SelfDesignException("兼职名称为空");
-        else if(jobInfo.getWorkDetails() == null)
-            throw new SelfDesignException("兼职详情为空");
-        else if(jobInfo.getStartTime() == null)
-            throw new SelfDesignException("兼职开始时间为空");
-        else if(jobInfo.getEndTime() == null)
-            throw new SelfDesignException("兼职结束时间为空");
-        else if(jobInfo.getWorkPlace() == null)
-            throw new SelfDesignException("兼职地址信息为空");
-        else if(jobInfo.getSalary() == null)
-            throw new SelfDesignException("兼职工资信息为空");
-        Job job = new Job();
-        job.setRecruiterId(jobUpVO.getRecruiterId());
-        job.setReleaseTime(new Date());
-        if (jobUpVO.isIfRelease())
-            job.setJobState("未审核");
-        else
-            job.setJobState("未发布");
-        job.setJobType(jobInfo.getJobType());
-        job.setWorkName(jobInfo.getJobName());
-        job.setWorkTime(jobInfo.getWorkTime());
-        job.setWorkPlace(jobInfo.getWorkPlace());
-        job.setWorkDetails(jobInfo.getWorkDetails());
-        job.setSalary(jobInfo.getSalary());
-        job.setStartTime(DateTimeTrans.stringToDate(jobInfo.getStartTime()));
-        job.setEndTime(DateTimeTrans.stringToDate(jobInfo.getEndTime()));
-        job.setWorkerNum(jobInfo.getEmployeeNum());
+        if(jobUpVO.getJobInfo().getJobName()==null)
+            throw new SelfDesignException("兼职名称不能为空");
+        if(jobUpVO.getJobInfo().getJobType()==null)
+            throw new SelfDesignException("兼职类型不能为空");
+        if(jobUpVO.getJobInfo().getWorkDetails()==null)
+            throw new SelfDesignException("兼职详情不能为空");
+        if(jobUpVO.getJobInfo().getWorkTime()==null)
+            throw new SelfDesignException("兼职每日时长不能为空");
+        if(jobUpVO.getJobInfo().getStartTime()==null)
+            throw new SelfDesignException("兼职开始时间不能为空");
+        if (jobUpVO.getJobInfo().getEndTime()==null)
+            throw new SelfDesignException("兼职结束时间不能为空");
+        if(jobUpVO.getJobInfo().getWorkPlace()==null)
+            throw new SelfDesignException("兼职地点不能为空");
+        if (jobUpVO.getJobInfo().getSalary()==null)
+            throw new SelfDesignException("兼职日薪资不能为空");
+        try {
+            JobInfoVO jobInfo = jobUpVO.getJobInfo();
+            Job job = new Job();
+            job.setRecruiterId(jobUpVO.getRecruiterId());
+            job.setReleaseTime(new Date());
+            if (jobUpVO.isIfRelease())
+                job.setJobState("未审核");
+            else
+                job.setJobState("未发布");
+            job.setJobType(jobInfo.getJobType());
+            job.setWorkName(jobInfo.getJobName());
+            job.setWorkTime(jobInfo.getWorkTime());
+            job.setWorkPlace(jobInfo.getWorkPlace());
+            job.setWorkDetails(jobInfo.getWorkDetails());
+            job.setSalary(jobInfo.getSalary());
+            job.setStartTime(DateTimeTrans.stringToDate(jobInfo.getStartTime()));
+            job.setEndTime(DateTimeTrans.stringToDate(jobInfo.getEndTime()));
+            job.setWorkerNum(jobInfo.getEmployeeNum());
 
-        int re = jobMapper.insert(job);
-        System.out.println("insert:" + re);
-        return re > 0;
+            int re = jobMapper.insert(job);
+            System.out.println("insert:" + re);
+            return re > 0;
+        }catch (Exception e){
+            System.out.print(e.getMessage());
+            if(e.getClass()== DataIntegrityViolationException.class){
+                if(e.getMessage().contains("FOREIGN KEY (`recruiter_id`)"))
+                    throw new SelfDesignException("不存在该招聘方");
+                if(e.getMessage().contains("FOREIGN KEY (`job_type`)"))
+                    throw new SelfDesignException("不存在该兼职类型");
+            }
+        }
+        return false;
     }
 
     //修改兼职草稿
@@ -199,11 +222,15 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job>
             throw new SelfDesignException("不存在该兼职信息");
         else if(!job.getJobState().equals("已通过"))
             throw new SelfDesignException("该兼职未在招聘");
-        if (job.getAcceptedNum().equals(job.getFinishedNum()))
+        if (job.getAcceptedNum()>0 && job.getFinishedNum()>0 && job.getAcceptedNum().equals(job.getFinishedNum()))
             job.setJobState("已完成");
         else
             job.setJobState("已结束");
         int re = jobMapper.updateById(job);
+        if(re>0){
+            List<Integer> refuses = orderService.refuseRestJobhunter(jobId);
+            return notificationService.noticeRestJobhunter(refuses);
+        }
         return re > 0;
     }
 

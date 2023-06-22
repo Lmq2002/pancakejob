@@ -11,6 +11,8 @@ import com.jbgz.pancakejob.mapper.RecruiterMapper;
 import com.jbgz.pancakejob.service.UserService;
 import com.jbgz.pancakejob.utils.SelfDesignException;
 import com.jbgz.pancakejob.vo.RegistVO;
+import io.qameta.allure.Feature;
+import org.apache.ibatis.annotations.Select;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,7 +34,7 @@ import static org.mockito.Mockito.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {PancakejobApplication.class})
-//@Feature("Unit Testing")
+@Feature("Unit Testing")
 class UserServiceImplTest {
     @Resource
     UserService userService;
@@ -58,21 +60,21 @@ class UserServiceImplTest {
 
     }
 
-//    @Test
-//    @Transactional
-//    @Rollback(value = true)
-//    void registByExistedEmail()  {
-//        registVO.setUserType(UserType.RECRUITER);
-//        registVO.setEmail("2054402@tongji.edu.cn");
-//        registVO.setPassword("test");
-//        try{
-//            userService.regist(registVO);
-//        }
-//        catch(SelfDesignException e){
-//            assertTrue(e instanceof SelfDesignException);
-//            assertEquals("该邮箱已被注册",e.getMessage());
-//        }
-//    }
+    @Test
+    @Transactional
+    @Rollback(value = true)
+    void registByExistedEmail()  {
+        registVO.setUserType(UserType.RECRUITER);
+        registVO.setEmail("2054402@tongji.edu.cn");
+        registVO.setPassword("test");
+        try{
+            userService.regist(registVO);
+        }
+        catch(SelfDesignException e){
+            assertTrue(e instanceof SelfDesignException);
+            assertEquals("该邮箱已被注册",e.getMessage());
+        }
+    }
 
     @Test
     @Transactional
@@ -167,132 +169,132 @@ class UserServiceImplTest {
     }
 
 
-//    @InjectMocks UserServiceImpl service;
-//    @Mock
-//    private JobhunterMapper jobhunterMapper;
-//
-//    @Mock
-//    private RecruiterMapper recruiterMapper;
-//
-//    @Mock
-//    private AdministratorMapper administratorMapper;
-//    @Test
-//    @Feature("Integration Testing")
-//    @Rollback(value = true)
-//    @Transactional
-//    void IfConsistentWhenRegistJobhunter() throws SelfDesignException {
-//        registVO.setUserType(UserType.JOBHUNTER);
-//        Integer id = 10449;
-//
-//        Jobhunter jobhunter=new Jobhunter();
-//        jobhunter.setJobhunterId(id);
-//
-//        service.regist2(registVO,id);
-//        ArgumentCaptor<Jobhunter> jobhunterArgumentCaptor =
-//                ArgumentCaptor.forClass(Jobhunter.class);
-//
-//        verify(jobhunterMapper).registJobhunter(jobhunterArgumentCaptor.capture());
-//        Jobhunter capturedJonbunter = jobhunterArgumentCaptor.getValue();
-//        assertEquals(jobhunter, capturedJonbunter);
-//    }
-//
-//    @Test
-//    @Feature("Integration Testing")
-//    @Rollback(value = true)
-//    void IfConsistentWhenRegistRecruiter() throws SelfDesignException {
-//        registVO.setUserType(UserType.RECRUITER);
-//        Integer id = 10449;
-//
-//        Recruiter recruiter=new Recruiter();
-//        recruiter.setRecruiterId(id);
-//
-//        service.regist2(registVO,id);
-//        ArgumentCaptor<Recruiter> recruiterArgumentCaptor =
-//                ArgumentCaptor.forClass(Recruiter.class);
-//
-//        verify(recruiterMapper).registRecruiter(recruiterArgumentCaptor.capture());
-//        Recruiter captureRecruiter = recruiterArgumentCaptor.getValue();
-//        assertEquals(recruiter, captureRecruiter);
-//    }
-//
-//    @Test
-//    @Feature("Integration Testing")
-//    @Rollback(value = true)
-//    void IfConsistentWhenRegistAdministrator() throws SelfDesignException {
-//        registVO.setUserType(UserType.ADMIN);
-//        Integer id = 10449;
-//
-//        Administrator administrator=new Administrator();
-//        administrator.setAdminId(id);
-//
-//        service.regist2(registVO,id);
-//        ArgumentCaptor<Administrator> administratorArgumentCaptor =
-//                ArgumentCaptor.forClass(Administrator.class);
-//
-//        verify(administratorMapper).registAdmin(administratorArgumentCaptor.capture());
-//        Administrator captureAdministrator = administratorArgumentCaptor.getValue();
-//        assertEquals(administrator, captureAdministrator);
-//    }
-//
-//    @Test@Feature("Integration Testing")
-//    @Rollback(value = true)
-//    void ifConsistentWhenRegist2Jobhunter() throws SelfDesignException {
-//        registVO.setUserType(UserType.JOBHUNTER);
-//        registVO.setEmail("123qq.com");
-//        registVO.setPassword("123456");
-//        Integer id=10018;
-//
-//        when(jobhunterMapper.registJobhunter(any(Jobhunter.class))).thenReturn(1);
-//
-//        service.regist2(registVO,id);
-//        ArgumentCaptor<Jobhunter> jobhunterArgumentCaptor =
-//                ArgumentCaptor.forClass(Jobhunter.class);
-//
-//        verify(jobhunterMapper).registJobhunter(jobhunterArgumentCaptor.capture());
-//        Jobhunter captureJobhunter = jobhunterArgumentCaptor.getValue();
-//        assertEquals(id,captureJobhunter.getJobhunterId());
-//
-//    }
-//
-//    @Test@Feature("Integration Testing")
-//    @Rollback(value = true)
-//    void ifConsistentWhenRegist2Recruiter() throws SelfDesignException {
-//        registVO.setUserType(UserType.RECRUITER);
-//        registVO.setEmail("123qq.com");
-//        registVO.setPassword("123456");
-//        Integer id=10018;
-//
-//        when(recruiterMapper.registRecruiter(any(Recruiter.class))).thenReturn(1);
-//
-//        service.regist2(registVO,id);
-//        ArgumentCaptor<Recruiter> recruiterArgumentCaptor =
-//                ArgumentCaptor.forClass(Recruiter.class);
-//
-//        verify(recruiterMapper).registRecruiter(recruiterArgumentCaptor.capture());
-//        Recruiter captureRecruiter = recruiterArgumentCaptor.getValue();
-//        assertEquals(id,captureRecruiter.getRecruiterId());
-//
-//    }
-//
-//    @Test@Feature("Integration Testing")
-//    @Rollback(value = true)
-//    void ifConsistentWhenRegist2Admin() throws SelfDesignException {
-//        registVO.setUserType(UserType.ADMIN);
-//        registVO.setEmail("123qq.com");
-//        registVO.setPassword("123456");
-//        Integer id=10018;
-//
-//        when(administratorMapper.registAdmin(any(Administrator.class))).thenReturn(1);
-//
-//        service.regist2(registVO,id);
-//        ArgumentCaptor<Administrator> administratorArgumentCaptor =
-//                ArgumentCaptor.forClass(Administrator.class);
-//
-//        verify(administratorMapper).registAdmin(administratorArgumentCaptor.capture());
-//        Administrator captureAdministrator = administratorArgumentCaptor.getValue();
-//        assertEquals(id,captureAdministrator.getAdminId());
-//
-//    }
+    @InjectMocks UserServiceImpl service;
+    @Mock
+    private JobhunterMapper jobhunterMapper;
+
+    @Mock
+    private RecruiterMapper recruiterMapper;
+
+    @Mock
+    private AdministratorMapper administratorMapper;
+    @Test
+    @Feature("Integration Testing")
+    @Rollback(value = true)
+    @Transactional
+    void IfConsistentWhenRegistJobhunter() throws SelfDesignException {
+        registVO.setUserType(UserType.JOBHUNTER);
+        Integer id = 10449;
+
+        Jobhunter jobhunter=new Jobhunter();
+        jobhunter.setJobhunterId(id);
+
+        service.regist2(registVO,id);
+        ArgumentCaptor<Jobhunter> jobhunterArgumentCaptor =
+                ArgumentCaptor.forClass(Jobhunter.class);
+
+        verify(jobhunterMapper).registJobhunter(jobhunterArgumentCaptor.capture());
+        Jobhunter capturedJonbunter = jobhunterArgumentCaptor.getValue();
+        assertEquals(jobhunter, capturedJonbunter);
+    }
+
+    @Test
+    @Feature("Integration Testing")
+    @Rollback(value = true)
+    void IfConsistentWhenRegistRecruiter() throws SelfDesignException {
+        registVO.setUserType(UserType.RECRUITER);
+        Integer id = 10449;
+
+        Recruiter recruiter=new Recruiter();
+        recruiter.setRecruiterId(id);
+
+        service.regist2(registVO,id);
+        ArgumentCaptor<Recruiter> recruiterArgumentCaptor =
+                ArgumentCaptor.forClass(Recruiter.class);
+
+        verify(recruiterMapper).registRecruiter(recruiterArgumentCaptor.capture());
+        Recruiter captureRecruiter = recruiterArgumentCaptor.getValue();
+        assertEquals(recruiter, captureRecruiter);
+    }
+
+    @Test
+    @Feature("Integration Testing")
+    @Rollback(value = true)
+    void IfConsistentWhenRegistAdministrator() throws SelfDesignException {
+        registVO.setUserType(UserType.ADMIN);
+        Integer id = 10449;
+
+        Administrator administrator=new Administrator();
+        administrator.setAdminId(id);
+
+        service.regist2(registVO,id);
+        ArgumentCaptor<Administrator> administratorArgumentCaptor =
+                ArgumentCaptor.forClass(Administrator.class);
+
+        verify(administratorMapper).registAdmin(administratorArgumentCaptor.capture());
+        Administrator captureAdministrator = administratorArgumentCaptor.getValue();
+        assertEquals(administrator, captureAdministrator);
+    }
+
+    @Test@Feature("Integration Testing")
+    @Rollback(value = true)
+    void ifConsistentWhenRegist2Jobhunter() throws SelfDesignException {
+        registVO.setUserType(UserType.JOBHUNTER);
+        registVO.setEmail("123qq.com");
+        registVO.setPassword("123456");
+        Integer id=10018;
+
+        when(jobhunterMapper.registJobhunter(any(Jobhunter.class))).thenReturn(1);
+
+        service.regist2(registVO,id);
+        ArgumentCaptor<Jobhunter> jobhunterArgumentCaptor =
+                ArgumentCaptor.forClass(Jobhunter.class);
+
+        verify(jobhunterMapper).registJobhunter(jobhunterArgumentCaptor.capture());
+        Jobhunter captureJobhunter = jobhunterArgumentCaptor.getValue();
+        assertEquals(id,captureJobhunter.getJobhunterId());
+
+    }
+
+    @Test@Feature("Integration Testing")
+    @Rollback(value = true)
+    void ifConsistentWhenRegist2Recruiter() throws SelfDesignException {
+        registVO.setUserType(UserType.RECRUITER);
+        registVO.setEmail("123qq.com");
+        registVO.setPassword("123456");
+        Integer id=10018;
+
+        when(recruiterMapper.registRecruiter(any(Recruiter.class))).thenReturn(1);
+
+        service.regist2(registVO,id);
+        ArgumentCaptor<Recruiter> recruiterArgumentCaptor =
+                ArgumentCaptor.forClass(Recruiter.class);
+
+        verify(recruiterMapper).registRecruiter(recruiterArgumentCaptor.capture());
+        Recruiter captureRecruiter = recruiterArgumentCaptor.getValue();
+        assertEquals(id,captureRecruiter.getRecruiterId());
+
+    }
+
+    @Test@Feature("Integration Testing")
+    @Rollback(value = true)
+    void ifConsistentWhenRegist2Admin() throws SelfDesignException {
+        registVO.setUserType(UserType.ADMIN);
+        registVO.setEmail("123qq.com");
+        registVO.setPassword("123456");
+        Integer id=10018;
+
+        when(administratorMapper.registAdmin(any(Administrator.class))).thenReturn(1);
+
+        service.regist2(registVO,id);
+        ArgumentCaptor<Administrator> administratorArgumentCaptor =
+                ArgumentCaptor.forClass(Administrator.class);
+
+        verify(administratorMapper).registAdmin(administratorArgumentCaptor.capture());
+        Administrator captureAdministrator = administratorArgumentCaptor.getValue();
+        assertEquals(id,captureAdministrator.getAdminId());
+
+    }
 
     @AfterEach
     void tearDown(){

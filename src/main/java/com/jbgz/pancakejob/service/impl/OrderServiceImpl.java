@@ -287,7 +287,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
         Order order = orderMapper.selectById(orderId);
         if (order == null)
             throw new SelfDesignException("订单不存在");
-        else if (!(order.getOrderState().equals("已完成")||!order.getOrderState().equals("支付状态异常")))
+        else if ((!(order.getOrderState().equals("已完成"))||(!order.getOrderState().equals("支付状态异常"))))
             throw new SelfDesignException("订单还未完成");
         if (newScore < 0)
             throw new SelfDesignException("评价分数必须大于0");
@@ -375,7 +375,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
         List<Integer> refuseList = new ArrayList<>();
         orders.forEach(order -> {
             order.setOrderState("未通过");
-            refuseList.add(order.getJobhunterId());//获得需要发送未通过通知的人员列表
+            refuseList.add(order.getOrderId());//获得需要发送未通过通知的人员列表
             orderMapper.updateById(order);
         });
         return refuseList;
