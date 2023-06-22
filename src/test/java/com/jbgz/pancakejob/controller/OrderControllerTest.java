@@ -764,7 +764,7 @@ class OrderControllerTest {
         String url = "/order/confirmPassResult";
         MvcResult mvcResult =
                 mockMvc.perform(MockMvcRequestBuilders.put(url)
-                                .param("orderId","213")
+                                .param("orderId","177")
                                 .param("orderState","已录用")
                                 .accept(MediaType.APPLICATION_JSON))
                         .andExpect(MockMvcResultMatchers.status().isOk())
@@ -787,7 +787,7 @@ class OrderControllerTest {
         String url = "/order/confirmPassResult";
         MvcResult mvcResult =
                 mockMvc.perform(MockMvcRequestBuilders.put(url)
-                                .param("orderId","213")
+                                .param("orderId","177")
                                 .param("orderState","已放弃")
                                 .accept(MediaType.APPLICATION_JSON))
                         .andExpect(MockMvcResultMatchers.status().isOk())

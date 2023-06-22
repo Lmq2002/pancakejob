@@ -149,6 +149,46 @@ class OrderServiceImplTest {
         }
     }
 
+    /*兼职未在招聘*/
+    @Test
+    @Rollback
+    @Transactional
+    void createOrder_test5() {
+        ApplyJobVO applyJobVO = new ApplyJobVO();
+        applyJobVO.setJobId(6);
+        applyJobVO.setJobhunterId(10014);
+        applyJobVO.setApplyReason("我认真负责");
+        try {
+            orderService.createOrder(applyJobVO);
+            fail("预期输出错误信息：'该兼职当前未在招聘'.");
+        } catch (Exception e) {
+            System.out.println("测试错误信息："+e.getMessage());
+            assertTrue(e instanceof SelfDesignException);
+            assertEquals(e.getMessage(), "该兼职当前未在招聘");
+
+        }
+    }
+
+    /*求职者已报名*/
+    @Test
+    @Rollback
+    @Transactional
+    void createOrder_test6() {
+        ApplyJobVO applyJobVO = new ApplyJobVO();
+        applyJobVO.setJobId(27);
+        applyJobVO.setJobhunterId(10014);
+        applyJobVO.setApplyReason("我认真负责");
+        try {
+            orderService.createOrder(applyJobVO);
+            fail("预期输出错误信息：'该求职者已报名该兼职'.");
+        } catch (Exception e) {
+            System.out.println("测试错误信息："+e.getMessage());
+            assertTrue(e instanceof SelfDesignException);
+            assertEquals(e.getMessage(), "该求职者已报名该兼职");
+
+        }
+    }
+
 
     //--------------------------------------------------------------------------------------------//
     //OrderService changeOrderScore方法
@@ -292,6 +332,21 @@ class OrderServiceImplTest {
             System.out.println(e.getMessage());
 //            assertTrue(e instanceof SelfDesignException);
 //            assertEquals(e.getMessage(),"不存在该兼职信息");
+        }
+    }
+
+    /*订单还未完成*/
+    @Test
+    @Rollback
+    @Transactional
+    void changeOrderScore_test9() {
+        try {
+            boolean res = orderService.changeOrderScore(50, 4, "jobhunter");
+            assertFalse(res);
+            fail("预期输出错误信息：'订单还未完成'.");
+        } catch (Exception e) {
+            assertTrue(e instanceof SelfDesignException);
+            assertEquals(e.getMessage(), "订单还未完成");
         }
     }
 
